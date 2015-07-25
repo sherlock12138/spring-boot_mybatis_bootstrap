@@ -1,5 +1,8 @@
 package com.gdut.dongjun.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gdut.dongjun.domain.dao.SwitchMapper;
 import com.gdut.dongjun.service.SwitchService;
 import com.gdut.dongjun.service.impl.system.BaseServiceImpl;
 
@@ -18,4 +21,9 @@ public class SwitchServiceImpl extends BaseServiceImpl implements SwitchService 
 	 * @author Sherlock-lee
 	 * @date 2015年7月24日 下午2:33:08
 	 */
+	@Autowired
+	private SwitchMapper switchMapper;
+	
+	
+	
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/boot")
-public class GreetingController {
+public class SwitchController {
 
 	@RequestMapping("/fluid")
 	public String greeting(

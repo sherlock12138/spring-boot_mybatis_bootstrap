@@ -1,5 +1,10 @@
 package com.gdut.dongjun.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.gdut.dongjun.domain.dao.LineMapper;
+import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.impl.system.BaseServiceImpl;
 
@@ -11,6 +16,7 @@ import com.gdut.dongjun.service.impl.system.BaseServiceImpl;
  * @date 2015年7月24日 下午2:33:08 
  * @version V1.0   
  */
+@Service
 public class LineServiceImpl extends BaseServiceImpl implements LineService{
 	/** 
 	 * @ClassName: UserServiceImpl 
@@ -18,4 +24,13 @@ public class LineServiceImpl extends BaseServiceImpl implements LineService{
 	 * @author Sherlock-lee
 	 * @date 2015年7月24日 下午2:33:08 
 	 */
+	@Autowired
+	private LineMapper lineMapper;
+
+	@Override
+	public Line selectByPrimaryKey(String string) {
+		// TODO Auto-generated method stub
+		return lineMapper.selectByPrimaryKey(string);
+	}
+	
 }

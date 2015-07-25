@@ -24,10 +24,4 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
-	public void test() {
-
-		User u = userMapper.selectByPrimaryKey("001");
-		System.out.println(u.getName());
-
-	}
 }

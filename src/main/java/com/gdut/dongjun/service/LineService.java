@@ -1,5 +1,6 @@
 package com.gdut.dongjun.service;
 
+import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.service.system.BaseService;
 
 /**   
@@ -11,5 +12,7 @@ import com.gdut.dongjun.service.system.BaseService;
  * @version V1.0   
  */
 public interface LineService extends BaseService{
+
+	public Line selectByPrimaryKey(String string);
 
 }

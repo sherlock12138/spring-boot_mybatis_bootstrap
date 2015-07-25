@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gdut.dongjun.domain.dao.LineMapper;
 import com.gdut.dongjun.domain.dao.system.UserMapper;
+import com.gdut.dongjun.service.LineService;
 
 @Controller
 @RequestMapping("/boot")
@@ -16,7 +17,7 @@ public class UserController {
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
-	private LineMapper lineMapper;
+	private LineService lineService;
 
 	@RequestMapping("/f")
 	public String greeting(
@@ -25,17 +26,9 @@ public class UserController {
 		model.addAttribute("name", name);
 		System.out.println(userMapper.selectByPrimaryKey("001").getName());
 		
-		System.out.println(lineMapper.selectByPrimaryKey("01").getName());
+		System.out.println(lineService.selectByPrimaryKey("01").getName());
 		
 		return "fluid";
-	}
-
-	@RequestMapping("/g")
-	public String greet(
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name,
-			Model model) {
-		model.addAttribute("name", name);
-		return "greeting";
 	}
 
 }
