@@ -14,4 +14,5 @@ import com.gdut.dongjun.domain.po.system.Permission;
 @Repository
 public class PermissionDAOImpl extends SinglePrimaryKeyBaseDAOImpl<Permission>
 		implements PermissionMapper {
+	
 }
