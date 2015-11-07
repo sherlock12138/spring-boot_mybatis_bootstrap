@@ -1,15 +1,96 @@
 package com.gdut.dongjun.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gdut.dongjun.domain.dao.SwitchMapper;
+import com.gdut.dongjun.domain.po.Switch;
 import com.gdut.dongjun.service.system.BaseService;
 
-/**   
- * @Title: UserService.java 
- * @Package com.gdut.dongjun.service.system 
- * @Description: TODO 
- * @author Sherlock-lee   
- * @date 2015年7月24日 下午2:34:11 
- * @version V1.0   
+/**
+ * @Title: UserService.java
+ * @Package com.gdut.dongjun.service.system
+ * @Description: TODO
+ * @author Sherlock-lee
+ * @date 2015年7月24日 下午2:34:11
+ * @version V1.0
  */
-public interface SwitchService extends BaseService{
+public interface SwitchService extends BaseService<Switch> {
+
+	/**
+	 * 
+	 * @Title: delSwitchByLineId
+	 * @Description: TODO
+	 * @param @param lineId
+	 * @return void
+	 * @throws
+	 */
+	public void delSwitchByLineId(String lineId);
+
+	/**
+	 * 
+	 * @Title: updateSwitch
+	 * @Description: TODO
+	 * @param @param switch1
+	 * @return void
+	 * @throws
+	 */
+	public void updateSwitch(Switch switch1);
+
+	/**
+	 * 
+	 * @Title: 判断开关是否存在
+	 * @Description: TODO
+	 * @param @param switch1
+	 * @param @return
+	 * @return boolean
+	 * @throws
+	 */
+	public boolean isSwitchExist(Switch switch1);
+
+	/**
+	 * 
+	 * @Title: getAddress
+	 * @Description: TODO
+	 * @param @param switchId
+	 * @param @return
+	 * @return String
+	 * @throws
+	 */
+	public String getAddress(String switchId);
+
+	/**
+	 * 
+	 * @Title: selectAll
+	 * @Description: 根据线路id查找开关
+	 * @param @param lineId
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	public List<Switch> selectByLineId(String lineId);
+
+	/**
+	 * 
+	 * @Title: getSwitchId
+	 * @Description: TODO
+	 * @param @param address
+	 * @param @return
+	 * @return String
+	 * @throws
+	 */
+	public String getSwitchId(String address);
+
+	/**
+	 * @param id 
+	 * 
+	 * @Title: updateSwtichOpen
+	 * @Description: TODO
+	 * @param String id
+	 * @return void
+	 * @throws
+	 */
+//	public void updateSwtichOpen(String id);
 
 }

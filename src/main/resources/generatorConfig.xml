@@ -7,31 +7,20 @@
 			connectionURL="jdbc:mysql://localhost:3306/elecon" userId="root"
 			password="33132212">
 		</jdbcConnection>
-		<javaModelGenerator targetPackage="com.gdut.dongjun.domain.po.system"
+		<javaModelGenerator targetPackage="com.gdut.dongjun.domain.po"
 			targetProject="E:\generator" />
 
-		<sqlMapGenerator targetPackage="com.gdut.dongjun.domain.dao.system"
+		<sqlMapGenerator targetPackage="com.gdut.dongjun.domain.dao"
 			targetProject="E:\generator" />
 
-		<javaClientGenerator targetPackage="com.gdut.dongjun.domain.dao.system"
+		<javaClientGenerator targetPackage="com.gdut.dongjun.domain.dao"
 			targetProject="E:\generator" type="XMLMAPPER" />
 
 
-		<table schema="root" tableName="user"
-			domainObjectName="User" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false" />
-
-		<table schema="root" tableName="role"
-			domainObjectName="Role" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false" />
-
-		<table schema="root" tableName="permission"
-			domainObjectName="Permission" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false" />
-
+		<table schema="root" tableName="switch" domainObjectName="Switch"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" />
 
 
 

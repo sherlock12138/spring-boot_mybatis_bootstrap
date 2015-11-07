@@ -1,5 +1,8 @@
 package com.gdut.dongjun.domain.dao.impl.system;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -18,14 +21,11 @@ import com.gdut.dongjun.domain.dao.system.SinglePrimaryKeyBaseMapper;
 public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		SinglePrimaryKeyBaseMapper<T> {
 
-	@Resource(name="msg_sqlSessionTemplate")
+	@Resource(name = "msg_sqlSessionTemplate")
 	protected SqlSessionTemplate template;
 	private static final Logger logger = Logger
 			.getLogger(SinglePrimaryKeyBaseMapper.class);
 
-	/**
-	 * 按主键删除
-	 */
 	@Transactional
 	public int deleteByPrimaryKey(String id) {
 		if (logger.isDebugEnabled()) {
@@ -40,9 +40,6 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		return 0;
 	}
 
-	/**
-	 * 插入记录
-	 */
 	@Transactional
 	public int insert(T record) {
 		if (logger.isDebugEnabled()) {
@@ -57,9 +54,6 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		return 0;
 	}
 
-	/**
-	 * 插入缺省字段的记录，在缺省字段无默认值时报错，插入失败
-	 */
 	@Transactional
 	public int insertSelective(T record) {
 		if (logger.isDebugEnabled()) {
@@ -74,9 +68,6 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		return 0;
 	}
 
-	/**
-	 * 按主键查找（单条记录）
-	 */
 	public T selectByPrimaryKey(String id) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("selectByPrimaryKey(String) - start"); //$NON-NLS-1$
@@ -87,9 +78,17 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		return template.selectOne(getNamespace("selectByPrimaryKey"), id);
 	}
 
-	/**
-	 * 按主键更新（单条记录）
-	 */
+	public List<T> selectByParameters(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectByParamsters(Map<String, Object>) - start"); //$NON-NLS-1$
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectByParamsters(Map<String, Object>) - end"); //$NON-NLS-1$
+		}
+		return template.selectList(getNamespace("selectByParameters"), map);
+	}
+
 	@Transactional
 	public int updateByPrimaryKey(T record) {
 		if (logger.isDebugEnabled()) {
@@ -104,9 +103,6 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		return 0;
 	}
 
-	/**
-	 * 按主键更新缺省字段的记录，在缺省字段无默认值时报错，更新失败
-	 */
 	@Transactional
 	public int updateByPrimaryKeySelective(T record) {
 		if (logger.isDebugEnabled()) {
@@ -130,11 +126,7 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 		if (logger.isDebugEnabled()) {
 			logger.debug("getFirstInterface() - start"); //$NON-NLS-1$
 		}
-
-		// ***************************************************************
-		// 接口的名称是按照类定义时的书写顺序
-		// ***************************************************************
-		String string = this.getClass().toString();
+		// String string = this.getClass().toString();
 		String returnString = this.getClass().getInterfaces()[0].toString()
 				.split(" ")[1].toString();
 
