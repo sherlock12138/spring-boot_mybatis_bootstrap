@@ -182,15 +182,15 @@ public class CommandUtil {
 //		
 //	}
 
-//	public static void main(String[] args) {
-//
-//		CommandUtil commandUtil = new CommandUtil("AAAAAAAAAAAA");
-//		commandUtil.setControl("13");
-//		String[] data = { "", "", "", "" };
-//		commandUtil.setData(data);
-////		System.out.println(commandUtil.generate());
-//		System.out.println(commandUtil.dataDecode("cb55"));
-////		new CommUtil("COM4").excute(commandUtil.generate());
-//	}
+	/*public static void main(String[] args) {
+
+		CommandUtil commandUtil = new CommandUtil("AAAAAAAAAAAA");
+		commandUtil.setControl("13");
+		String[] data = { "", "", "", "" };
+		commandUtil.setData(data);
+		System.out.println(commandUtil.generate());
+		System.out.println(commandUtil.dataDecode("cb55"));
+		new CommUtil("COM4").excute(commandUtil.generate());
+	}*/
 
 }
