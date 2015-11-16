@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gdut.dongjun.domain.dao.CurrentMapper;
-import com.gdut.dongjun.domain.dao.SwitchMapper;
+import com.gdut.dongjun.domain.dao.LowVoltageCurrentMapper;
+import com.gdut.dongjun.domain.dao.LowVoltageSwitchMapper;
 import com.gdut.dongjun.domain.po.Company;
-import com.gdut.dongjun.domain.po.Switch;
-import com.gdut.dongjun.service.system.BaseService;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
+import com.gdut.dongjun.service.base.BaseService;
 
 /**
  * @Title: UserService.java

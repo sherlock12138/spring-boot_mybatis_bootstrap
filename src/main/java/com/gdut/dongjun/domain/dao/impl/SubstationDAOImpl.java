@@ -3,14 +3,15 @@ package com.gdut.dongjun.domain.dao.impl;
 import org.springframework.stereotype.Repository;
 
 import com.gdut.dongjun.domain.dao.SubstationMapper;
-import com.gdut.dongjun.domain.dao.impl.system.SinglePrimaryKeyBaseDAOImpl;
+import com.gdut.dongjun.domain.dao.base.impl.SinglePrimaryKeyBaseDAOImpl;
 import com.gdut.dongjun.domain.po.Substation;
 
 /**
- * @author Sherlock-lee
- * @version 创建时间：2015年3月20日 上午8:56:12
- * @Tel 15622358381
- * @state 站内消息DaoImpl
+ * 
+ * @author	Sherlock-lee
+ * @date	2015年11月14日 下午4:57:00
+ * @see 	TODO
+ * @since   1.0
  */
 @Repository
 public class SubstationDAOImpl extends SinglePrimaryKeyBaseDAOImpl<Substation> implements

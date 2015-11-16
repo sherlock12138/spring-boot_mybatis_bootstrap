@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.dao.LineMapper;
 import com.gdut.dongjun.domain.po.Line;
-import com.gdut.dongjun.domain.po.Substation;
 import com.gdut.dongjun.service.LineService;
-import com.gdut.dongjun.service.impl.system.BaseServiceImpl;
+import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 
 /**

@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.dao.SubstationMapper;
 import com.gdut.dongjun.domain.po.Substation;
-import com.gdut.dongjun.domain.po.Switch;
 import com.gdut.dongjun.service.SubstationService;
-import com.gdut.dongjun.service.impl.system.BaseServiceImpl;
+import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 
 /**
  * @Title: UserServiceImpl.java

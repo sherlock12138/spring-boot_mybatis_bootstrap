@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdut.dongjun.service.UserService;
 import com.gdut.dongjun.service.impl.enums.LoginResult;
-import com.gdut.dongjun.service.system.UserService;
-import com.gdut.dongjun.web.net_server.NetServer;
+import com.gdut.dongjun.service.net_server.NetServer;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -175,7 +175,7 @@ public class UserController {
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name,
 			Model model) {
 
-		return "baidu_map";
+		return "fluid";
 	}
 
 }

@@ -108,14 +108,8 @@ function readAllPhaseCurrent() {
  * @return void
  * @throws
  */
-function controlSwitch() {
+function controlSwitch(type) {
 
-	alert('ddd')
-	var time = $("#control_switch").val();
-	if ($("#control_switch").val() == '')
-		time = "00";
-	else if ($("#control_switch").length == 1)
-		time = "0" + $("#control_switch").val();
 	$.ajax({
 		type : "post",
 		url : "control_switch",
@@ -123,11 +117,25 @@ function controlSwitch() {
 		data : {
 			"switchId" : "03",
 			"sign" : $("#control_type").val(),
-			"orderTime" : time + $("#control_switch_unit").val(),
+			"type" : type,
 		}
 
 	})
 }
+
+function closeSwitch(){
+	
+	controlSwitch()
+	
+}
+
+
+
+
+
+
+
+
 
 /**
  * 

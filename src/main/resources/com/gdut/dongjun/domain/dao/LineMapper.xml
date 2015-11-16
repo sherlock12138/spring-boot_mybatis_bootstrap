@@ -23,7 +23,7 @@
 
 	<select id="getLineBySwitchId" resultMap="BaseResultMap">
 		select l.* from line l,
-		switch s
+		low_voltage_switch s
 		where l.id = s.line_id and s.id = #{switchId}
 	</select>
 

@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.gdut.dongjun.service.CurrentService;
-import com.gdut.dongjun.service.VoltageService;
+import com.gdut.dongjun.service.LowVoltageCurrentService;
+import com.gdut.dongjun.service.LowVoltageVoltageService;
 
 @Controller
 @RequestMapping("/dongjun")
 public class ChartController {
 
 	@Autowired
-	private CurrentService currentService;
+	private LowVoltageCurrentService currentService;
 	@Autowired
-	private VoltageService voltageService;
+	private LowVoltageVoltageService voltageService;
 
 	/**
 	 * 

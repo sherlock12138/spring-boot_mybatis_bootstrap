@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.domain.po.Substation;
-import com.gdut.dongjun.domain.po.Switch;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.SubstationService;
-import com.gdut.dongjun.service.SwitchService;
+import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.ZTreeNodeService;
 
 /**
@@ -31,7 +31,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 	@Autowired
 	private LineService lineService;
 	@Autowired
-	private SwitchService switchService;
+	private LowVoltageSwitchService switchService;
 
 	@Override
 	public List<ZTreeNode> getSwitchTree(String company_id) {
@@ -65,7 +65,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 							n2.setId(lines.get(j).getId());
 							n2.setName(lines.get(j).getName());
 
-							List<Switch> switchs = switchService// 取到所有的开关
+							List<LowVoltageSwitch> switchs = switchService// 取到所有的开关
 									.selectByLineId(lines.get(j).getId());
 
 							List<ZTreeNode> switchNodes = new LinkedList<ZTreeNode>();

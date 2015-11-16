@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.Line;
-import com.gdut.dongjun.domain.po.Switch;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.LineService;
-import com.gdut.dongjun.service.SwitchService;
+import com.gdut.dongjun.service.LowVoltageSwitchService;
 
 @Controller
 @RequestMapping("/dongjun")
 public class SwitchController {
 
 	@Autowired
-	private SwitchService switchService;
+	private LowVoltageSwitchService switchService;
 	@Autowired
 	private LineService LineService;
 
@@ -93,7 +93,7 @@ public class SwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_switch")
-	public String editSwitch(Switch switch1, Model model,
+	public String editSwitch(LowVoltageSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 		
 		//@RequestParam(required = true) 

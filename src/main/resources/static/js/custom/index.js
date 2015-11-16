@@ -84,7 +84,7 @@ function switch_filter(node) {
 /**
  * 
  * @Title: zTreeOnAsyncSuccess
- * @Description: TODO
+ * @Description: ZTree成功渲染之后的回调函数
  * @param
  * @param event
  * @param
@@ -119,7 +119,10 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 
 	for (var i = 0; i < nodes.length; i++) {
 
-		switchs_draw(nodes[i]);// 描绘定点
+		//*************************************************************
+		// 描绘自定义点
+		//*************************************************************
+		switchs_draw(nodes[i]);
 	}
 
 	// 添加跳闸事件监听
@@ -158,12 +161,12 @@ function zTreeSearch(value) {
 
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 	var nodeList = zTree.getNodes();
-	
-	if(nodeList.children!=null){
-		
+
+	if (nodeList.children != null) {
+
 		zTreeSearch(nodeList.children);
 	}
-	
+
 	alert(nodeList.length)
 	updateNodes(nodeList, false);// 重置状态
 
@@ -250,7 +253,9 @@ function switchs_draw(node) {
 	// 添加点击事件
 	marker2.addEventListener("click", click_switch);
 
+	// **************************************************************************
 	// 添加自定义控件
+	// **************************************************************************
 	// 定义一个控件类,即function
 	function ZoomControl() {
 		// 默认停靠位置和偏移量

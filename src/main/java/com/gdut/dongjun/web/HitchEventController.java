@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdut.dongjun.service.HitchEventService;
+import com.gdut.dongjun.service.LowVoltageHitchEventService;
 
 @Controller
 @RequestMapping("/dongjun")
 public class HitchEventController {
 
 	@Autowired
-	private HitchEventService hitchEventService;
+	private LowVoltageHitchEventService hitchEventService;
 
 	/**
 	 * 

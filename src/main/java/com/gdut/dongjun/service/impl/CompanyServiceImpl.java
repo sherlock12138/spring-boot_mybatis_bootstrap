@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.gdut.dongjun.domain.dao.CompanyMapper;
 import com.gdut.dongjun.domain.po.Company;
 import com.gdut.dongjun.service.CompanyService;
-import com.gdut.dongjun.service.impl.system.BaseServiceImpl;
+import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 
 /**   
  * @Title: UserServiceImpl.java 

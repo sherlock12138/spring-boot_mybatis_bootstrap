@@ -1,7 +1,5 @@
 package com.gdut.dongjun.service.impl;
 
-import com.gdut.dongjun.service.impl.enums.CommandControlCode;
-import com.gdut.dongjun.service.impl.enums.DataZoneStructure;
 
 /**
  * @Title: DataZone.java

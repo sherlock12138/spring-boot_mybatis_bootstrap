@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.service.LineService;
-import com.gdut.dongjun.service.SwitchService;
+import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.util.Array_ListUtil;
 
 @Controller
@@ -21,7 +21,7 @@ public class LineController {
 	@Autowired
 	private LineService lineService;
 	@Autowired
-	private SwitchService switchService;
+	private LowVoltageSwitchService switchService;
 
 	@RequestMapping("/line_list")
 	public String getLineSwitchList(Model model) {

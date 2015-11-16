@@ -23,6 +23,7 @@ public class ZTreeNode {
 	private List<ZTreeNode> children;// 子节点
 	private String longitude;// 结合百度地图使用 ,经度
 	private String latitude;// 纬度
+	private int type;//类型标志
 
 	public String getId() {
 		return id;
@@ -70,6 +71,14 @@ public class ZTreeNode {
 
 	public void setChildren(List<ZTreeNode> children) {
 		this.children = children;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 }

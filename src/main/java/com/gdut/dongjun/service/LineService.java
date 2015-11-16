@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.domain.po.Substation;
-import com.gdut.dongjun.service.system.BaseService;
+import com.gdut.dongjun.service.base.BaseService;
 
 /**
  * @Title: UserService.java
