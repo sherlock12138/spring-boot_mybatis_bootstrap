@@ -1,3 +1,4 @@
+
 package com.gdut.dongjun.domain.dao;
 
 import com.gdut.dongjun.domain.dao.system.SinglePrimaryKeyBaseMapper;

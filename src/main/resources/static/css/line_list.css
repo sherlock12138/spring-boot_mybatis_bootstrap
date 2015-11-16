@@ -1,0 +1,19 @@
+
+.hero-unit {
+  padding: 20px;
+  line-height: 50px;
+ 	
+}
+
+.row-fluid{
+	padding:5px;
+}
+
+.span3 {
+	padding:15px;
+	border: 2px solid;
+	border-radius: 9px;
+	box-shadow: 2px 2px 2px #888888;
+	background-color:#52A8FE;
+}
+
