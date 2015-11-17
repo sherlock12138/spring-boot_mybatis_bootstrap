@@ -52,9 +52,9 @@ public class Application extends SpringBootServletInitializer {
 	public DataSource dataSource() {
 
 		com.mchange.v2.c3p0.ComboPooledDataSource ds = new ComboPooledDataSource();
-		ds.setJdbcUrl("jdbc:mysql://localhost:3306/dongjun?useUnicode=true&amp;charaterEncoding=utf-8");
+		ds.setJdbcUrl("jdbc:mysql://10.21.23.141:3306/ele?useUnicode=true&amp;charaterEncoding=utf-8");
 		ds.setUser("root");
-		ds.setPassword("33132212");
+		ds.setPassword("root");
 		try {
 			ds.setDriverClass("com.mysql.jdbc.Driver");
 		} catch (PropertyVetoException e) {
