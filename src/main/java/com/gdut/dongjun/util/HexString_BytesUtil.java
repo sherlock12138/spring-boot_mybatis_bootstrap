@@ -1,5 +1,7 @@
 package com.gdut.dongjun.util;
 
+import org.junit.Test;
+
 /**
  * @Title: HexString_BytesUtil.java
  * @Package com.gdut.Netty_testing.dongjun.util
@@ -57,6 +59,37 @@ public class HexString_BytesUtil {
 		}
 		return d;
 	}
+
+	
+	/**
+	 * 
+	 * @Title: hexStringToByteStringsf
+	 * @Description: TODO
+	 * @param @param hexString
+	 * @param @return
+	 * @return String
+	 * @throws
+	 */
+	public static String hexStringToByteString(String hexString) {
+
+		if (hexString == null || hexString.equals("")) {
+			return null;
+		}
+		hexString = hexString.toUpperCase();
+		char[] hexChars = hexString.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < hexChars.length; i++) {
+			sb.append(Integer.toBinaryString(charToByte(hexChars[i])));
+		}
+		return sb.toString();
+	}
+	
+	@Test
+	public void t(){
+		
+		hexStringToByteString("0f");
+	}
+	
 
 	/**
 	 * 

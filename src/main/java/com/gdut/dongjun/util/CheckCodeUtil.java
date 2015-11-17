@@ -24,6 +24,7 @@ public class CheckCodeUtil {
 
 		int sum = 0;
 		source = source.replace(" ", "");
+		System.out.println(source);
 		for (int i = 0; i < source.length(); i = i + 2) {
 
 			String tmp = source.substring(i, i + 2);// 将原串各个字节相加求和

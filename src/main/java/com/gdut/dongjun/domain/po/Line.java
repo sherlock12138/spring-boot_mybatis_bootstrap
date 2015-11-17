@@ -1,5 +1,8 @@
 package com.gdut.dongjun.domain.po;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @Title: Wire.java
  * @Package com.gdut.dongjun.domain.po
@@ -32,6 +35,26 @@ public class Line {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public static List<Object> convert2Object(List<Line> lines) {
+
+		List<Object> objects = new LinkedList<Object>();
+		for (int i = 0; i < lines.size(); i++) {
+			objects.add(i, lines.get(i));
+		}
+		return objects;
+	}
+
+	public static List<String> getNames(List<Line> lines) {
+
+		List<String> list = new LinkedList<String>();
+		if (lines != null) {
+			for (Line line : lines) {
+				list.add(line.getName());
+			}
+		}
+		return list;
 	}
 
 }
