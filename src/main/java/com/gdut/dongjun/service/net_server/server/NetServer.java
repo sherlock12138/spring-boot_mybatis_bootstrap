@@ -43,7 +43,7 @@ public abstract class NetServer {
 	protected static final int defaultHitchEventBreak = 5 * 60 * 1000;
 	protected static final int defaultCVReadBreak = 15 * 60 * 1000;
 
-	static final boolean SSL = true;
+	static final boolean SSL = false;//当需要实现加密连接时才打开，否则会报错！！，没有加包头
 	private int port;
 
 	// Integer.parseInt(System.getProperty("port", "8463"));
