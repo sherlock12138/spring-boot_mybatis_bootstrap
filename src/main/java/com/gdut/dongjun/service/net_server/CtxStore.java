@@ -8,32 +8,22 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.gdut.dongjun.service.impl.DataZone;
-import com.gdut.dongjun.service.impl.enums.EventVariable;
-import com.gdut.dongjun.util.LowVoltageDeviceCommandUtil;
-
 /**
  * @Title: ClientList.java
  * @Package com.gdut.dongjun.service.impl
- * @Description: TODO
+ * @Description: 应用单例模式，用一个List管理设备与服务器之间的连接SwitchGPRS,包含Id,address,ctx等属性
  * @author Sherlock-lee
  * @date 2015年8月11日 下午4:30:06
  * @version V1.0
+ * @see {@link SwitchGPRS}
  */
 @Component
-public class CtxStore {
+public abstract class CtxStore {
 	/**
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(CtxStore.class);
-
-	/**
-	 * @ClassName: ClientList
-	 * @Description: TODO
-	 * @author Sherlock-lee
-	 * @date 2015年8月11日 下午4:30:06
-	 */
-	private static List<SwitchGPRS> ctxlist = new LinkedList<SwitchGPRS>();
+	private static final List<SwitchGPRS> ctxlist = new LinkedList<SwitchGPRS>();
 
 	private CtxStore() {
 		super();
@@ -54,27 +44,6 @@ public class CtxStore {
 
 	/**
 	 * 
-	 * @Title: add
-	 * @Description: TODO
-	 * @param @param ctx
-	 * @return void
-	 * @throws
-	 */
-	public static void add(SwitchGPRS ctx) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("add(SwitchGPRS) - start"); //$NON-NLS-1$
-		}
-
-		ctxlist.add(ctx);
-		printCtxStore();
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("add(SwitchGPRS) - end"); //$NON-NLS-1$
-		}
-	}
-
-	/**
-	 * 
 	 * @Title: get
 	 * @Description: TODO
 	 * @param @param ctx
@@ -84,7 +53,7 @@ public class CtxStore {
 	 */
 	public static SwitchGPRS get(ChannelHandlerContext ctx) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - start"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - start");
 		}
 
 		if (ctxlist != null) {
@@ -94,13 +63,12 @@ public class CtxStore {
 				if (gprs != null && ctx.equals(gprs.getCtx())) {
 					return gprs;
 				}
-
 			}
 		} else {
-			logger.info("ctxlist is empty, no gprs has bean remove!");
+			logger.info("ctxlist is empty!");
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - end"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - end");
 		}
 		return null;
 	}
@@ -116,7 +84,7 @@ public class CtxStore {
 	 */
 	public static SwitchGPRS get(String id) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - start"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - start");
 		}
 
 		if (ctxlist != null) {
@@ -129,10 +97,10 @@ public class CtxStore {
 
 			}
 		} else {
-			logger.info("ctxlist is empty, no gprs has bean remove!");
+			logger.info("ctxlist is empty!");
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - end"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - end");
 		}
 		return null;
 	}
@@ -148,7 +116,7 @@ public class CtxStore {
 	 */
 	public static String getId(String address) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - start"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - start");
 		}
 		if (ctxlist != null) {
 
@@ -160,12 +128,33 @@ public class CtxStore {
 
 			}
 		} else {
-			logger.info("ctxlist is empty, no gprs has bean remove!");
+			logger.info("ctxlist is empty!");
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - end"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - end");
 		}
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @Title: add
+	 * @Description: TODO
+	 * @param @param ctx
+	 * @return void
+	 * @throws
+	 */
+	public static void add(SwitchGPRS ctx) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("add(SwitchGPRS) - start");
+		}
+
+		ctxlist.add(ctx);
+		printCtxStore();
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("add(SwitchGPRS) - end");
+		}
 	}
 
 	/**
@@ -178,7 +167,7 @@ public class CtxStore {
 	 */
 	public static void remove(ChannelHandlerContext ctx) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - start"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - start");
 		}
 
 		if (ctxlist != null) {
@@ -186,15 +175,15 @@ public class CtxStore {
 			for (SwitchGPRS gprs : ctxlist) {
 
 				if (gprs != null && ctx.equals(gprs.getCtx())) {
+					
 					ctxlist.remove(gprs);
 				}
-
 			}
 		} else {
 			logger.info("ctxlist is empty, no gprs has bean remove!");
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("remove(SwitchGPRS) - end"); //$NON-NLS-1$
+			logger.debug("remove(SwitchGPRS) - end");
 		}
 	}
 
@@ -208,75 +197,13 @@ public class CtxStore {
 	 */
 	public static void clear() {
 		if (logger.isDebugEnabled()) {
-			logger.debug("clear() - start"); //$NON-NLS-1$
+			logger.debug("clear() - start");
 		}
 
 		ctxlist.clear();
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("clear() - end"); //$NON-NLS-1$
-		}
-	}
-
-	/**
-	 * 
-	 * @Title: beginHitchEventSpy
-	 * @Description: TODO
-	 * @param
-	 * @return void
-	 * @throws
-	 */
-	public static void hitchEventSpy() {
-
-		printCtxStore();
-		for (SwitchGPRS switchGPRS : ctxlist) {
-
-			if (switchGPRS != null && switchGPRS.getCtx() != null
-					&& switchGPRS.getAddress() != null) {
-
-				logger.info("syping " + switchGPRS.getAddress());
-				String msg = LowVoltageDeviceCommandUtil.read(switchGPRS.getAddress(),
-						new DataZone(EventVariable.HITCH_EVENT.toString()));
-
-				switchGPRS.getCtx().writeAndFlush(msg);
-			} else {
-				logger.error("the store is empty!");
-			}
-		}
-
-	}
-
-	/**
-	 * 
-	 * @Title: timedCVRead
-	 * @Description: 定时读取电流电压
-	 * @param
-	 * @return void
-	 * @throws
-	 */
-	public static void timedCVReadTask() {
-		// TODO Auto-generated method stub
-		for (SwitchGPRS switchGPRS : ctxlist) {
-
-			if (switchGPRS != null && switchGPRS.getCtx() != null
-					&& switchGPRS.getAddress() != null) {
-
-				logger.info("reading " + switchGPRS.getAddress() + " voltage");
-				// 读取电压
-				String msg = LowVoltageDeviceCommandUtil.readAllPhaseVoltage(switchGPRS
-						.getAddress());
-
-				switchGPRS.getCtx().writeAndFlush(msg);
-
-				logger.info("reading " + switchGPRS.getAddress() + " current");
-				// 读取电流
-				msg = LowVoltageDeviceCommandUtil.readAllPhaseCurrent(switchGPRS.getAddress());
-
-				switchGPRS.getCtx().writeAndFlush(msg);
-
-			} else {
-				logger.error("the store is empty!");
-			}
+			logger.debug("clear() - end");
 		}
 	}
 
@@ -295,35 +222,7 @@ public class CtxStore {
 			gprs.setOpen(true);
 			printCtxStore();
 		} else {
-			logger.info("ctxlist is empty, no gprs has bean remove!");
-		}
-	}
-
-	/**
-	 * 
-	 * @Title: printCtxStore
-	 * @Description: TODO
-	 * @param
-	 * @return void
-	 * @throws
-	 */
-	public static void printCtxStore() {
-		if (logger.isDebugEnabled()) {
-			logger.debug("printCtxStore() - start"); //$NON-NLS-1$
-		}
-
-		logger.info("ctx in the store now:");
-		if (ctxlist != null) {
-			for (int i = 0; i < ctxlist.size(); i++) {
-
-				logger.info(ctxlist.get(i));
-			}
-		} else {
-			logger.info("CtxStore is null");
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("printCtxStore() - end"); //$NON-NLS-1$
+			logger.info("ctxlist is empty!");
 		}
 	}
 
@@ -338,43 +237,50 @@ public class CtxStore {
 	public static void excute(String id, String msg) {
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("excute(String) - start"); //$NON-NLS-1$
+			logger.debug("excute(String) - start");
 		}
 
 		SwitchGPRS gprs = get(id);
 		if (gprs != null && gprs.getCtx() != null) {
+
 			gprs.getCtx().writeAndFlush(msg);
 			logger.info("excute " + msg);
 		} else {
 
 			logger.info("there is an error accour in excuting !");
 		}
-
-		// CtxStore.getInstance().get(0).writeAndFlush("aabbcc");
-		// for (SwitchGPRS ctx : ctxlist) {
-		//
-		// ChannelFuture f = ctx.writeAndFlush(msg);
-		// // logger.info("this:" + f.channel().pipeline().);
-		// logger.info("future  " + ctx.read());
-		//
-		// }
-
 		if (logger.isDebugEnabled()) {
-			logger.debug("excute(String) - end"); //$NON-NLS-1$
+			logger.debug("excute(String) - end");
 		}
 	}
-	// 多线程的支持
-	// if (address.equals("1")) {
-	// CtxStore.getInstance().get(0).writeAndFlush("111111");
-	// try {
-	// Thread.sleep(10 * 1000);
-	// } catch (InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// CtxStore.getInstance().get(0).writeAndFlush("111111");
-	// } else if (address.equals("2")) {
-	// CtxStore.getInstance().get(0).writeAndFlush("22222222");
-	// }
+
+	/**
+	 * 
+	 * @Title: printCtxStore
+	 * @Description: TODO
+	 * @param
+	 * @return void
+	 * @throws
+	 */
+	public static void printCtxStore() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("printCtxStore() - start");
+		}
+
+		logger.info("ctx in the store now:");
+		if (ctxlist != null) {
+			for (int i = 0; i < ctxlist.size(); i++) {
+
+				logger.info(ctxlist.get(i));
+			}
+		} else {
+			logger.info("CtxStore is empty");
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("printCtxStore() - end");
+		}
+	}
+	
 
 }
