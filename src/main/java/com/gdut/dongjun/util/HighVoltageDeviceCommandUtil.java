@@ -50,10 +50,10 @@ public class HighVoltageDeviceCommandUtil {
 	
 	
 	
-	public static void main(String[] args) {
-		HighVoltageDeviceCommandUtil a = new HighVoltageDeviceCommandUtil();
-		a.setData("73 01 00 2E 01 06 01 01 00 60 01 81");
-		System.out.println(a.closeSwitchPre(""));
-	}
+//	public static void main(String[] args) {
+//		HighVoltageDeviceCommandUtil a = new HighVoltageDeviceCommandUtil();
+//		a.setData("73 01 00 2E 01 06 01 01 00 60 01 81");
+//		System.out.println(a.closeSwitchPre(""));
+//	}
 	
 }
