@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.gdut.dongjun.service.device_message_engine.ControlMessageEngine;
 import com.gdut.dongjun.service.device_message_engine.DataMessageEngine;
 import com.gdut.dongjun.service.device_message_engine.EventMessageEngine;
+import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
 
 /**
  * @author Sherlock-lee
@@ -18,8 +19,7 @@ public class HighVoltageSwitchMessageEngine implements ControlMessageEngine,
 
 	@Override
 	public String generateCloseSwitchMessage(String address) {
-		
-		return null;
+		return new HighVoltageDeviceCommandUtil().closeSwitchPre(address) + new HighVoltageDeviceCommandUtil().closeSwitch(address);
 	}
 
 	@Override
