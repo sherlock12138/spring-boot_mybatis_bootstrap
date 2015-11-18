@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.gdut.dongjun.service.net_server.handler;
+package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,7 +40,7 @@ import com.gdut.dongjun.web.UserController;
 
 @Service
 @Sharable
-public class DataReceiver extends ChannelInboundHandlerAdapter {
+public class LowVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 	@Autowired
 	private LowVoltageCurrentService currentService;
@@ -55,9 +55,10 @@ public class DataReceiver extends ChannelInboundHandlerAdapter {
 	@Autowired
 	private UserController controller;
 	private static final String READ_ADDRESS = "68AAAAAAAAAAAA681300DF16";
-	private static final Logger logger = Logger.getLogger(DataReceiver.class);
+	private static final Logger logger = Logger
+			.getLogger(LowVoltageDataReceiver.class);
 
-	public DataReceiver() {
+	public LowVoltageDataReceiver() {
 		super();
 	}
 
@@ -71,6 +72,9 @@ public class DataReceiver extends ChannelInboundHandlerAdapter {
 		gprs.setCtx(ctx);
 		CtxStore.add(gprs);
 
+		// ***********************************************
+		// 设备刚连上我们的服务器还不知道它的地址的,先查一下它的地址
+		// ***********************************************
 		ctx.channel().writeAndFlush(READ_ADDRESS);// 读取地址
 		CtxStore.printCtxStore();
 		//
@@ -277,10 +281,12 @@ public class DataReceiver extends ChannelInboundHandlerAdapter {
 
 		if (address != null && id != null) {
 
-			LowVoltageHitchEvent hitchEvent = LowVoltageDeviceCommandUtil.readHitchEvent(data);// 查询开关的结果
+			LowVoltageHitchEvent hitchEvent = LowVoltageDeviceCommandUtil
+					.readHitchEvent(data);// 查询开关的结果
 			hitchEvent.setId(UUIDUtil.getUUID());
 			hitchEvent.setSwitchId(id);
-			LowVoltageHitchEvent hitchEvent2 = hitchEventService.getRecentlyHitchEvent();
+			LowVoltageHitchEvent hitchEvent2 = hitchEventService
+					.getRecentlyHitchEvent();
 
 			hitchEvent2.getHitchTime().compareTo(hitchEvent.getHitchTime());
 
