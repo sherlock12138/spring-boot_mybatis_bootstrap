@@ -1,5 +1,12 @@
 package com.gdut.dongjun.web;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.annotation.Resource;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,27 +26,26 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.service.UserService;
 import com.gdut.dongjun.service.impl.enums.LoginResult;
-import com.gdut.dongjun.service.net_server.NetServer;
+import com.gdut.dongjun.service.net_server.server.NetServer;
 
 @Controller
 @RequestMapping("/dongjun")
 @SessionAttributes("currentUser")
 public class UserController {
 
-	@Autowired
-	private NetServer netServer;
+	@Resource(name = "LowVoltageServer")
+	private NetServer lowVoltageNetServer;
+	
+	@Resource(name = "HighVoltageServer")
+	private NetServer HighVoltageNetServer;
+	
+	@Resource(name = "ControlMeasureServer")
+	private NetServer ControlMeasureNetServer;
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private org.apache.shiro.mgt.SecurityManager manager;
 	private static final Logger logger = Logger.getLogger(UserController.class);
-
-	@RequestMapping(value = "/n")
-	public Object n() {
-
-		netServer.remove();
-		return "";
-	}
 
 	@RequestMapping(value = "/login")
 	public String login() {
@@ -52,18 +58,11 @@ public class UserController {
 	public Object loginForm(String name, String password, Model model,
 			RedirectAttributes redirectAttributes) {
 
-		// UsernamePasswordToken token = new UsernamePasswordToken(name,
-		// password);
-		// token.setRememberMe(true);
-		// SecurityUtils.getSubject().login(token);
-
 		SecurityUtils.setSecurityManager(manager);
 		Subject currentUser = SecurityUtils.getSubject();
 
 		UsernamePasswordToken token = new UsernamePasswordToken(name, password);
 		token.setRememberMe(true);
-		// currentUser.login(token);
-
 		try {
 			currentUser.login(token);
 			// if no exception, that's it, we're done!
@@ -82,40 +81,7 @@ public class UserController {
 			logger.error("login error!");
 		}
 		return LoginResult.LOGIN_PASS.value();
-		// System.out.println(currentUser.getSession().getHost());
-		// System.out.println(currentUser.getSession().getTimeout());
-		// System.out.println(currentUser.getSession());
-		//
-		// System.out.println(currentUser.isAuthenticated());
-		//
-		// System.out.println(currentUser.hasRole("xx"));
-		// System.out.println(currentUser.isPermitted("xxx"));
-
-		// System.out.println(name + password);
-		// LoginResult r = userService.login(name, password);
-		//
-		// if (r.equals(LoginResult.LOGIN_PASS)) {
-		//
-		// model.addAttribute("currentUser", "");
-		// }
-		// return r.value();
 	}
-
-	// @RequestMapping(value = "/excute")
-	// @ResponseBody
-	// public Object excute() {
-	//
-	// // CtxStore.excute("1", "dddddf");
-	// return "";
-	// }
-	//
-	// @RequestMapping(value = "/excute2")
-	// @ResponseBody
-	// public Object excute2() {
-	//
-	// // CtxStore.excute("2", "cccccc");
-	// return "";
-	// }
 
 	/**
 	 * 
@@ -130,9 +96,16 @@ public class UserController {
 	public Object netServerTrigger(@RequestParam(required = true) String name,
 			@RequestParam(required = true) String password) {
 
-		if (name.equals("sherlock") && password.equals("33132212"))
-			netServer.start();
-
+		lowVoltageNetServer.setPort(8463);
+		HighVoltageNetServer.setPort(8464);
+		ControlMeasureNetServer.setPort(8465);
+		
+		if (name.equals("sherlock") && password.equals("33132212")){
+			
+			lowVoltageNetServer.start();
+			HighVoltageNetServer.start();
+			ControlMeasureNetServer.start();
+		}
 		return "";
 	}
 
@@ -152,8 +125,12 @@ public class UserController {
 			@RequestParam(required = true) String name,
 			@RequestParam(required = true) String password) {
 
-		if (name.equals("sherlock") && password.equals("33132212"))
-			netServer.stop();
+		if (name.equals("sherlock") && password.equals("33132212")){
+			
+			lowVoltageNetServer.stop();
+			HighVoltageNetServer.stop();
+			ControlMeasureNetServer.stop();
+		}
 		return "";
 	}
 
