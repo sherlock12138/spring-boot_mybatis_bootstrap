@@ -23,7 +23,7 @@ import io.netty.handler.ssl.SslContext;
 public abstract class ServerInitializer extends
 		ChannelInitializer<SocketChannel> {
 
-	private SslContext sslCtx;
+	protected SslContext sslCtx;
 
 	public void setSslCtx(SslContext sslCtx) {
 		this.sslCtx = sslCtx;
@@ -34,7 +34,7 @@ public abstract class ServerInitializer extends
 
 		ChannelPipeline p = ch.pipeline();
 		if (sslCtx != null) {
-			p.addLast(sslCtx.newHandler(ch.alloc()));// 建立TCP长连接
+			p.addLast(sslCtx.newHandler(ch.alloc()));// 建立SSL加密连接
 		}
 	}
 
