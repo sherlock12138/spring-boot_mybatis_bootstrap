@@ -162,4 +162,11 @@ public class ControlMearsureCurrent {
     public void setSwitchId(String switchId) {
         this.switchId = switchId;
     }
+
+	@Override
+	public String toString() {
+		return "ControlMearsureCurrent [id=" + id + ", time=" + time + ", phase=" + phase + ", value=" + value
+				+ ", switchId=" + switchId + "]";
+	}
+    
 }

@@ -56,7 +56,7 @@ public class ControlMearsureDeviceCommandUtil {
 
 	/**
 	 * @description	获取CRC验证位
-	 * @param messageWithoutCRC
+	 * @param messageWithoutCRC	CRC验证码之前的报文
 	 * @return	TODO
 	 */
 	private static String getCRCCode(String messageWithoutCRC) {
@@ -94,6 +94,7 @@ public class ControlMearsureDeviceCommandUtil {
 
 	@Test
 	public void testOne() {
-		
+		System.out.println(ControlMearsureDeviceCommandUtil.getTotalMessage(
+			ControlMearsureFunctionCode.RECENTLY_DATA_REQUEST.toString(), "0001"));
 	}
 }
