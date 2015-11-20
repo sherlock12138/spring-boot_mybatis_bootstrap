@@ -21,7 +21,7 @@ public class LowVoltageSwitchMessageEngine implements ControlMessageEngine,
 
 	@Override
 	public String generateCloseSwitchMessage(String address) {
-
+		
 		return LowVoltageDeviceCommandUtil.controlSwitch(address, new DataZone(
 				ControlIdentificationCode.CLOSE_SWITCH.toString()));
 	}

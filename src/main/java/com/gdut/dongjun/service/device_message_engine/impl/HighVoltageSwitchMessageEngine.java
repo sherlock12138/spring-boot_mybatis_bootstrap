@@ -15,48 +15,52 @@ import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
  * @since 1.0
  */
 @Service("HighVoltageSwitchMessageEngine")
-public class HighVoltageSwitchMessageEngine implements ControlMessageEngine,
-		DataMessageEngine, EventMessageEngine {
+public class HighVoltageSwitchMessageEngine implements ControlMessageEngine, DataMessageEngine, EventMessageEngine {
 
 	@Override
 	public String generateCloseSwitchMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().closeSwitchPre(address,HighCommandControlCode.PRE_CLOSE_SWITCH.toString()) + new HighVoltageDeviceCommandUtil().closeSwitch(address,HighCommandControlCode.CLOSE_SWITCH.toString());
+		return new HighVoltageDeviceCommandUtil().closeSwitchPre(address,
+				HighCommandControlCode.PRE_CLOSE_SWITCH.toString())
+				+ new HighVoltageDeviceCommandUtil().closeSwitch(address,
+						HighCommandControlCode.CLOSE_SWITCH.toString());
 	}
 
 	@Override
 	public String generateOpenSwitchMessage(String address) {
-		
-		return new HighVoltageDeviceCommandUtil().openSwitchPre(address, HighCommandControlCode.PRE_OPEN_SWITCH.toString()) + new HighVoltageDeviceCommandUtil().openSwitch(address, HighCommandControlCode.OPEN_SWITCH.toString());
+
+		return new HighVoltageDeviceCommandUtil().openSwitchPre(address,
+				HighCommandControlCode.PRE_OPEN_SWITCH.toString())
+				+ new HighVoltageDeviceCommandUtil().openSwitch(address, HighCommandControlCode.OPEN_SWITCH.toString());
 	}
 
 	@Override
 	public String generateReadAPhaseCurrentMessage(String address) {
-		return "002";
+		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadBPhaseCurrentMessage(String address) {
-		return null;
+		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadCPhaseCurrentMessage(String address) {
-		return null;
+		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadAPhaseVoltageMessage(String address) {
-		return null;
+		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadBPhaseVoltageMessage(String address) {
-		return "22.22";
+		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadCPhaseVoltageMessage(String address) {
-		return null;
+		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
