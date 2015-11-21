@@ -130,4 +130,13 @@
       switch_id = #{switchId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  
+  <select id="getRecentlyCurrent" resultMap="BaseResultMap">
+ 		select * from
+		control_mearsure_current
+		where (time IN
+		(SELECT MAX(time)
+		FROM
+		control_mearsure_current))
+  </select>
 </mapper>

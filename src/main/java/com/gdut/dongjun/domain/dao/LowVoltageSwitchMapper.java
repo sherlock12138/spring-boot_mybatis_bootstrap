@@ -17,6 +17,4 @@ public interface LowVoltageSwitchMapper extends SinglePrimaryKeyBaseMapper<LowVo
 	 * @throws
 	 */
 	public List<LowVoltageSwitch> selectByLineId(String lineId);
-
-
 }
