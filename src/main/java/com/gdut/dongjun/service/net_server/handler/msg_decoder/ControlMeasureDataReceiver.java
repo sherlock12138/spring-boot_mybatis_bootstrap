@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,8 +81,9 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 		data = data.replace(" ", "");
 		String address = data.substring(10, 14);
 		String controlCode = data.substring(16, 18);
-		String id = CtxStore.getId(address);
-		
+		System.out.println(controlCode);
+		String id = "03";
+		//CtxStore.getId(address)
 		/*// 将接收到的客户端信息分类处理
 		if (controlCode.equals("80")) {	// 读通信地址
 
@@ -129,9 +131,9 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 			
 			if(id != null || address != null) {
 				saveCV(id, data);
-			} else {
+			} /*else {
 				logger.error("there is an error in saving CV!");
-			}
+			}*/
 		} else if(controlCode.equals(ControlMearsureFunctionCode.
 				INTERGER_DATA_RESPONSE.toString())) {	//整点数据返回
 			System.out.println("整点数据返回");
@@ -264,25 +266,30 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 	 * @return void
 	 * @throws
 	 */
-	@SuppressWarnings("unused")
 	private void saveHitchEvent(String id, String address, String data) {
 
 		if (address != null && id != null) {
-			String eventReason = data.substring(22, 24);
 			
 			ControlMearsureHitchEvent hitchEvent = new ControlMearsureHitchEvent();
 			hitchEvent.setId(UUIDUtil.getUUID());
 			hitchEvent.setSwitchId(id);
 			hitchEvent.setHitchReason(data.substring(22, 24));
-			hitchEvent.setHitchTime(stringToDate(getFormatDateString(data)));
+			
+			if(timeCheckStrict(data.substring(24, 30))) {
+				hitchEvent.setHitchTime(stringToDate(getFormatDateString(data)));
+			} else {
+				hitchEvent.setHitchTime(new Date());
+			}
+			
 			hitchEventService.insert(hitchEvent);
+			System.out.println("");
 		}
 
 	}
 	
 	private Date stringToDate(String date) {
 		try {
-			return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -299,17 +306,41 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 	 * @return
 	 */
 	private String getFormatDateString(String data) {
-		return new StringBuilder().
-			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(24, 26))).
-			append('-').
-			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(26, 28))).
-			append('-').
-			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(28, 30))).
-			append(' ').
-			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(30, 32))).
-			append(':').
-			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(32, 34))).
+		return new StringBuilder().append("20").
+			append(timeCheck(data.substring(24, 26))).
+			append('-').append(timeCheck(data.substring(26, 28))).
+			append('-').append(timeCheck(data.substring(28, 30))).
+			append(' ').append(timeCheck(data.substring(30, 32))).
+			append(':').append(timeCheck(data.substring(32, 34))).
 			append(':').append("00").toString();
+	}
+
+	/**
+	 * @description	针对该协议，进行时间年月日时分秒的校验，并返回该协议认同的字符串
+	 * @param date	
+	 * @return
+	 */
+	private String timeCheck(String date) {
+		String result = String.valueOf(Long.parseLong(date, 16));
+		return result.length() == 1 ? "0" + result : result;
+	}
+	
+	/**
+	 * @description	严格判断时间年月日是否正确
+	 * @param substring
+	 * @return
+	 */
+	private boolean timeCheckStrict(String substring) {
+		String[] checked = ControlMearsureDeviceCommandUtil.cutString(2, substring);
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		format.setLenient(false);
+		try {
+			format.parse("20" + timeCheck(checked[0]) + timeCheck(checked[1]) +
+					timeCheck(checked[2]));
+			return true;
+		} catch(ParseException e) {
+			return false;
+		}
 	}
 
 	@Override

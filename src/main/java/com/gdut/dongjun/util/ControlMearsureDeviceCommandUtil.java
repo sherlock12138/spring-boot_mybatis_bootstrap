@@ -1,5 +1,8 @@
 package com.gdut.dongjun.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import org.junit.Test;
 
 import com.gdut.dongjun.service.impl.enums.ControlMearsureFunctionCode;
@@ -90,20 +93,5 @@ public class ControlMearsureDeviceCommandUtil {
 			result[i] = preString.substring(j, j + digit);
 		}
 		return result;
-	}
-
-	/**
-	 * @description	将十六进制字符串转化为十进制
-	 * @param hex	十六进制字符串
-	 * @return
-	 */
-	public static String hexToDec(String hex) {
-		return String.valueOf(Long.parseLong(hex, 16));
-	}
-	
-	@Test
-	public void testOne() {
-		System.out.println(ControlMearsureDeviceCommandUtil.getTotalMessage(
-			ControlMearsureFunctionCode.RECENTLY_DATA_REQUEST.toString(), "0001"));
 	}
 }

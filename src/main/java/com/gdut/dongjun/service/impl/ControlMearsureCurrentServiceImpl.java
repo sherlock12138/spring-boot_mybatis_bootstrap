@@ -23,7 +23,7 @@ public class ControlMearsureCurrentServiceImpl extends
 		implements ControlMearsureCurrentService {
 
 	@Autowired
-	public ControlMearsureCurrentMapper currentMapper;
+	private ControlMearsureCurrentMapper currentMapper;
 
 	@Override
 	public List<ControlMearsureCurrent> getRecentlyCurrent() {
