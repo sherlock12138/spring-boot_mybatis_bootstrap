@@ -167,23 +167,23 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		HighVoltageCurrent c1 = new HighVoltageCurrent();
 		c1.setId(UUIDUtil.getUUID());
 		c1.setPhase("A");
-		c1.setSwitchId("03");
+		c1.setSwitchId(switchId);
 		c1.setTime(date);
-		c1.setValue(123);
+		c1.setValue(Integer.parseInt(dStrings[0]));
 
 		HighVoltageCurrent c2 = new HighVoltageCurrent();
 		c2.setId(UUIDUtil.getUUID());
 		c2.setPhase("B");
-		c2.setSwitchId("03");
+		c2.setSwitchId(switchId);
 		c2.setTime(date);
-		c2.setValue(456);
+		c2.setValue(Integer.parseInt(dStrings[1]));
 
 		HighVoltageCurrent c3 = new HighVoltageCurrent();
 		c3.setId(UUIDUtil.getUUID());
 		c3.setPhase("C");
-		c3.setSwitchId("04");
+		c3.setSwitchId(switchId);
 		c3.setTime(date);
-		c3.setValue(789);
+		c3.setValue(Integer.parseInt(dStrings[2]));
 
 		currentService.insert(c1);
 		currentService.insert(c2);
