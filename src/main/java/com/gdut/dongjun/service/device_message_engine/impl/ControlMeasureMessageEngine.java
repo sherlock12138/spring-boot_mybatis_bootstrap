@@ -1,10 +1,13 @@
 package com.gdut.dongjun.service.device_message_engine.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.service.device_message_engine.ControlMessageEngine;
 import com.gdut.dongjun.service.device_message_engine.DataMessageEngine;
 import com.gdut.dongjun.service.device_message_engine.EventMessageEngine;
+import com.gdut.dongjun.service.impl.enums.ControlMearsureFunctionCode;
+import com.gdut.dongjun.util.ControlMearsureDeviceCommandUtil;
 
 /**
  * @author Sherlock-lee
@@ -18,48 +21,57 @@ public class ControlMeasureMessageEngine implements ControlMessageEngine,
 
 	@Override
 	public String generateCloseSwitchMessage(String address) {
-		
 		return null;
 	}
 
 	@Override
 	public String generateOpenSwitchMessage(String address) {
-		
 		return null;
 	}
 
 	@Override
 	public String generateReadAPhaseCurrentMessage(String address) {
-		return null;
+		return generateReadAllRecentlyMessage(address);
 	}
 
 	@Override
 	public String generateReadBPhaseCurrentMessage(String address) {
-		return null;
+		return generateReadAllRecentlyMessage(address);
 	}
 
 	@Override
 	public String generateReadCPhaseCurrentMessage(String address) {
-		return null;
+		return generateReadAllRecentlyMessage(address);
 	}
 
 	@Override
 	public String generateReadAPhaseVoltageMessage(String address) {
-		return null;
+		return generateReadAllRecentlyMessage(address);
 	}
 
 	@Override
 	public String generateReadBPhaseVoltageMessage(String address) {
-		return null;
+		return generateReadAllRecentlyMessage(address);
 	}
 
 	@Override
 	public String generateReadCPhaseVoltageMessage(String address) {
-		return null;
+		return generateReadAllRecentlyMessage(address);
 	}
 
 	@Override
 	public String generateReadHitchEventMessage(String address) {
-		return null;
+		String msg = ControlMearsureDeviceCommandUtil.getTotalMessage(
+				ControlMearsureFunctionCode.EVENT_REQUEST.toString(), address);
+		System.out.println(msg);
+		return msg;
+	}
+	
+	public String generateReadAllRecentlyMessage(String address) {
+		String msg = ControlMearsureDeviceCommandUtil.getTotalMessage(
+				ControlMearsureFunctionCode.INTEGER_DATA_REQUEST.toString(), 
+				address);
+		System.out.println(msg);
+		return msg;
 	}
 }

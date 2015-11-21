@@ -27,8 +27,10 @@ public class ControlMeasureServerInitializer extends ServerInitializer{
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {
 		
-		super.initChannel(ch);
 		ChannelPipeline p = ch.pipeline();
+		if (super.sslCtx != null) {
+			p.addLast(super.sslCtx.newHandler(ch.alloc()));// 建立TCP长连接
+		}
 		p.addLast(new Decoder());
 		p.addLast(new Encoder());
 		p.addLast(dataReceiver);
