@@ -52,7 +52,7 @@ public class UserController {
 
 		return "login";
 	}
-
+	
 	@RequestMapping(value = "elecon/login_form")
 	@ResponseBody
 	public Object loginForm(String name, String password, Model model,

@@ -24,9 +24,6 @@ public class HighVoltageDeviceCommandUtil {
 	private String[] data;// 应用服务数据单元ASDU
 	private String check;// 帧校验和CS
 
-	public String baoWen = "68 47 47 68 D4 01 00 09 94 14 01 01 00 01 40 5F 5C 00 00"
-			+ " 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
-			+ "00 00 00 00 E8 03 00 8B 13 00 45 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 52 16";
 
 	// 预置合闸
 	public String closeSwitchPre(String address, String data) {
@@ -109,25 +106,8 @@ public class HighVoltageDeviceCommandUtil {
 		return data;
 	}
 
-	@Test
-	public void readAPhaseVoltage() {
-		// TODO Auto-generated method stub\
-		baoWen = baoWen.replace(" ", "");
-		System.out.println("AB的电压"
-				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(30, 34)), 16) + "") / 100 + "V");
-		System.out.println("BC的电压"
-				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(38, 42)), 16) + "") / 100 + "V");
-//		System.out.println("C的电压"
-//				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(38, 42)), 16) + "") / 100 + "V");
-		System.out.println("A的电流"
-				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(50, 54)), 16) + "") / 100 + "A");
-		System.out.println("B的电流"
-				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(54, 58)), 16) + "") / 100 + "A");
-		System.out.println("B的电流"
-				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(58, 62)), 16) + "") / 100 + "A");
-	}
 
-	//读取电压电流
+	//读取电压电流的报文
 	public String readVoltageAndCurrent(String address, String data) {
 		address = correctAddress(address);
 		String msg = HighCommandControlCode.CONTROL + " " + address + " " + data + " " + address + " 00 00 14";
@@ -135,33 +115,61 @@ public class HighVoltageDeviceCommandUtil {
 		return  "68 " + this.dataLength + " " + this.dataLength + " 68 " + msg  + " "+ this.check + " 16";
 	}
 	
-	public String readBPhaseVoltage(String address) {
-		return null;
+	//读AB的电压
+	public String readABPhaseVoltage(String data) {
+		// TODO Auto-generated method stub\
+		
+//		System.out.println("AB的电压"
+//				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(30, 34)), 16) + "") / 100 + "V");
+//		System.out.println("BC的电压"
+//				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(38, 42)), 16) + "") / 100 + "V");
+//		System.out.println("C的电压"
+//				+ Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(38, 42)), 16) + "") / 100 + "V");
+//		System.out.println("A的电流"
+//				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(50, 54)), 16) + "") / 100 + "A");
+//		System.out.println("B的电流"
+//				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(54, 58)), 16) + "") / 100 + "A");
+//		System.out.println("B的电流"
+//				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(58, 62)), 16) + "") / 100 + "A");
+		data = data.replace(" ", "");
+		return Integer.parseInt(reverseString(data.substring(30, 34)), 16) / 100 + "";
+	}
+	
+	//读BC电压
+	public String readBCPhaseVoltage(String data) {
+		data = data.replace(" ", "");
+		return Integer.parseInt(reverseString(data.substring(38, 42)), 16) / 100 + "";
 	}
 
 	public String readCPhaseVoltage(String address) {
 		return null;
 	}
 
-	public String readAPhaseCurrent(String address) {
-		return null;
+	//读A电流
+	public String readAPhaseCurrent(String data) {
+		data = data.replace(" ", "");
+		return Integer.parseInt(reverseString(data.substring(50, 54)), 16) / 100 + "";
 	}
 
-	public String readBPhaseCurrent(String address) {
-		return null;
+	//读B电流
+	public String readBPhaseCurrent(String data) {
+		data = data.replace(" ", "");
+		return Integer.parseInt(reverseString(data.substring(54, 58)), 16) / 100 + "";
 	}
 
-	public String readCPhaseCurrent(String address) {
-		return null;
+	//读C的电流
+	public String readCPhaseCurrent(String data) {
+		data = data.replace(" ", "");
+		return Integer.parseInt(reverseString(data.substring(54, 58)), 16) / 100 + "";
 	}
 
-	public static void main(String[] args) {
-		HighVoltageDeviceCommandUtil a = new HighVoltageDeviceCommandUtil();
+//	public static void main(String[] args) {
+//		HighVoltageDeviceCommandUtil a = new HighVoltageDeviceCommandUtil();
 //		System.out.println(a.closeSwitchPre("01 00", HighCommandControlCode.PRE_CLOSE_SWITCH.toString()));
 //		System.out.println(a.closeSwitch("01 00", HighCommandControlCode.CLOSE_SWITCH.toString()));
 //		System.out.println(a.openSwitch("01 00", HighCommandControlCode.OPEN_SWITCH.toString()));
 //		System.out.println(a.openSwitchPre("01 00", HighCommandControlCode.PRE_OPEN_SWITCH.toString()));
-		System.out.println(a.readVoltageAndCurrent("01 00", HighCommandControlCode.READ_VOLTAGE_CURRENT.toString()));
-	}
+//		System.out.println(a.readVoltageAndCurrent("01 00", HighCommandControlCode.READ_VOLTAGE_CURRENT.toString()));
+//	}
 
 }

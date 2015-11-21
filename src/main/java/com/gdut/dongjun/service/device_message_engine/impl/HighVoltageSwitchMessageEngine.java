@@ -6,6 +6,7 @@ import com.gdut.dongjun.service.device_message_engine.ControlMessageEngine;
 import com.gdut.dongjun.service.device_message_engine.DataMessageEngine;
 import com.gdut.dongjun.service.device_message_engine.EventMessageEngine;
 import com.gdut.dongjun.service.impl.enums.HighCommandControlCode;
+import com.gdut.dongjun.service.net_server.handler.msg_decoder.HighVoltageDataReceiver;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
 
 /**
