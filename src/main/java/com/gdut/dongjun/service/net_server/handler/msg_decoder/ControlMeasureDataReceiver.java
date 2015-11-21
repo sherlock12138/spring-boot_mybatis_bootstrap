@@ -15,27 +15,25 @@
  */
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
+import com.gdut.dongjun.domain.po.ControlMearsureHitchEvent;
 import com.gdut.dongjun.domain.po.ControlMearsureVoltage;
-import com.gdut.dongjun.domain.po.LowVoltageHitchEvent;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureHitchEventService;
-import com.gdut.dongjun.service.ControlMearsureSwitchService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.impl.enums.ControlMearsureFunctionCode;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.util.ControlMearsureDeviceCommandUtil;
-import com.gdut.dongjun.util.LowVoltageDeviceCommandUtil;
 import com.gdut.dongjun.util.UUIDUtil;
-import com.gdut.dongjun.web.UserController;
 
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -50,14 +48,7 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 	@Autowired
 	private ControlMearsureVoltageService voltageService;
 	@Autowired
-	private ControlMearsureSwitchService switchService;
-	@Autowired
 	private ControlMearsureHitchEventService hitchEventService;
-	@Autowired
-	private LowVoltageDeviceCommandUtil commandUtil;
-	
-	@Autowired
-	private UserController controller;
 	
 	private static final String READ_ADDRESS = "68AAAAAAAAAAAA681300DF16";
 	private static final Logger logger = Logger.getLogger(ControlMeasureDataReceiver.class);
@@ -89,6 +80,7 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 		data = data.replace(" ", "");
 		String address = data.substring(10, 14);
 		String controlCode = data.substring(16, 18);
+		String id = CtxStore.getId(address);
 		
 		/*// 将接收到的客户端信息分类处理
 		if (controlCode.equals("80")) {	// 读通信地址
@@ -134,7 +126,7 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 		if(controlCode.equals(ControlMearsureFunctionCode.
 				RECENTLY_DATA_RESPONSE.toString())) {	//实时数据返回
 			
-			String id = CtxStore.getId(address);
+			
 			if(id != null || address != null) {
 				saveCV(id, data);
 			} else {
@@ -146,14 +138,11 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 		} else if(controlCode.equals(ControlMearsureFunctionCode.
 				COUNT_DATA_RESPONSE.toString())) {	//统计数据返回
 			System.out.println("统计数据返回");
-		} else {	//报警事件返回
-			
-			String eventId = data.substring(22, 24);
-			String year = data.substring(24, 26);
-			String month = data.substring(26, 28);
-			String day = data.substring(28, 30);
-			String hour = data.substring(32, 34);
-			String minute = data.substring(34, 36);
+		} else if(controlCode.equals(ControlMearsureFunctionCode.
+				EVENT_RESPONSE.toString())) {	//报警事件返回
+			saveHitchEvent(id, address, data);
+		} else {
+			logger.info("undefine message received!");
 		}
 	};
 
@@ -276,44 +265,57 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 	 * @throws
 	 */
 	@SuppressWarnings("unused")
-	private void readHitchEvent(String id, String address, String data) {
+	private void saveHitchEvent(String id, String address, String data) {
 
-		/*if (address != null && id != null) {
-
-			LowVoltageHitchEvent hitchEvent = LowVoltageDeviceCommandUtil.readHitchEvent(data);// 查询开关的结果
+		if (address != null && id != null) {
+			String eventReason = data.substring(22, 24);
+			
+			ControlMearsureHitchEvent hitchEvent = new ControlMearsureHitchEvent();
 			hitchEvent.setId(UUIDUtil.getUUID());
 			hitchEvent.setSwitchId(id);
-			LowVoltageHitchEvent hitchEvent2 = hitchEventService.getRecentlyHitchEvent();
+			hitchEvent.setHitchReason(data.substring(22, 24));
+			hitchEvent.setHitchTime(stringToDate(getFormatDateString(data)));
+			hitchEventService.insert(hitchEvent);
+		}
 
-			hitchEvent2.getHitchTime().compareTo(hitchEvent.getHitchTime());
-
-			if (hitchEvent2 != null) {
-				if (hitchEvent != null) {
-					if (hitchEvent2.getHitchTime().getTime() < hitchEvent// 当前的跳闸事件新增
-							.getHitchTime().getTime()) {
-						hitchEventService.insert(hitchEvent);// 存入数据库
-						CtxStore.updateSwtichOpen(id);
-					}
-
-				}
-			} else {
-				hitchEventService.insert(hitchEvent);
-				CtxStore.updateSwtichOpen(id);
-			}
-
-		}*/
-
+	}
+	
+	private Date stringToDate(String date) {
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * @description	
+	 * 	将回来的报文转化为有时间格式的字符串，<code>data.substring(24, 26)</code>表示年份，
+	 * <code>data.substring(26, 28)</code>表示月份，<code>data.substring(28, 30)</code>
+	 * 表示天，<code>data.substring(30, 32)</code>表示小时，<code>data.substring(32, 34)
+	 * </code>表示分钟数
+	 * @param data
+	 * @return
+	 */
+	private String getFormatDateString(String data) {
+		return new StringBuilder().
+			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(24, 26))).
+			append('-').
+			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(26, 28))).
+			append('-').
+			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(28, 30))).
+			append(' ').
+			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(30, 32))).
+			append(':').
+			append(ControlMearsureDeviceCommandUtil.hexToDec(data.substring(32, 34))).
+			append(':').append("00").toString();
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		cause.printStackTrace();
 		ctx.close();
-	}
-	
-	@Test
-	public void testOne() {
-		
 	}
 
 }

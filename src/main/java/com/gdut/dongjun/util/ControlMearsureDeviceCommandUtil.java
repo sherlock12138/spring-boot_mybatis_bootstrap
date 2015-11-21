@@ -92,6 +92,15 @@ public class ControlMearsureDeviceCommandUtil {
 		return result;
 	}
 
+	/**
+	 * @description	将十六进制字符串转化为十进制
+	 * @param hex	十六进制字符串
+	 * @return
+	 */
+	public static String hexToDec(String hex) {
+		return String.valueOf(Long.parseLong(hex, 16));
+	}
+	
 	@Test
 	public void testOne() {
 		System.out.println(ControlMearsureDeviceCommandUtil.getTotalMessage(

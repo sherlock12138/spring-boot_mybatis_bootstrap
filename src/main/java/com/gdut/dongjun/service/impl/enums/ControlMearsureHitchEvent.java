@@ -28,4 +28,9 @@ public enum ControlMearsureHitchEvent {
 	public String toString() {
 		return this.code;
 	}
+	
+	public String getStatement() {
+		return this.statement;
+	}
+	
 }

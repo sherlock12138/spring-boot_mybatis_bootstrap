@@ -1,5 +1,6 @@
 package com.gdut.dongjun.service.device_message_engine.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.service.device_message_engine.ControlMessageEngine;
@@ -60,13 +61,17 @@ public class ControlMeasureMessageEngine implements ControlMessageEngine,
 
 	@Override
 	public String generateReadHitchEventMessage(String address) {
-		return ControlMearsureDeviceCommandUtil.getTotalMessage(
+		String msg = ControlMearsureDeviceCommandUtil.getTotalMessage(
 				ControlMearsureFunctionCode.EVENT_REQUEST.toString(), address);
+		System.out.println(msg);
+		return msg;
 	}
 	
 	public String generateReadAllRecentlyMessage(String address) {
-		return ControlMearsureDeviceCommandUtil.getTotalMessage(
+		String msg = ControlMearsureDeviceCommandUtil.getTotalMessage(
 				ControlMearsureFunctionCode.INTEGER_DATA_REQUEST.toString(), 
 				address);
+		System.out.println(msg);
+		return msg;
 	}
 }
