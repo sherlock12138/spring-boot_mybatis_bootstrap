@@ -200,6 +200,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	 * @return void
 	 * @throws
 	 */
+	@Test
 	private void saveVoltage(String switchId, String[] dStrings) {
 
 		logger.info("saving voltage...");
