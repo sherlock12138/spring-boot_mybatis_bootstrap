@@ -233,21 +233,21 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 		v1.setPhase("A");
 		v1.setSwitchId(switchId);
 		v1.setTime(date);
-		v1.setValue(Integer.parseInt(dStrings[0]));
+		v1.setValue(Integer.parseInt(dStrings[0], 16));
 
 		ControlMearsureVoltage v2 = new ControlMearsureVoltage();
 		v2.setId(UUIDUtil.getUUID());
 		v2.setPhase("B");
 		v2.setSwitchId(switchId);
 		v2.setTime(date);
-		v2.setValue(Integer.parseInt(dStrings[1]));
+		v2.setValue(Integer.parseInt(dStrings[1], 16));
 
 		ControlMearsureVoltage v3 = new ControlMearsureVoltage();
 		v3.setId(UUIDUtil.getUUID());
 		v3.setPhase("C");
 		v3.setSwitchId(switchId);
 		v3.setTime(date);
-		v3.setValue(Integer.parseInt(dStrings[2]));
+		v3.setValue(Integer.parseInt(dStrings[2], 16));
 		
 		voltageService.insert(v1);
 		voltageService.insert(v2);
