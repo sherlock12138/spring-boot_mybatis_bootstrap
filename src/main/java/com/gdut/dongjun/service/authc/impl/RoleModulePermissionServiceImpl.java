@@ -78,4 +78,9 @@ public class RoleModulePermissionServiceImpl extends
 		
 		return roleModulePermissionMapper.deleteByRoleModuleId(id);
 	}
+
+	@Override
+	protected boolean isExist(RoleModulePermissionKey record) {
+		return true;
+	}
 }

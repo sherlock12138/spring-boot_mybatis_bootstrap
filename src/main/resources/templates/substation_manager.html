@@ -21,7 +21,7 @@ body {
 }
 
 th, td {
- white-space: nowrap;
+	white-space: nowrap;
 }
 
 .sidebar-nav {
@@ -112,13 +112,19 @@ th, td {
 
 			<div class="row-fluid">
 				<div class="span2 container-fluid well sidebar-nav">
-					<ul  class="nav nav-list bs-docs-sidenav">
+					<ul class="nav nav-list bs-docs-sidenav">
 						<li class="nav-header">资源管理</li>
 						<li><a href="#">变电站管理</a></li>
-						<li><a href="#about">线路管理</a></li>
-						<li class="active"><a href="switch_manager">开关管理</a></li>
+						<li><a href="line_manager">线路管理</a></li>
+						<li class="nav-header">设备管理</li>
+						<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
+						<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
+						<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
+
 						<li class="nav-header">事件管理</li>
-						<li><a href="hitch_event_manager">故障事件管理</a></li>
+						<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+						<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
+						<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
 						<li><a href="#">Link</a></li>
 						<li><a href="#">Link</a></li>
 						<li class="nav-header">Sidebar</li>
@@ -133,33 +139,14 @@ th, td {
 					<table id="switch_list"
 						class="table table-bordered table-striped table-hover table-condensed success">
 						<thead>
-							<td>设备号码</td>
 							<td>名称</td>
 							<td class="hidden">Id</td>
-							<td class="hidden">线路ID</td>
-							<td>地址</td>
-							<td>经度</td>
-							<td>纬度</td>
-							<td>SIM</td>
-							<td>公约</td>
-							<td>是否在线</td>
-							<td>进入地图</td>
 							<td>修改</td>
 							<td>删除</td>
 						</thead>
 						<tr th:each="switch:${switches}" th:if="*{switch!=null}">
-							<td th:text="${switch.deviceNumber}"></td>
 							<td th:text="${switch.name}"></td>
 							<td class="hide" th:text="${switch.id}"></td>
-							<td class="hide" th:text="${switch.lineId}"></td>
-							<td th:text="${switch.address}"></td>
-							<td th:text="${switch.longitude}"></td>
-							<td th:text="${switch.latitude}"></td>
-
-							<td th:text="${switch.simNumber}"></td>
-							<td th:text="${switch.protocal}!=0?'07':'101'"></td>
-							<td></td>
-							<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
 							<td><a href="#edit_switch_modal" role="button"
 								class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
 							<td><a href="#del_switch_modal"
@@ -169,17 +156,8 @@ th, td {
 							<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
 						</tr>
 						<tfoot>
-							<td>设备号码</td>
 							<td>名称</td>
 							<td class="hidden">Id</td>
-							<td class="hidden">线路ID</td>
-							<td>地址</td>
-							<td>经度</td>
-							<td>纬度</td>
-							<td>SIM</td>
-							<td>公约</td>
-							<td>是否在线</td>
-							<td>进入地图</td>
 							<td>修改</td>
 							<td>删除</td>
 						</tfoot>

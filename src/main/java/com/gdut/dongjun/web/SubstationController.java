@@ -11,20 +11,24 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.Line;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
+import com.gdut.dongjun.domain.po.Substation;
+import com.gdut.dongjun.domain.po.User;
+import com.gdut.dongjun.service.CompanyService;
 import com.gdut.dongjun.service.LineService;
+import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.SubstationService;
 import com.gdut.dongjun.util.MyBatisMapUtil;
-import com.gdut.dongjun.util.UUIDUtil;
 
 @Controller
 @RequestMapping("/dongjun")
 @SessionAttributes("currentUser")
-public class LineController {
+public class SubstationController {
 
 	@Autowired
-	private LineService lineService;
-	@Autowired
 	private SubstationService substationService;
+	@Autowired
+	private CompanyService companyService;
 
 	/**
 	 * 
@@ -36,11 +40,12 @@ public class LineController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/line_manager")
+	@RequestMapping("/substation_manager")
 	public String getLineSwitchList(Model model) {
 
-		model.addAttribute("switches", lineService.selectByParameters(null));
-		return "line_manager";
+		model.addAttribute("switches",
+				substationService.selectByParameters(null));
+		return "substation_manager";
 	}
 
 	/**
@@ -53,14 +58,19 @@ public class LineController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/line_list_by_substation_id")
-	public String getLineSwitchListByLineId(String substation_id,
-			HttpSession session, Model model) {
+	@RequestMapping("/substation_list_by_company_id")
+	public String getLineSwitchListByLineId(HttpSession session, Model model) {
 
-		model.addAttribute("switches", lineService
-				.selectByParameters(MyBatisMapUtil.warp("substation_id",
-						substation_id)));
-		return "line_list";
+		User user = (User) session.getAttribute("currentUser");
+		String companyId = null;
+		if (user != null) {
+
+			companyId = user.getCompanyId();
+		}
+		model.addAttribute("switches", substationService
+				.selectByParameters(MyBatisMapUtil
+						.warp("company_id", companyId)));
+		return "substation_list";
 	}
 
 	/**
@@ -74,15 +84,15 @@ public class LineController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/del_line")
+	@RequestMapping("/del_substation")
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
-		lineService.deleteByPrimaryKey(switchId);
+		substationService.deleteByPrimaryKey(switchId);
 		redirectAttributes.addAttribute("lineId",
-				lineService.selectByParameters(null));
+				substationService.selectByParameters(null));
 
-		return "redirect:line_manager";
+		return "redirect:substation_manager";
 	}
 
 	/**
@@ -96,18 +106,17 @@ public class LineController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/edit_line")
-	public String editSwitch(Line switch1, Model model,
+	@RequestMapping("/edit_substation")
+	public String editSwitch(Substation switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
 		// @RequestParam(required = true)
 		// 进不来
 		System.out.println(switch1.toString());
-		switch1.setId(UUIDUtil.getUUID());
-		lineService.updateByPrimaryKey(switch1);
+		substationService.updateByPrimaryKey(switch1);
 		redirectAttributes.addAttribute("lineId",
-				lineService.selectByParameters(null));
-		return "redirect:line_manager";
+				substationService.selectByParameters(null));
+		return "redirect:substation_manager";
 	}
 
 }

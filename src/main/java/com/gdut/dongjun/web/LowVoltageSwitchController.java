@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.Line;
@@ -14,7 +15,7 @@ import com.gdut.dongjun.service.LowVoltageSwitchService;
 
 @Controller
 @RequestMapping("/dongjun")
-public class SwitchController {
+public class LowVoltageSwitchController {
 
 	@Autowired
 	private LowVoltageSwitchService switchService;
@@ -31,11 +32,27 @@ public class SwitchController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/switch_manager")
+	@RequestMapping("/low_voltage_switch_manager")
 	public String getLineSwitchList(Model model) {
 
 		model.addAttribute("switches", switchService.selectByParameters(null));
-		return "switch_manager";
+		return "low_voltage_switch_manager";
+	}
+
+	/**
+	 * 
+	 * @Title: getAllLowVoltage_Switch
+	 * @Description: TODO
+	 * @param @param model
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/get_all_low_voltage_switch")
+	@ResponseBody
+	public Object getAllLowVoltage_Switch(Model model) {
+
+		return switchService.selectByParameters(null);
 	}
 
 	/**
@@ -78,7 +95,7 @@ public class SwitchController {
 
 		// /为绝对路径，即为http://localhost:9080/switch_list?lineId=01
 		// 没有/为相对路径 http://localhost:9080/dongjun/switch_list?lineId=01
-		return "redirect:switch_manager";
+		return "redirect:low_voltage_switch_manager";
 	}
 
 	/**
@@ -95,13 +112,13 @@ public class SwitchController {
 	@RequestMapping("/edit_switch")
 	public String editSwitch(LowVoltageSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
-		
-		//@RequestParam(required = true) 
-		//进不来
+
+		// @RequestParam(required = true)
+		// 进不来
 		System.out.println(switch1.toString());
 		switchService.updateSwitch(switch1);
 		redirectAttributes.addAttribute("lineId", switch1.getLineId());
-		return "redirect:switch_manager";
+		return "redirect:low_voltage_switch_manager";
 	}
 
 }

@@ -66,4 +66,16 @@ public class LineServiceImpl extends BaseServiceImpl<Line> implements
 		}
 	}
 
+	@Override
+	protected boolean isExist(Line record) {
+		
+		if (record != null
+				&& lineMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

@@ -74,4 +74,16 @@ public class LowVoltageVoltageServiceImpl extends BaseServiceImpl<LowVoltageVolt
 		return voltageMapper.getRecentlyVoltage();
 	}
 
+	@Override
+	protected boolean isExist(LowVoltageVoltage record) {
+
+		if (record != null
+				&& voltageMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

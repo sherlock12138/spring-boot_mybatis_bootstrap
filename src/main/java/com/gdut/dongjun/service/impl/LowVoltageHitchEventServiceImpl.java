@@ -56,4 +56,16 @@ public class LowVoltageHitchEventServiceImpl extends BaseServiceImpl<LowVoltageH
 		return events;
 	}
 
+	@Override
+	protected boolean isExist(LowVoltageHitchEvent record) {
+
+		if (record != null
+				&& hitchEventMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

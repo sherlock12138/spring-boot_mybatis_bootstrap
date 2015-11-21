@@ -105,4 +105,9 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleKey> implements
 		return userRoleMapper.deleteByUserId(userId);
 	}
 
+	@Override
+	protected boolean isExist(UserRoleKey record) {
+		return true;
+	}
+
 }

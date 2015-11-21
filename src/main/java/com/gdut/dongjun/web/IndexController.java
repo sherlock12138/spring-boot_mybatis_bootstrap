@@ -1,21 +1,30 @@
 package com.gdut.dongjun.web;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.ZTreeNodeService;
 
 @Controller
 @RequestMapping("/dongjun")
+@SessionAttributes("currentUser")
 public class IndexController {
 
 	@Autowired
 	private ZTreeNodeService zTreeNodeService;
+	@Autowired
+	private org.apache.shiro.mgt.SecurityManager manager;
 
 	/**
 	 * 
@@ -32,11 +41,11 @@ public class IndexController {
 
 	/**
 	 * 
-	* @Title: manager 
-	* @Description: TODO
-	* @param @return   
-	* @return String   
-	* @throws
+	 * @Title: manager
+	 * @Description: TODO
+	 * @param @return
+	 * @return String
+	 * @throws
 	 */
 	@RequestMapping("/manager")
 	public String manager() {
@@ -56,7 +65,6 @@ public class IndexController {
 		return "current_voltage_chart";
 	}
 
-	
 	/**
 	 * 
 	 * @Title: switchTree
@@ -70,14 +78,26 @@ public class IndexController {
 	 */
 	@RequestMapping("/switch_tree")
 	@ResponseBody
-	public Object switchTree(@RequestParam(required = true) String companyId,
-			Model model, RedirectAttributes redirectAttributes) {
+	public Object switchTree(@RequestParam(required = true) String type,
+			Model model, HttpSession session,
+			RedirectAttributes redirectAttributes) {
 
-		System.out.println(zTreeNodeService.getSwitchTree(companyId));
+		User user = (User) session.getAttribute("currentUser");
+		if (user != null && user.getCompanyId() != null) {
 
-		return zTreeNodeService.getSwitchTree(companyId);
+			return zTreeNodeService.getSwitchTree(user.getCompanyId());
+		} else {
 
+			return "";
+		}
 	}
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * 

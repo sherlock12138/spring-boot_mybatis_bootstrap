@@ -11,7 +11,7 @@ import com.gdut.dongjun.service.LowVoltageHitchEventService;
 
 @Controller
 @RequestMapping("/dongjun")
-public class HitchEventController {
+public class ControlMeasureHitchEventController {
 
 	@Autowired
 	private LowVoltageHitchEventService hitchEventService;
@@ -26,11 +26,11 @@ public class HitchEventController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/hitch_event_manager")
+	@RequestMapping("/control_measure_hitch_event_manager")
 	public String getLineSwitchList(Model model) {
 
 		model.addAttribute("hitch_events", hitchEventService.hitchEventList());
-		return "hitch_event_manager";
+		return "control_measure_hitch_event_manager";
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class HitchEventController {
 	 * @return String
 	 * @throws
 	 */
-	@RequestMapping("/del_hitch_event")
+	@RequestMapping("/del_control_measure_hitch_event")
 	public String delSwitch(@RequestParam(required = true) String eventId,
 			Model model, RedirectAttributes redirectAttributes) {
 
@@ -52,7 +52,7 @@ public class HitchEventController {
 
 		// /为绝对路径，即为http://localhost:9080/switch_list?lineId=01
 		// 没有/为相对路径 http://localhost:9080/dongjun/switch_list?lineId=01
-		return "redirect:hitch_event_manager";
+		return "redirect:control_measure_hitch_event_manager";
 	}
 
 

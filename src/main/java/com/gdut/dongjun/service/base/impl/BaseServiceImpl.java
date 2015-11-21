@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gdut.dongjun.domain.dao.base.SinglePrimaryKeyBaseMapper;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**
@@ -16,7 +17,7 @@ import com.gdut.dongjun.service.base.BaseService;
  * @date 2015年7月24日 下午2:33:08
  * @version V1.0
  */
-public class BaseServiceImpl<T> implements BaseService<T> {
+public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	@Autowired
 	private SinglePrimaryKeyBaseMapper<T> baseMapper;
@@ -59,13 +60,36 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 	@Override
 	public int updateByPrimaryKey(T record) {
 		// TODO Auto-generated method stub
-		return baseMapper.updateByPrimaryKey(record);
+		if (isExist(record)) {
+
+			return baseMapper.updateByPrimaryKey(record);
+		} else {
+
+			return baseMapper.insert(record);
+		}
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(T record) {
 		// TODO Auto-generated method stub
-		return baseMapper.updateByPrimaryKeySelective(record);
+		if (isExist(record)) {
+
+			return baseMapper.updateByPrimaryKeySelective(record);
+		} else {
+
+			return baseMapper.insert(record);
+		}
 	}
+
+	/**
+	 * 
+	 * @Title: isExist
+	 * @Description: TODO
+	 * @param @param record
+	 * @param @return
+	 * @return boolean
+	 * @throws
+	 */
+	protected abstract boolean isExist(T record);
 
 }

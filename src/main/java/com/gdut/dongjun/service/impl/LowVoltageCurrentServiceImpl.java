@@ -77,4 +77,16 @@ public class LowVoltageCurrentServiceImpl extends BaseServiceImpl<LowVoltageCurr
 		// TODO Auto-generated method stub
 		return currentMapper.getRecentlyCurrent();
 	}
+
+	@Override
+	protected boolean isExist(LowVoltageCurrent record) {
+
+		if (record != null
+				&& currentMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
