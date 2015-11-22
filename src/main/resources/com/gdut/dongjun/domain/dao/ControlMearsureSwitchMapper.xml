@@ -25,6 +25,24 @@
     -->
     id, name, address, sim_number, device_number, protocal, longitude, latitude, line_id
   </sql>
+  
+  <select id="selectByParameters" resultMap="BaseResultMap">
+		select * from control_mearsure_switch where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+	</select>
+  
+  
+  
+  
+  
+  
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--
       WARNING - @mbggenerated

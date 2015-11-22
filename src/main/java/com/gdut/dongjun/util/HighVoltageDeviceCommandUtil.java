@@ -1,14 +1,11 @@
 package com.gdut.dongjun.util;
 
-import org.junit.Test;
 import org.springframework.stereotype.Component;
 
-import com.gdut.dongjun.service.impl.enums.CurrentVariable;
 import com.gdut.dongjun.service.impl.enums.HighCommandControlCode;
 
 /**
  * 高压设备util类
- * 
  * @author zjd
  * @email 452880294@qq.com
  * @date 2015年11月18日
@@ -27,7 +24,6 @@ public class HighVoltageDeviceCommandUtil {
 
 	// 预置合闸
 	public String closeSwitchPre(String address, String data) {
-		address = correctAddress(address);
 		String msg = HighCommandControlCode.PRE_CONTROL + " " + address + " " + HighCommandControlCode.COMMAND + " " + address + " " + data;
 		this.setData(msg);
 		return "68 " + this.dataLength + " " + this.dataLength + " 68 " + msg + " " + this.check + " 16";
@@ -35,7 +31,6 @@ public class HighVoltageDeviceCommandUtil {
 
 	// 合闸
 	public String closeSwitch(String address, String data) {
-		address = correctAddress(address);
 		String msg = HighCommandControlCode.CONTROL + " " + address + " " + HighCommandControlCode.COMMAND + " " + address + " " + data;
 		this.setData(msg);
 		return "68 " + this.dataLength + " " + this.dataLength + " 68 " + msg + " " + this.check + " 16";
@@ -43,7 +38,6 @@ public class HighVoltageDeviceCommandUtil {
 
 	// 预置合闸
 	public String openSwitchPre(String address, String data) {
-		address = correctAddress(address);
 		String msg = HighCommandControlCode.PRE_CONTROL + " " + address + " " + HighCommandControlCode.COMMAND + " " + address + " " + data;
 		this.setData(msg);
 		return "68 " + this.dataLength + " " + this.dataLength + " 68 " + msg + " " + this.check + " 16";
@@ -51,7 +45,6 @@ public class HighVoltageDeviceCommandUtil {
 
 	// 合闸
 	public String openSwitch(String address, String data) {
-		address = correctAddress(address);
 		String msg = HighCommandControlCode.CONTROL + " " + address + " " + HighCommandControlCode.COMMAND + " " + address + " " + data;
 		this.setData(msg);
 		return "68 " + this.dataLength + " " + this.dataLength + " 68 " + msg +" " + this.check + " 16";
@@ -131,15 +124,25 @@ public class HighVoltageDeviceCommandUtil {
 //				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(54, 58)), 16) + "") / 100 + "A");
 //		System.out.println("B的电流"
 //				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(58, 62)), 16) + "") / 100 + "A");
-		data = data.replace(" ", "");
-		return Integer.parseInt(reverseString(data.substring(30, 34)), 16) / 100 + "";
+//		return Integer.parseInt(reverseString(data.substring(66, 70)), 16) / 100 + "";
+		return changToRight(data.substring(66, 70));
+	}
+	
+	//将线电压装化为相电压
+	private String changToRight(String data) {
+		//返回相电压
+		//int voltage = (int) (Double.parseDouble(Integer.parseInt(reverseString(data), 16) / 100 + "") / Math.sqrt(3));
+		//返回线电压
+		int voltage = (int) Double.parseDouble(Integer.parseInt(reverseString(data), 16) / 100 + "");
+		return voltage + "";
 	}
 	
 	//读BC电压
 	public String readBCPhaseVoltage(String data) {
-		data = data.replace(" ", "");
-		return Integer.parseInt(reverseString(data.substring(38, 42)), 16) / 100 + "";
+		
+		return changToRight(data.substring(74, 78));
 	}
+
 
 	public String readCPhaseVoltage(String address) {
 		return null;
@@ -147,20 +150,17 @@ public class HighVoltageDeviceCommandUtil {
 
 	//读A电流
 	public String readAPhaseCurrent(String data) {
-		data = data.replace(" ", "");
-		return Integer.parseInt(reverseString(data.substring(50, 54)), 16) / 100 + "";
+		return Integer.parseInt(reverseString(data.substring(86, 90)), 16) / 100 + "";
 	}
 
 	//读B电流
 	public String readBPhaseCurrent(String data) {
-		data = data.replace(" ", "");
-		return Integer.parseInt(reverseString(data.substring(54, 58)), 16) / 100 + "";
+		return Integer.parseInt(reverseString(data.substring(90, 94)), 16) / 100 + "";
 	}
 
 	//读C的电流
 	public String readCPhaseCurrent(String data) {
-		data = data.replace(" ", "");
-		return Integer.parseInt(reverseString(data.substring(54, 58)), 16) / 100 + "";
+		return Integer.parseInt(reverseString(data.substring(94, 98)), 16) / 100 + "";
 	}
 
 //	public static void main(String[] args) {

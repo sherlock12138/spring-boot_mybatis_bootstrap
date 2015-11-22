@@ -20,6 +20,11 @@ public class HighVoltageSwitchMessageEngine implements ControlMessageEngine, Dat
 
 	@Override
 	public String generateCloseSwitchMessage(String address) {
+		String test = new HighVoltageDeviceCommandUtil().closeSwitchPre(address,
+				HighCommandControlCode.PRE_CLOSE_SWITCH.toString())
+				+ new HighVoltageDeviceCommandUtil().closeSwitch(address,
+						HighCommandControlCode.CLOSE_SWITCH.toString());
+		System.out.println(test);
 		return new HighVoltageDeviceCommandUtil().closeSwitchPre(address,
 				HighCommandControlCode.PRE_CLOSE_SWITCH.toString())
 				+ new HighVoltageDeviceCommandUtil().closeSwitch(address,

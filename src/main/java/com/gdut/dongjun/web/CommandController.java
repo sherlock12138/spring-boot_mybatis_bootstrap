@@ -77,7 +77,7 @@ public class CommandController {
 			// return "error";
 		}
 
-		address = "001";
+		address = "005";
 
 		switch (sign) {
 		case 0:// 开
