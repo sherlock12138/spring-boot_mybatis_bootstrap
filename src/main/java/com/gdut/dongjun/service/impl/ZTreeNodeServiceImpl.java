@@ -14,6 +14,7 @@ import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.SubstationService;
 import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.ZTreeNodeService;
+import com.gdut.dongjun.util.MyBatisMapUtil;
 
 /**
  * @Title: ZTreeNodeServiceImpl.java
@@ -52,7 +53,9 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 					n1.setName(substations.get(i).getName());
 
 					List<Line> lines = lineService
-							.selectBySubstationId(substations.get(i).getId());// 取到所有的线路
+							.selectByParameters(MyBatisMapUtil
+									.warp("substation_id", substations.get(i)
+											.getId()));// 取到所有的线路
 
 					List<ZTreeNode> lineNodes = new LinkedList<ZTreeNode>();
 

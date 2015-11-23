@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,6 +20,7 @@ import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.SubstationService;
 import com.gdut.dongjun.util.MyBatisMapUtil;
+import com.gdut.dongjun.util.UUIDUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -59,7 +61,8 @@ public class SubstationController {
 	 * @throws
 	 */
 	@RequestMapping("/substation_list_by_company_id")
-	public String getLineSwitchListByLineId(HttpSession session, Model model) {
+	@ResponseBody
+	public Object getLineSwitchListByLineId(HttpSession session, Model model) {
 
 		User user = (User) session.getAttribute("currentUser");
 		String companyId = null;
@@ -67,10 +70,8 @@ public class SubstationController {
 
 			companyId = user.getCompanyId();
 		}
-		model.addAttribute("switches", substationService
-				.selectByParameters(MyBatisMapUtil
-						.warp("company_id", companyId)));
-		return "substation_list";
+		return substationService.selectByParameters(MyBatisMapUtil.warp(
+				"company_id", companyId));
 	}
 
 	/**
@@ -89,9 +90,6 @@ public class SubstationController {
 			Model model, RedirectAttributes redirectAttributes) {
 
 		substationService.deleteByPrimaryKey(switchId);
-		redirectAttributes.addAttribute("lineId",
-				substationService.selectByParameters(null));
-
 		return "redirect:substation_manager";
 	}
 
@@ -110,12 +108,12 @@ public class SubstationController {
 	public String editSwitch(Substation switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
+		if (switch1.getId() == "") {
+			switch1.setId(UUIDUtil.getUUID());
+		}
 		// @RequestParam(required = true)
 		// 进不来
-		System.out.println(switch1.toString());
 		substationService.updateByPrimaryKey(switch1);
-		redirectAttributes.addAttribute("lineId",
-				substationService.selectByParameters(null));
 		return "redirect:substation_manager";
 	}
 

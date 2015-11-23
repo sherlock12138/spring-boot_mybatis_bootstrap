@@ -30,4 +30,16 @@ public class ControlMearsureVoltageServiceImpl extends
 		return voltageMapper.getRecentlyVoltage();
 	}
 
+	@Override
+	protected boolean isExist(ControlMearsureVoltage record) {
+
+		if (record != null
+				&& voltageMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

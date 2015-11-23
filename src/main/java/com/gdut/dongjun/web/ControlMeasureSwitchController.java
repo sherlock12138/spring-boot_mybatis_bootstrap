@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdut.dongjun.domain.po.Line;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
+import com.gdut.dongjun.domain.po.ControlMearsureSwitch;
+import com.gdut.dongjun.service.ControlMearsureSwitchService;
 import com.gdut.dongjun.service.LineService;
-import com.gdut.dongjun.service.LowVoltageSwitchService;
+import com.gdut.dongjun.util.MyBatisMapUtil;
 
 @Controller
 @RequestMapping("/dongjun")
 public class ControlMeasureSwitchController {
 
 	@Autowired
-	private LowVoltageSwitchService switchService;
+	private ControlMearsureSwitchService switchService;
 	@Autowired
 	private LineService LineService;
 
@@ -69,7 +69,8 @@ public class ControlMeasureSwitchController {
 	public String getLineSwitchListByLineId(
 			@RequestParam(required = true) String lineId, Model model) {
 
-		model.addAttribute("switches", switchService.selectByLineId(lineId));
+		model.addAttribute("switches", switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId)));
 		return "switch_list";
 	}
 
@@ -88,10 +89,7 @@ public class ControlMeasureSwitchController {
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
-		Line line = LineService.getLineBySwitchId(switchId);// 根据开关ID查到所属线路
 		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
-		if (line != null)
-			redirectAttributes.addAttribute("lineId", line.getId());// 再次查找线路下的开关
 
 		// /为绝对路径，即为http://localhost:9080/switch_list?lineId=01
 		// 没有/为相对路径 http://localhost:9080/dongjun/switch_list?lineId=01
@@ -110,14 +108,12 @@ public class ControlMeasureSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_control_measure_switch")
-	public String editSwitch(LowVoltageSwitch switch1, Model model,
+	public String editSwitch(ControlMearsureSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
 		// @RequestParam(required = true)
 		// 进不来
-		System.out.println(switch1.toString());
-		switchService.updateSwitch(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getLineId());
+		switchService.updateByPrimaryKey(switch1);
 		return "redirect:control_measure_switch_manager";
 	}
 

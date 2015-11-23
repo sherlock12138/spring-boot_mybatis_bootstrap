@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.LowVoltageSwitchService;
@@ -25,7 +24,6 @@ public class HighVoltageSwitchController {
 	/**
 	 * 
 	 * @Title: getLineSwitchList
-	 * @Description: TODO
 	 * @param @param lineId
 	 * @param @param model
 	 * @param @return
@@ -88,13 +86,7 @@ public class HighVoltageSwitchController {
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
-		Line line = LineService.getLineBySwitchId(switchId);// 根据开关ID查到所属线路
 		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
-		if (line != null)
-			redirectAttributes.addAttribute("lineId", line.getId());// 再次查找线路下的开关
-
-		// /为绝对路径，即为http://localhost:9080/switch_list?lineId=01
-		// 没有/为相对路径 http://localhost:9080/dongjun/switch_list?lineId=01
 		return "redirect:high_voltage_switch_manager";
 	}
 
@@ -113,11 +105,7 @@ public class HighVoltageSwitchController {
 	public String editSwitch(LowVoltageSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
-		// @RequestParam(required = true)
-		// 进不来
-		System.out.println(switch1.toString());
 		switchService.updateSwitch(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getLineId());
 		return "redirect:high_voltage_switch_manager";
 	}
 

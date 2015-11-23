@@ -29,5 +29,17 @@ public class ControlMearsureCurrentServiceImpl extends
 	public List<ControlMearsureCurrent> getRecentlyCurrent() {
 		return currentMapper.getRecentlyCurrent();
 	}
+
+	@Override
+	protected boolean isExist(ControlMearsureCurrent record) {
+
+		if (record != null
+				&& currentMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }

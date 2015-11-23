@@ -33,38 +33,6 @@ public class LineServiceImpl extends BaseServiceImpl<Line> implements
 	@Autowired
 	private LineMapper lineMapper;
 
-	@Override
-	public List<Line> selectAll() {
-		// TODO Auto-generated method stub
-		return lineMapper.selectAll();
-	}
-
-	@Override
-	public Line getLineBySwitchId(String switchId) {
-		// TODO Auto-generated method stub
-		return lineMapper.getLineBySwitchId(switchId);
-	}
-
-	@Override
-	public List<Line> selectByKeyWord(String keyWord) {
-		// TODO Auto-generated method stub
-		return lineMapper.selectByKeyWord(keyWord);
-	}
-
-	@Override
-	public List<Line> selectBySubstationId(String substationId) {
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("substation_id", substationId);
-		List<Line> list = lineMapper.selectByParameters(MyBatisMapUtil
-				.warp(map));
-
-		if (list != null) {
-			return list;
-		} else {
-			return null;
-		}
-	}
 
 	@Override
 	protected boolean isExist(Line record) {

@@ -1,5 +1,8 @@
 package com.gdut.dongjun.web;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.LowVoltageSwitchService;
+import com.gdut.dongjun.util.MapUtil;
+import com.gdut.dongjun.util.MyBatisMapUtil;
+import com.gdut.dongjun.util.UUIDUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -66,11 +71,20 @@ public class LowVoltageSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/switch_list_by_line_id")
-	public String getLineSwitchListByLineId(
+	@ResponseBody
+	public Object getLineSwitchListByLineId(
 			@RequestParam(required = true) String lineId, Model model) {
 
-		model.addAttribute("switches", switchService.selectByLineId(lineId));
-		return "switch_list";
+		System.out.println(lineId);
+		List<LowVoltageSwitch> switchs = switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
+		HashMap<String, Object> map = (HashMap<String, Object>) MapUtil.warp(
+				"draw", 1);
+		int size = switchs.size();
+		map.put("recordsTotal", size);
+		map.put("data", switchs);
+		map.put("recordsFiltered", size);
+		return map;
 	}
 
 	/**
@@ -88,13 +102,7 @@ public class LowVoltageSwitchController {
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
-		Line line = LineService.getLineBySwitchId(switchId);// 根据开关ID查到所属线路
 		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
-		if (line != null)
-			redirectAttributes.addAttribute("lineId", line.getId());// 再次查找线路下的开关
-
-		// /为绝对路径，即为http://localhost:9080/switch_list?lineId=01
-		// 没有/为相对路径 http://localhost:9080/dongjun/switch_list?lineId=01
 		return "redirect:low_voltage_switch_manager";
 	}
 
@@ -115,9 +123,10 @@ public class LowVoltageSwitchController {
 
 		// @RequestParam(required = true)
 		// 进不来
-		System.out.println(switch1.toString());
-		switchService.updateSwitch(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getLineId());
+		if (switch1.getId() == "") {
+			switch1.setId(UUIDUtil.getUUID());
+		}
+		switchService.updateByPrimaryKey(switch1);
 		return "redirect:low_voltage_switch_manager";
 	}
 

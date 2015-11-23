@@ -15,4 +15,18 @@ public class ControlMearsureHitchEventServiceImpl extends
 	
 	@Autowired
 	private ControlMearsureHitchEventMapper hitchEventMapper;
+
+	@Override
+	protected boolean isExist(ControlMearsureHitchEvent record) {
+
+		if (record != null
+				&& hitchEventMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 }

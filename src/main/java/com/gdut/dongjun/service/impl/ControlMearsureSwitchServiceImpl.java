@@ -15,4 +15,16 @@ public class ControlMearsureSwitchServiceImpl extends
 
 	@Autowired
 	private ControlMearsureSwitchMapper switchMapper;
+
+	@Override
+	protected boolean isExist(ControlMearsureSwitch record) {
+
+		if (record != null
+				&& switchMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
