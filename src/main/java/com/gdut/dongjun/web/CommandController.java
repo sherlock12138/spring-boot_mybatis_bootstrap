@@ -77,7 +77,6 @@ public class CommandController {
 			// return "error";
 		}
 
-
 		switch (sign) {
 		case 0:// 开
 			switch (type) {
