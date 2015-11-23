@@ -77,11 +77,6 @@ public class CommandController {
 			// return "error";
 		}
 
-<<<<<<< HEAD
-=======
-		address = "005";
->>>>>>> 5e0c5b2e03bad5e79e8c874db0a46633062e5a4e
-
 		switch (sign) {
 		case 0:// 开
 			switch (type) {
