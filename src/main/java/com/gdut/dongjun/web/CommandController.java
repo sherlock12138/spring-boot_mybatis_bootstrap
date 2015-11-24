@@ -275,7 +275,6 @@ public class CommandController {
 	public Object readCurrentVariable(
 			@RequestParam(required = true) String switchId, String type) {
 
-		System.out.println(switchId);
 		Integer[] deStrings = new Integer[3];
 		switch (type) {
 		case "0":// 低压开关
