@@ -35,19 +35,26 @@ public class LowVoltageSwitchController {
 	 * @param @param model
 	 * @param @return
 	 * @return String
-	 * @throws
+	 * @throws  high_voltage_
 	 */
 	@RequestMapping("/low_voltage_switch_manager")
-	public String getLineSwitchList(Model model) {
+	public String getLineSwitchList(String lineId, Model model) {
 
-		model.addAttribute("switches", switchService.selectByParameters(null));
+		if (lineId != null) {
+
+			model.addAttribute("switches", switchService
+					.selectByParameters(MyBatisMapUtil.warp("line_id", lineId)));
+		} else {
+			model.addAttribute("switches",
+					switchService.selectByParameters(null));
+		}
 		return "low_voltage_switch_manager";
 	}
 
 	/**
 	 * 
 	 * @Title: getAllLowVoltage_Switch
-	 * @Description: TODO
+	 * @Description: 用于百度地图的描点
 	 * @param @param model
 	 * @param @return
 	 * @return Object
@@ -102,7 +109,9 @@ public class LowVoltageSwitchController {
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
+		String lineId = switchService.selectByPrimaryKey(switchId).getLineId();
 		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
+		redirectAttributes.addAttribute("lineId", lineId);
 		return "redirect:low_voltage_switch_manager";
 	}
 
@@ -127,6 +136,7 @@ public class LowVoltageSwitchController {
 			switch1.setId(UUIDUtil.getUUID());
 		}
 		switchService.updateByPrimaryKey(switch1);
+		redirectAttributes.addAttribute("lineId", switch1.getLineId());
 		return "redirect:low_voltage_switch_manager";
 	}
 

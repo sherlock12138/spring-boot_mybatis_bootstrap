@@ -22,14 +22,45 @@
     id, time, phase, value, switch_id
   </sql>
   
-  <select id="getRecentlyVoltage" resultMap="BaseResultMap">
-  	select * from 
-  	control_mearsure_voltage
-  	where (time IN
-  	(select MAX(time) FROM
-  	control_mearsure_voltage))
-  </select>
-  
+  <select id="selectByParameters" resultMap="BaseResultMap">
+		select * from control_mearsure_voltage where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="selectBySwitchId" resultMap="BaseResultMap">
+		select * from control_mearsure_voltage where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+		order by time Asc
+	</select>
+
+
+	<select id="selectByTime" resultMap="BaseResultMap">
+		select * from
+		control_mearsure_voltage where
+		switch_id = #{switchId} and phase = #{phase}
+		and
+		time like #{time}
+		order By time Asc
+	</select>
+
+	<select id="getRecentlyVoltage" resultMap="BaseResultMap">
+		select * from
+		control_mearsure_voltage
+		where (time IN
+		(SELECT MAX(time)
+		FROM
+		control_mearsure_voltage))
+	</select>
   
   
   

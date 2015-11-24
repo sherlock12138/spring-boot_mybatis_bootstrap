@@ -7,13 +7,18 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.gdut.dongjun.domain.po.ControlMearsureSwitch;
+import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.domain.po.Line;
-import com.gdut.dongjun.domain.po.Substation;
 import com.gdut.dongjun.domain.po.LowVoltageSwitch;
+import com.gdut.dongjun.domain.po.Substation;
+import com.gdut.dongjun.service.ControlMearsureSwitchService;
+import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.LineService;
-import com.gdut.dongjun.service.SubstationService;
 import com.gdut.dongjun.service.LowVoltageSwitchService;
+import com.gdut.dongjun.service.SubstationService;
 import com.gdut.dongjun.service.ZTreeNodeService;
+import com.gdut.dongjun.service.base.BaseService;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 
 /**
@@ -33,13 +38,32 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 	private LineService lineService;
 	@Autowired
 	private LowVoltageSwitchService switchService;
+	@Autowired
+	private HighVoltageSwitchService switchService2;
+	@Autowired
+	private ControlMearsureSwitchService switchService3;
 
 	@Override
-	public List<ZTreeNode> getSwitchTree(String company_id) {
+	public List<ZTreeNode> getSwitchTree(String company_id, String type) {
 		// TODO Auto-generated method stub
 		List<ZTreeNode> nodes = new LinkedList<ZTreeNode>();
 		List<Substation> substations = substationService// 取到所有的变电站
 				.selectByCompanyId(company_id);
+
+		BaseService baseService = null;
+		switch (type) {
+		case "0":
+			baseService = switchService;
+			break;
+		case "1":
+			baseService = switchService2;
+			break;
+		case "2":
+			baseService = switchService3;
+			break;
+		default:
+			break;
+		}
 
 		if (substations != null) {
 
@@ -68,25 +92,73 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 							n2.setId(lines.get(j).getId());
 							n2.setName(lines.get(j).getName());
 
-							List<LowVoltageSwitch> switchs = switchService// 取到所有的开关
-									.selectByLineId(lines.get(j).getId());
-
 							List<ZTreeNode> switchNodes = new LinkedList<ZTreeNode>();
+							switch (type) {
+							case "0":
+								List<LowVoltageSwitch> switchs = baseService
+										.selectByParameters(MyBatisMapUtil
+												.warp("line_id", lines.get(j)
+														.getId()));// 取到所有的开关
+								// 遍历所有的开关
+								for (int k = 0; k < switchs.size(); k++) {
 
-							// 遍历所有的开关
-							for (int k = 0; k < switchs.size(); k++) {
+									ZTreeNode n3 = new ZTreeNode();
+									if (switchs.get(k) != null) {
 
-								ZTreeNode n3 = new ZTreeNode();
-								if (switchs.get(k) != null) {
-
-									n3.setId(switchs.get(k).getId());
-									n3.setName(switchs.get(k).getName());
-									n3.setLongitude(switchs.get(k)
-											.getLongitude().toString());
-									n3.setLatitude(switchs.get(k).getLatitude()
-											.toString());
+										n3.setId(switchs.get(k).getId());
+										n3.setName(switchs.get(k).getName());
+										n3.setLongitude(switchs.get(k)
+												.getLongitude().toString());
+										n3.setLatitude(switchs.get(k)
+												.getLatitude().toString());
+									}
+									switchNodes.add(n3);
 								}
-								switchNodes.add(n3);
+								break;
+							case "1":
+								List<HighVoltageSwitch> switchs2 = baseService
+										.selectByParameters(MyBatisMapUtil
+												.warp("line_id", lines.get(j)
+														.getId()));// 取到所有的开关
+								// 遍历所有的开关
+								for (int k = 0; k < switchs2.size(); k++) {
+
+									ZTreeNode n3 = new ZTreeNode();
+									if (switchs2.get(k) != null) {
+
+										n3.setId(switchs2.get(k).getId());
+										n3.setName(switchs2.get(k).getName());
+										n3.setLongitude(switchs2.get(k)
+												.getLongitude().toString());
+										n3.setLatitude(switchs2.get(k)
+												.getLatitude().toString());
+									}
+									switchNodes.add(n3);
+								}
+								break;
+							case "2":
+								List<ControlMearsureSwitch> switchs3 = baseService
+										.selectByParameters(MyBatisMapUtil
+												.warp("line_id", lines.get(j)
+														.getId()));// 取到所有的开关
+								// 遍历所有的开关
+								for (int k = 0; k < switchs3.size(); k++) {
+
+									ZTreeNode n3 = new ZTreeNode();
+									if (switchs3.get(k) != null) {
+
+										n3.setId(switchs3.get(k).getId());
+										n3.setName(switchs3.get(k).getName());
+										n3.setLongitude(switchs3.get(k)
+												.getLongitude().toString());
+										n3.setLatitude(switchs3.get(k)
+												.getLatitude().toString());
+									}
+									switchNodes.add(n3);
+								}
+								break;
+							default:
+								break;
 							}
 							n2.setChildren(switchNodes);
 						}

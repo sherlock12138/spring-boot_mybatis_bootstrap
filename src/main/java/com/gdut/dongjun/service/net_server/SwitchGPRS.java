@@ -17,10 +17,10 @@ public class SwitchGPRS {
 	 * @author Sherlock-lee
 	 * @date 2015年8月11日 下午7:10:20
 	 */
-	private String id;
-	private String address;
-	private ChannelHandlerContext ctx;
-	private boolean isOpen = false;
+	private String id;//ID
+	private String address;//地址
+	private ChannelHandlerContext ctx;//上下文对象，可以用于发送报文
+	private boolean isOpen = false;//开关是否跳闸的标志
 
 	public String getId() {
 		return id;

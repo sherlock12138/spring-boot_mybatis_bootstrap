@@ -85,7 +85,7 @@ public class IndexController {
 		User user = (User) session.getAttribute("currentUser");
 		if (user != null && user.getCompanyId() != null) {
 
-			return zTreeNodeService.getSwitchTree(user.getCompanyId());
+			return zTreeNodeService.getSwitchTree(user.getCompanyId(),type);
 		} else {
 
 			return "";

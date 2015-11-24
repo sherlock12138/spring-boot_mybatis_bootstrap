@@ -30,6 +30,24 @@
     behitch_b_phase_voltage, behitch_c_phase_voltage, behitch_a_phase_current, behitch_b_phase_current, 
     behitch_c_phase_current
   </sql>
+  
+  <select id="selectByParameters" resultMap="BaseResultMap">
+		select * from high_voltage_hitch_event where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+	</select>
+  
+  
+  
+  
+  
+  
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--
       WARNING - @mbggenerated

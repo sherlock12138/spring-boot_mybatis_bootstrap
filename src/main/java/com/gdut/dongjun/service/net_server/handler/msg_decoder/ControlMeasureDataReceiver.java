@@ -268,6 +268,7 @@ public class ControlMeasureDataReceiver extends ChannelInboundHandlerAdapter {
 	 */
 	private void saveHitchEvent(String id, String address, String data) {
 
+		CtxStore.updateSwtichOpen(id);//修改报警的标志位
 		if (address != null && id != null) {
 			
 			ControlMearsureHitchEvent hitchEvent = new ControlMearsureHitchEvent();

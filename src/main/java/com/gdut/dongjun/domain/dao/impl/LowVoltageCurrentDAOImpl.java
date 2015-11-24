@@ -35,7 +35,7 @@ public class LowVoltageCurrentDAOImpl extends
 	@Override
 	public List<LowVoltageCurrent> getRecentlyCurrent() {
 		// TODO Auto-generated method stub
-		return template.selectList("getRecentlyCurrent");
+		return template.selectList(getNamespace("getRecentlyCurrent"));
 
 	}
 

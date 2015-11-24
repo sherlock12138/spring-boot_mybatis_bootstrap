@@ -28,6 +28,8 @@ th, td {
 	padding: 9px;
 }
 
+td.dpass {display: none;}
+
 @media ( max-width : 980px) {
 	/* Enable use of floated navbar text */
 	.navbar-text.pull-right {
@@ -84,7 +86,7 @@ th, td {
 					</p>
 					<ul class="nav">
 						<li><a href="index">首页</a></li>
-						<li class="active"><a href="manager">管理</a></li>
+						<li class="active"><a href="low_voltage_switch_manager">管理</a></li>
 						<li><a href="current_voltage_chart">报表</a></li>
 						<li><a href="#about">关于</a></li>
 						<li><a href="#contact">联系我们</a></li>
@@ -118,24 +120,29 @@ th, td {
 						<li><a href="line_manager">线路管理</a></li>
 						<li class="nav-header">设备管理</li>
 						<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
-						<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
+						<li><a href="#">高压开关管理</a></li>
 						<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
 
 						<li class="nav-header">事件管理</li>
 						<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
 						<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
 						<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li class="nav-header">Sidebar</li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
 					</ul>
 					<!--/.well -->
 				</div>
 				<!--/span-->
 				<div class="span10 container">
+
+					<div class="control-group form-horizontal">
+						<div class="controls span4">
+							<label class="control-label">请选择变电站：</label> <select
+								id='substations' class='span6'></select>
+						</div>
+						<div class="controls span4">
+							<label class="control-label">请选择线路：</label> <select id='lines'
+								class='span6'></select>
+						</div>
+					</div>
 					<table id="switch_list"
 						class="table table-bordered table-striped table-hover table-condensed success">
 						<thead>
@@ -147,8 +154,6 @@ th, td {
 							<td>经度</td>
 							<td>纬度</td>
 							<td>SIM</td>
-							<td>公约</td>
-							<td>是否在线</td>
 							<td>进入地图</td>
 							<td>修改</td>
 							<td>删除</td>
@@ -163,8 +168,6 @@ th, td {
 							<td th:text="${switch.latitude}"></td>
 
 							<td th:text="${switch.simNumber}"></td>
-							<td th:text="${switch.protocal}!=0?'07':'101'"></td>
-							<td></td>
 							<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
 							<td><a href="#edit_switch_modal" role="button"
 								class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
@@ -183,8 +186,6 @@ th, td {
 							<td>经度</td>
 							<td>纬度</td>
 							<td>SIM</td>
-							<td>公约</td>
-							<td>是否在线</td>
 							<td>进入地图</td>
 							<td>修改</td>
 							<td>删除</td>
@@ -253,15 +254,6 @@ th, td {
 						<label class="control-label" for="inputSim">SIM</label>
 						<div class="controls">
 							<input type="text" id="inputSim" name="simNumber" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputProtocal">公约</label>
-						<div class="controls">
-							<select name="protocal">
-								<option value="1">07公约</option>
-								<option value="0">101公约</option>
-							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -336,13 +328,6 @@ th, td {
 							<input type="text" id="editSim" name="simNumber" readOnly="true" />
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="editProtocal">公约</label>
-						<div class="controls">
-							<input type="text" id="editProtocal" name="protocal"
-								readOnly="true" />
-						</div>
-					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
 						<button id="edit_switch_confirm_btn" class="btn btn-primary"
@@ -405,5 +390,6 @@ th, td {
 
 	<!-- custom -->
 	<script src="../../js/custom/high_voltage_switch_manager.js"></script>
+	<script src="../../js/custom/substation_line_set.js"></script>
 </body>
 </html>

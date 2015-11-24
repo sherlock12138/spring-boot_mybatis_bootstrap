@@ -35,7 +35,7 @@ public class LowVoltageVoltageDAOImpl extends
 	@Override
 	public List<LowVoltageVoltage> getRecentlyVoltage() {
 		// TODO Auto-generated method stub
-		return template.selectList("getRecentlyVoltage");
+		return template.selectList(getNamespace("getRecentlyVoltage"));
 	}
 
 }

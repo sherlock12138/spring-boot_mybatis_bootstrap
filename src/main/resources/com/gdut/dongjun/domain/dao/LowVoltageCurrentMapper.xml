@@ -54,7 +54,7 @@
 		where (time IN
 		(SELECT MAX(time)
 		FROM
-		low_voltage_voltage))
+		low_voltage_current))
 	</select>
 
 

@@ -11,6 +11,7 @@ import com.gdut.dongjun.domain.dao.LowVoltageCurrentMapper;
 import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.service.LowVoltageCurrentService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
+import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 
 /**
@@ -58,8 +59,7 @@ public class LowVoltageCurrentServiceImpl extends BaseServiceImpl<LowVoltageCurr
 	public Map<String, Object> selectByTime(String switchId, String date) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, Object> xx = new HashMap<String, Object>();
-		xx.put("switchId", switchId);
+		Map<String, Object> xx = MapUtil.warp("switchId", switchId);
 		xx.put("phase", "A");
 		xx.put("time", date);
 		result.put("A", currentMapper.selectByTime(xx));

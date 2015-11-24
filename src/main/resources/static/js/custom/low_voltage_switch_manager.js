@@ -4,11 +4,12 @@ $(document).ready(function() {
 	 * 初始化列表
 	 */
 	initial_table("switch_list");
+	loadSubstationSet();	
 	$("#add_switch_btn").click(addSwitch);
 	$(".edit_switch_btn").click(editSwitch);
 	$(".del_switch_btn").click(delSwitch);
 	$(".enter_map").click(enterMap);
-	loadSubstationSet();	
+	
 
 	/**
 	 * 编辑开关提交时,处理select属性值
@@ -31,14 +32,16 @@ $(document).ready(function() {
 	            { "data": "deviceNumber" },        
 	            { "data": "name" },
 	            { 	"data": "id",
-	            	"visible": false},
+	            	"sClass": "dpass"
+	            },
 	            { 	"data": "lineId",
-		            "visible": false},
-		            { "data": "address" },   
-		            { "data": "longitude" },   
-		            { "data": "latitude" }, 
-		            { "data": "simNumber" },
-		            { "data": null},
+	            	"sClass": "dpass"
+	            },
+		        { "data": "address" },   
+		        { "data": "longitude" },   
+		        { "data": "latitude" }, 
+		        { "data": "simNumber" },
+		        { "data": null},
 	            { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
 	            { "data": null }// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
 	        ],
@@ -57,9 +60,16 @@ $(document).ready(function() {
 	            "targets": -1,
 	            "data": null,
 	            "defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
-	        }], 	
+	        }],
+	        "fnInitComplete": function(oSettings, json) { 
+
+	        	$(".edit_switch_btn").click(editSwitch);
+	        	$(".del_switch_btn").click(delSwitch);
+	        	$(".enter_map").click(enterMap);
+	          }
 	    } );
 	});
+	
 });
 
 
@@ -88,7 +98,6 @@ function addSwitch() {
 	$("#inputDeviceNumber").val("");
 	$("#inputName").val("");
 	$("#inputSim").val("");
-	$("#inputProtocal").text("");
 }
 
 /**
@@ -111,13 +120,6 @@ function editSwitch() {
 	$("#editLatitude").val(column[2].innerHTML);
 
 	$("#editSim").val(column[1].innerHTML);
-	$("#editProtocal").val(column[0].innerHTML);
-	// $("#editIsOnline").val("false");
-	// $("#inputDeviceNumber").attr("placeholder",
-	// column[4].innerHTML);
-	// $("#inputName").attr("placeholder", column[3].innerHTML);
-	// $("#inputSim").attr("placeholder", column[2].innerHTML);
-	// $("#inputProtocal").attr("placeholder", column[1].innerHTML);
 }
 
 /**

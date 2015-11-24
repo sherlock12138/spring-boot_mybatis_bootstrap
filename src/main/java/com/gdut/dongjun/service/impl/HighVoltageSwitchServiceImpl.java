@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gdut.dongjun.domain.dao.HighVoltageSwitchMapper;
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.HighVoltageSwitchService;
@@ -25,7 +26,7 @@ public class HighVoltageSwitchServiceImpl extends BaseServiceImpl<HighVoltageSwi
 HighVoltageSwitchService {
 
 	@Autowired
-	private HighVoltageSwitchService currentMapper;
+	private HighVoltageSwitchMapper currentMapper;
 	/* (non-Javadoc)
 	 * @see com.gdut.dongjun.service.HighVoltageSwitchService#delSwitchByLineId(java.lang.String)
 	 */

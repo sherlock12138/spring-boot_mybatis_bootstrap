@@ -22,6 +22,11 @@ body {
 
 .thumbnail {
 	padding: 10px;
+	overflow: auto;
+}
+
+.outer_chart {
+	
 }
 
 @media ( max-width : 980px) {
@@ -108,12 +113,39 @@ body {
 			</div>
 		</div>
 	</div>
+
 	<div class="container-fluid">
+		<div class="control-group form-horizontal row-fluid">
+			<div class="controls span4">
+				<label class="control-label">请选择变电站：</label> <select
+					id='substations' class='span6'></select>
+			</div>
+			<div class="controls span4">
+				<label class="control-label">请选择线路：</label> <select id='lines'
+					class='span6'></select>
+			</div>
+		</div>
+		<div class="control-group form-horizontal row-fluid">
+			<div class="controls span4">
+				<label class="control-label">请选择设备类型:</label> <select
+					id='zTree_node_type' class='span6'>
+					<option value='0'>低压设备</option>
+					<option value='1'>高压设备</option>
+					<option value='2'>无功无场设备</option>
+				</select>
+			</div>
+			<div class="controls span4">
+				<label class="control-label">请选择设备：</label> <select id='switchs'
+					class='span6'></select>
+			</div>
+
+
+		</div>
 		<div class="control-group offset9">
 			<div class="controls input-append date form_date" data-date=""
 				data-date-format="yyyy-mm-dd" data-link-field="dtp_input2"
 				data-link-format="yyyy-mm-dd">
-				<input id="search_date" type="text"/> <span class="add-on"><i
+				<input id="search_date" type="text" /> <span class="add-on"><i
 					class="icon-remove"></i></span> <span class="add-on"><i
 					class="icon-th"></i></span>
 				<button id="search_btn" class="btn">搜索</button>
@@ -121,11 +153,13 @@ body {
 
 		</div>
 
+
 		<div class="span11 row-fluid">
 			<span class="span2 offset5"><h3>电压曲线图</h3> </span>
 			<div class="thumbnail span10">
-				<canvas id="voltage_chart" height="230" width="1000"></canvas>
-
+				<div id="parent_voltage_chart" style="height: 100%">
+					<canvas id="voltage_chart" height="400"></canvas>
+				</div>
 			</div>
 			<div class="span1" th:fragment="tooltip">
 				<ul class="inline">
@@ -144,12 +178,13 @@ body {
 
 		</div>
 		<div class="span11 row-fluid">
-			<span class="span2 offset5"><h3>电流曲线图</h3></span>
+			<span class="span2 offset5"><h3>电流曲线图</h3> </span>
 			<div class="thumbnail span10">
-				<canvas id="current_chart" height="230" width="1000"></canvas>
-
+				<div id="parent_current_chart" style=" height: 100%">
+					<canvas id="current_chart" height="400"></canvas>
+				</div>
 			</div>
-			<div class="span1">
+			<div class="span1" th:fragment="tooltip">
 				<ul class="inline">
 					<li class="a_phase"></li>
 					<li>A相</li>
@@ -163,16 +198,16 @@ body {
 					<li>C相</li>
 				</ul>
 			</div>
-			<!-- <div th:include="current_voltage_chart::tooltip"></div> -->
 
 		</div>
 		<div class="span11 row-fluid">
-			<span class="span2 offset5"><h3>功率曲线图</h3></span>
+			<span class="span2 offset5"><h3>功率曲线图</h3> </span>
 			<div class="thumbnail span10">
-				<canvas id="power_chart" height="230" width="1000"></canvas>
-
+				<div id="parent_power_chart" style=" height: 100%">
+					<canvas id="power_chart" height="400"></canvas>
+				</div>
 			</div>
-			<div class="span1">
+			<div class="span1" th:fragment="tooltip">
 				<ul class="inline">
 					<li class="a_phase"></li>
 					<li>A相</li>
@@ -221,10 +256,17 @@ body {
 	<script type="text/javascript"
 		src="../../js/datetimepicker/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript"
-		src="../js/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+		src="../js/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"
+		charset="UTF-8"></script>
 
 	<!-- custom -->
 	<script src="../../js/custom/Date.js"></script>
+	<script src="../../js/custom/substation_line_set.js"></script>
+	<script src="../../js/custom/line_switch_set.js"></script>
 	<script src="../../js/custom/current_voltage_chart.js"></script>
+
+
+
+
 </body>
 </html>

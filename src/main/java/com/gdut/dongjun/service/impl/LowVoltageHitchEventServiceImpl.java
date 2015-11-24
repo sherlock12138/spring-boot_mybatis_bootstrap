@@ -20,8 +20,9 @@ import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
  * @version V1.0
  */
 @Service
-public class LowVoltageHitchEventServiceImpl extends BaseServiceImpl<LowVoltageHitchEvent>
-		implements LowVoltageHitchEventService {
+public class LowVoltageHitchEventServiceImpl extends
+		BaseServiceImpl<LowVoltageHitchEvent> implements
+		LowVoltageHitchEventService {
 	/**
 	 * @ClassName: UserServiceImpl
 	 * @Description: TODO
@@ -42,15 +43,15 @@ public class LowVoltageHitchEventServiceImpl extends BaseServiceImpl<LowVoltageH
 	@Override
 	public List<com.gdut.dongjun.dto.HitchEvent> hitchEventList() {
 		// TODO Auto-generated method stub
-		List<com.gdut.dongjun.dto.HitchEvent> events = hitchEventMapper.hitchEventList();
-		
+		List<com.gdut.dongjun.dto.HitchEvent> events = hitchEventMapper
+				.hitchEventList();
+
 		for (com.gdut.dongjun.dto.HitchEvent hitchEvent : events) {
-			
-			if(hitchEvent!= null && hitchEvent.getHitchTime()!= null){
-				
-				
-				
-					hitchEvent.setHitchTime(hitchEvent.getHitchTime().substring(0, 19));
+
+			if (hitchEvent != null && hitchEvent.getHitchTime() != null) {
+
+				hitchEvent.setHitchTime(hitchEvent.getHitchTime().substring(0,
+						19));
 			}
 		}
 		return events;

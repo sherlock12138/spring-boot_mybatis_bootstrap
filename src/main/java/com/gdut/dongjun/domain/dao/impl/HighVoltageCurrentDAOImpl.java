@@ -3,11 +3,15 @@
  */
 package com.gdut.dongjun.domain.dao.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.gdut.dongjun.domain.dao.HighVoltageCurrentMapper;
 import com.gdut.dongjun.domain.dao.base.impl.SinglePrimaryKeyBaseDAOImpl;
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 
 /**
  * @author zjd
@@ -20,4 +24,22 @@ import com.gdut.dongjun.domain.po.HighVoltageCurrent;
 public class HighVoltageCurrentDAOImpl extends
 SinglePrimaryKeyBaseDAOImpl<HighVoltageCurrent> implements HighVoltageCurrentMapper {
 
+	@Override
+	public List<HighVoltageCurrent> selectBySwitchId(Map<String, Object> xx) {
+		// TODO Auto-generated method stub
+		return template.selectList(getNamespace("selectBySwitchId"), xx);
+	}
+
+	@Override
+	public List<HighVoltageCurrent> selectByTime(Map<String, Object> xx) {
+		// TODO Auto-generated method stub
+		return template.selectList(getNamespace("selectByTime"), xx);
+	}
+
+	@Override
+	public List<HighVoltageCurrent> getRecentlyCurrent() {
+		// TODO Auto-generated method stub
+		return template.selectList(getNamespace("getRecentlyCurrent"));
+
+	}
 }

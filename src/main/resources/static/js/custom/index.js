@@ -16,6 +16,9 @@ $(document).ready(function() {
 		$.fn.zTree.init($("#treeDemo"), set_tree(this.value));
 	})
 
+	// // 添加跳闸事件监听
+	// hitchEventSpy();
+
 });
 
 /**
@@ -235,8 +238,6 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	forDrawPoint(getAllControlMeasureSwitch(), control_measure_switch_icon,// 描绘管测开关
 	click_low_voltage_switch);
 
-	// // 添加跳闸事件监听
-	// hitchEventSpy();
 }
 
 /**
@@ -258,7 +259,10 @@ function getAllLowVoltageSwitch() {
 		data : {},
 		success : function(data) {
 
-			nodes = data;
+			nodes = data;// 设置开关类型
+			for (var i = 0; i < nodes.length; i++) {
+				nodes[i].type = 0;
+			}
 		}
 	})
 	return nodes;
@@ -284,6 +288,9 @@ function getAllHighVoltageSwitch() {
 		success : function(data) {
 
 			nodes = data;
+			for (var i = 0; i < nodes.length; i++) {
+				nodes[i].type = 1;
+			}
 		}
 	})
 	return nodes;
@@ -309,6 +316,9 @@ function getAllControlMeasureSwitch() {
 		success : function(data) {
 
 			nodes = data;
+			for (var i = 0; i < nodes.length; i++) {
+				nodes[i].type = 2;
+			}
 		}
 	})
 	return nodes;
@@ -359,6 +369,8 @@ function switchs_draw(node, switch_icon, click_switch) {
 	}); // 创建标注
 	// ****************************************************************
 	marker2.id = node.id;// 设置id
+	marker2.type = node.type;
+	// mraker2.isWorning = false;//设置报警标志
 	// ****************************************************************
 	map.addOverlay(marker2); // 将标注添加到地图中
 
@@ -383,78 +395,76 @@ function switchs_draw(node, switch_icon, click_switch) {
  * @return void
  * @throws
  */
+var old_icon = "";
 function click_low_voltage_switch() {
 
 	// zTree.reAsyncChildNodes(null, "refresh");
 
 	// var p = this.getPosition();
 	// alert(this.id)
-	var content = "<h4>开关控制</h4>"
-			+ "<div class='container offset2'>"
-			+ "<div class='row'>"
-			+ "<div class='span2'>"
-			+ "<ul class='inline'>"
-			+ "<li>A相电压:</li>"
-			+ "<li id='a_phase_voltage' class='value_block'></li>"
-			+ "</ul>"
-			+ "<ul class='inline'>"
-			+ "<li>B相电压:</li>"
-			+ "<li id='b_phase_voltage' class='value_block'></li>"
-			+ "</ul>"
-			+ "<ul class='inline'>"
-			+ "<li>C相电压:</li>"
-			+ "<li id='c_phase_voltage' class='value_block'></li>"
-			+ "</ul>"
-			+ "</div>"
-			+ "<div class='span2'>"
-			+ "<ul class='inline'>"
+	var content = "<h4>开关控制</h4>" + "<div class='container offset2'>"
+			+ "<div class='row'>" + "<div class='span2'>"
+			+ "<ul class='inline'>" + "<li>A相电压:</li>"
+			+ "<li id='a_phase_voltage' class='value_block'></li>" + "</ul>"
+			+ "<ul class='inline'>" + "<li>B相电压:</li>"
+			+ "<li id='b_phase_voltage' class='value_block'></li>" + "</ul>"
+			+ "<ul class='inline'>" + "<li>C相电压:</li>"
+			+ "<li id='c_phase_voltage' class='value_block'></li>" + "</ul>"
+			+ "</div>" + "<div class='span2'>" + "<ul class='inline'>"
 			+ "<li>A相电流:</li>"
-			+ "<li id='a_phase_current' class='value_block'></li>"
-			+ "</ul>"
-			+ "<ul class='inline'>"
-			+ "<li>B相电流:</li>"
-			+ "<li id='b_phase_current' class='value_block'></li>"
-			+ "</ul>"
-			+ "<ul class='inline'>"
-			+ "<li>C相电流:</li>"
-			+ "<li id='c_phase_current' class='value_block'></li>"
-			+ "</ul>"
-			+ "</div>"
-			+ "</div>"
-			+ "<div class='row'>"
-			+ "<div class='span4 text-center'>"
-			+ "<select id='control_type' class='span5'>"
-			+ "<option value='0'>预约跳闸</option>"
-			+ "<option value='2'>预约合闸</option>"
-			+ "<option value='4'>测试预约跳闸</option>"
-			+ "</select> <input type='text' id='control_switch' class='span2'"
-			+ "placeholder='0-99' /> <select id='control_switch_unit'"
-			+ "class='span3'>"
-			+ "<option value='02'>分钟</option>"
-			+ "<option value='03'>小时</option>"
-			+ "</select> <a id='control_switch_btn' class='btn btn-primary' onclick='controlSwitch()'>确定</a>"
-			+ "</div>"
-			+ "</div>"
-			+ "<div class='row'>"
-			+ "<div class='span4 text-center'>"
-			+ "<select id='cancel_control_type'>"
-			+ "<option value='1'>取消预约跳闸</option>"
-			+ "<option value='3'>取消预约合闸</option>"
-			+ "<option value='5'>取消测试预约跳闸</option>"
-			+ "</select> <a id='cancel_control_switch_btn' class='btn btn-primary' onclick='cancelControlSwitch()'>确定</a>"
-			+ "</div>" + "</div>" + "</div>";
+			+ "<li id='a_phase_current' class='value_block'></li>" + "</ul>"
+			+ "<ul class='inline'>" + "<li>B相电流:</li>"
+			+ "<li id='b_phase_current' class='value_block'></li>" + "</ul>"
+			+ "<ul class='inline'>" + "<li>C相电流:</li>"
+			+ "<li id='c_phase_current' class='value_block'></li>" + "</ul>"
+			+ "</div>" + "</div>" + "<br/><div class='span4'>"
+			+ "<a id='close_switch_btn'" + "class='btn btn-primary'>合闸</a> <a"
+			+ "id='open_switch_btn' class='btn btn-primary'" + ">分闸</a>"
+			+ "</div>";
+
+	// + "<div class='row'>"
+	// + "<div class='span4 text-center'>"
+	// + "<select id='cancel_control_type'>"
+	// + "<option value='1'>取消预约跳闸</option>"
+	// + "<option value='3'>取消预约合闸</option>"
+	// + "<option value='5'>取消测试预约跳闸</option>"
+	// + "</select> <a id='cancel_control_switch_btn' class='btn btn-primary'
+	// onclick='cancelControlSwitch()'>确定</a>"
+	// + "</div>" + "</div>" + "</div>";
 
 	var opts = {
-		width : 450, // 信息窗口宽度
-		height : 210, // 信息窗口高度
+		width : 415, // 信息窗口宽度
+		height : 180, // 信息窗口高度
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
 
 	var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
 	this.openInfoWindow(infoWindow);
+
 	// 窗口打开读取实时数据,switch_detail.js 中定义
-	readCurrentVoltage();
+	// ********************************************************************
+	if (old_icon != "") {
+
+		this.setIcon(old_icon);// 打开窗口就代表去处理了报警
+	}
+	// 还没有提报警处理的需求 ==！
+	// ********************************************************************
+
+	// 绑定控制监听
+	$("#open_switch_btn").click(function() {
+
+		openSwitch(this.id, this.type);
+	})
+
+	$("#close_switch_btn").click(function() {
+
+		closeSwitch(this.id, this.type);
+	})
+
+	// ********************************************************************
+	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+	// ********************************************************************
 
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
@@ -462,6 +472,8 @@ function click_low_voltage_switch() {
 	});
 
 }
+
+
 
 /**
  * 
@@ -482,9 +494,9 @@ function hitchEventSpy() {
 		success : function(data) {
 
 			for (var i = 0; i < data.length; i++) {
-
 				for (var j = 0; j < nodes.length; j++) {
-					if (nodes[j].id == data[i].id) {
+
+					if (data[i].id == nodes[j].id) {
 						worning_switchs_draw(nodes[j]);
 					}
 				}
@@ -509,7 +521,7 @@ function worning_switchs_draw(node) {
 	// var marker = new BMap.Marker(new BMap.Point(116.404,
 	// 39.915)); //创建点
 	// map.addOverlay(marker); // 增加点
-
+	old_icon = myIcon;// 保存原来的icon
 	// 创建标注
 	var pt = new BMap.Point(node.longitude, node.latitude);
 	var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));

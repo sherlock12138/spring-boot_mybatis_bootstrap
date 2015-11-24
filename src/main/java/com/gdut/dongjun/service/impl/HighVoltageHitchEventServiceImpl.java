@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.dao.ControlMearsureCurrentMapper;
+import com.gdut.dongjun.domain.dao.HighVoltageHitchEventMapper;
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.domain.po.LowVoltageHitchEvent;
 import com.gdut.dongjun.dto.HitchEvent;
@@ -27,7 +28,7 @@ public class HighVoltageHitchEventServiceImpl extends BaseServiceImpl<HighVoltag
 implements HighVoltageHitchEventService {
 	
 	@Autowired
-	private HighVoltageHitchEventService currentMapper;
+	private HighVoltageHitchEventMapper currentMapper;
 
 	@Override
 	protected boolean isExist(HighVoltageHitchEvent record) {

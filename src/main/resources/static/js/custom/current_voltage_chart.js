@@ -7,10 +7,84 @@ $(document).ready(function() {
 	initail_voltage_chart();
 	initail_power_chart();
 
+	loadSubstationSet();
 	initail_datetimepicker();
 
 	$("#search_btn").click(search_chart);
 })
+
+// 切换ZTree显示的开关种类
+$("#zTree_node_type").click(
+		function() {
+
+			// $.fn.zTree.getZTreeObj("treeDemo").destroy();
+			// $.fn.zTree.init($("#treeDemo"), set_tree(this.value));
+			var url = "";
+			switch (this.value) {
+			case '0':
+				url = "switch_list_by_line_id";
+				break;
+			case '1':
+				url = "high_voltage_switch_list_by_line_id";
+				break;
+			case '2':
+				url = "control_measure_switch_list_by_line_id";
+				break;
+			}
+
+			$.ajax({
+				type : "post",
+				url : url,
+				async : false,
+				data : {
+					"lineId" : $("#lines").val()
+				},
+				success : function(data) {
+
+					data = data.data;
+					var options = "";
+					for (var i = 0; i < data.length; i++) {
+
+						options += "<option value='" + data[i].id + "'>"
+								+ data[i].name + "</option>";
+					}
+					$("#switchs").empty();
+					$("#switchs").append(options);
+				}
+			})
+
+		})
+
+// 按照开关找记录
+$("#switchs").click(search_chart);
+
+// function updateChart(id, data) {
+//
+// $("#" + id).parent().css("width", data.A.length * 80 + "px");
+// $("#" + id).css("width", data.A.length * 160);
+// $("#" + id).css("height", 400);
+// // $("#" + id).datasets[0] = data.A;
+// // $("#" + id).datasets[1] = data.B;
+// // $("#" + id).datasets[2] = data.C;
+//
+// var ctx = $("#" + id).get(0).getContext("2d");
+//
+// // ctx.canvas.datasets[0] = data.A;
+// // ctx.canvas.datasets[1] = data.B;
+// // ctx.canvas.datasets[2] = data.C;
+//	
+//	
+// new Chart(ctx).Line(load(data), {
+// responsive : true,
+//
+// });
+//	
+//	
+//	
+//	
+// // $("#" + id).update();
+// console.log(data.A.length)
+// }
 
 /**
  * 
@@ -24,16 +98,17 @@ function search_chart() {
 
 	$.ajax({
 		type : "post",
-		url : "select_chart_by_date",
+		url : "select_chart_by_switch_id",
 		async : false,
 		data : {
+			"type" : $("#zTree_node_type").val(),
 			"date" : $("#search_date").val(),
-			"switchId" : "03"
+			"switchId" : $("#switchs").val()
 		},
 		success : function(data) {
+
 			creat("current_chart", data.current);
 			creat("voltage_chart", data.voltage);
-
 			creat("power_chart", calculate_power(data.current, data.voltage));
 		}
 	})
@@ -57,7 +132,7 @@ function initail_datetimepicker() {
 		todayHighlight : 1,
 		startView : 2,
 		minView : 2,
-		forceParse : 0
+		forceParse : 0,
 	});
 }
 
@@ -94,9 +169,9 @@ function initail_voltage_chart() {
 
 			for (var i = 0; i < data.A.length; i++) {
 
-				data.A[i].value = data.A[i].value /10;
-				data.B[i].value = data.B[i].value /10;
-				data.C[i].value = data.C[i].value /10;
+				data.A[i].value = data.A[i].value / 10;
+				data.B[i].value = data.B[i].value / 10;
+				data.C[i].value = data.C[i].value / 10;
 			}
 			voltages = data;
 			creat("voltage_chart", voltages);
@@ -128,9 +203,9 @@ function initail_current_chart() {
 
 			for (var i = 0; i < data.A.length; i++) {
 
-				data.A[i].value = data.A[i].value /100;
-				data.B[i].value = data.B[i].value /100;
-				data.C[i].value = data.C[i].value /100;
+				data.A[i].value = data.A[i].value / 100;
+				data.B[i].value = data.B[i].value / 100;
+				data.C[i].value = data.C[i].value / 100;
 			}
 			currents = data;
 			creat("current_chart", currents);
@@ -197,6 +272,13 @@ function calculate_power(currents, voltages) {
  * @throws
  */
 function creat(id, data) {
+
+	$("#" + id).remove(); // this is my <canvas> element
+	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
+
+	$("#" + id).parent().css("width", data.A.length * 80 + "px");
+	$("#" + id).css("width", data.A.length * 160);
+	$("#" + id).css("height", 400);
 
 	var ctx = $("#" + id).get(0).getContext("2d");
 	new Chart(ctx).Line(load(data), {
@@ -266,7 +348,12 @@ function lineChart() {
 			pointHighlightFill : "#fff",
 			pointHighlightStroke : "#A572AA",
 			data : []
-		}, ]
+		}, ],
+	// scaleGridLineWidth : 600,
+	// datasetStrokeWidth : 6,
+	// scaleFontSize : 12,
+
+	// scaleStepWidth : 20,
 
 	}
 	return lineChart;

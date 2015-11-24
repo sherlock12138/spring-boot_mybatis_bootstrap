@@ -42,9 +42,16 @@ public class LineController {
 	 * @throws
 	 */
 	@RequestMapping("/line_manager")
-	public String getLineSwitchList(Model model) {
+	public String getLineSwitchList(String lineId,Model model) {
 
-		model.addAttribute("switches", lineService.selectByParameters(null));
+		if (lineId != null) {
+
+			model.addAttribute("switches", lineService
+					.selectByParameters(MyBatisMapUtil.warp("line_id", lineId)));
+		} else {
+			model.addAttribute("switches",
+					lineService.selectByParameters(null));
+		}
 		return "line_manager";
 	}
 
@@ -90,7 +97,9 @@ public class LineController {
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
+		String id = lineService.selectByPrimaryKey(switchId).getSubstationId();
 		lineService.deleteByPrimaryKey(switchId);
+		redirectAttributes.addAttribute("lineId", id);
 		return "redirect:line_manager";
 	}
 
@@ -115,6 +124,7 @@ public class LineController {
 			switch1.setId(UUIDUtil.getUUID());
 		}
 		lineService.updateByPrimaryKey(switch1);
+		redirectAttributes.addAttribute("lineId", switch1.getSubstationId());
 		return "redirect:line_manager";
 	}
 
