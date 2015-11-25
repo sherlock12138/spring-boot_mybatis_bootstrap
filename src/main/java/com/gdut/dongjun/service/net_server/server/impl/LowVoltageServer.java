@@ -54,7 +54,7 @@ public class LowVoltageServer extends NetServer {
 		if (switchs != null) {
 			for (LowVoltageSwitch s : switchs) {
 
-				if (s.getId() != null) {
+				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
 					String msg = LowVoltageDeviceCommandUtil.read(gprs
@@ -86,21 +86,24 @@ public class LowVoltageServer extends NetServer {
 		if (switchs != null) {
 			for (LowVoltageSwitch s : switchs) {
 
-				if (s.getId() != null) {
+				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
+
 					msg = LowVoltageDeviceCommandUtil.readAllPhaseVoltage(gprs
 							.getAddress());
 
 					gprs.getCtx().writeAndFlush(msg);// 读取电压
+
 				}
 			}
 
 			for (LowVoltageSwitch s : switchs) {
 
-				if (s.getId() != null) {
+				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
+
 					msg = LowVoltageDeviceCommandUtil.readAllPhaseCurrent(gprs
 							.getAddress());
 

@@ -166,5 +166,4 @@
 		switch_id = #{switchId,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
-
 </mapper>

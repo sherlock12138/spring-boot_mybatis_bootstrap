@@ -135,7 +135,7 @@ public abstract class CtxStore {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @Title: add
@@ -175,7 +175,7 @@ public abstract class CtxStore {
 			for (SwitchGPRS gprs : ctxlist) {
 
 				if (gprs != null && ctx.equals(gprs.getCtx())) {
-					
+
 					ctxlist.remove(gprs);
 				}
 			}
@@ -223,6 +223,26 @@ public abstract class CtxStore {
 			printCtxStore();
 		} else {
 			logger.info("ctxlist is empty!");
+		}
+	}
+
+	/**
+	 * 
+	 * @Title: isReady
+	 * @Description: TODO
+	 * @param @param id
+	 * @param @return
+	 * @return boolean
+	 * @throws
+	 */
+	public static boolean isReady(String id) {
+
+		SwitchGPRS gprs = get(id);
+		if (gprs != null && gprs.getId() != null && gprs.getAddress() != null
+				&& gprs.getCtx() != null) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -281,6 +301,5 @@ public abstract class CtxStore {
 			logger.debug("printCtxStore() - end");
 		}
 	}
-	
 
 }

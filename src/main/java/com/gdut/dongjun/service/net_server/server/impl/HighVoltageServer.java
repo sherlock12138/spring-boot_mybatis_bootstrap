@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +33,13 @@ public class HighVoltageServer extends NetServer {
 	private ServerInitializer initializer;
 	@Autowired
 	private HighVoltageSwitchService lowVoltageSwitchService;
+	private static final Logger logger = Logger.getLogger(HighVoltageServer.class);
 
 	@Resource(name = "HighVoltageServerInitializer")
 	public void setInitializer(ServerInitializer initializer) {
 
 		super.initializer = initializer;
+		super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
 	}
 
 	@Override
@@ -54,14 +57,16 @@ public class HighVoltageServer extends NetServer {
 		if (switchs != null) {
 			for (HighVoltageSwitch s : switchs) {
 
-				if (s.getId() != null) {
+				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
+					
 					msg = new HighVoltageDeviceCommandUtil()
 							.readVoltageAndCurrent(s.getAddress(),
 									HighCommandControlCode.READ_VOLTAGE_CURRENT
 											.toString());
 
+					logger.info("读取 "+ s.getAddress()+" 的电流电压");
 					gprs.getCtx().writeAndFlush(msg);// 读取电压
 				}
 			}
