@@ -39,9 +39,9 @@ public class ControlMeasureServer extends NetServer {
 	public void setInitializer(ServerInitializer initializer) {
 
 		super.initializer = initializer;
-		super.hitchEventBreak = 35 * 60 * 1000;//延迟了报警事件的读取
+		super.hitchEventBreak = 35 * 60 * 1000;// 延迟了报警事件的读取
 	}
-	
+
 	@Override
 	protected void hitchEventSpy() {
 		List<ControlMearsureSwitch> switchs = lowVoltageSwitchService
@@ -50,7 +50,7 @@ public class ControlMeasureServer extends NetServer {
 		if (switchs != null) {
 			for (ControlMearsureSwitch s : switchs) {
 
-				if (s.getId() != null) {
+				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
 					String msg = ControlMearsureDeviceCommandUtil
@@ -73,9 +73,10 @@ public class ControlMeasureServer extends NetServer {
 		if (switchs != null) {
 			for (ControlMearsureSwitch s : switchs) {
 
-				if (s.getId() != null) {
+				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
+
 					String msg = ControlMearsureDeviceCommandUtil
 							.getTotalMessage(
 									ControlMearsureFunctionCode.RECENTLY_DATA_REQUEST

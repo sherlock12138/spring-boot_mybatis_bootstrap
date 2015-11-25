@@ -58,7 +58,8 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	@Autowired
 	private UserController controller;
 	private static final String READ_ADDRESS = "68AAAAAAAAAAAA681300DF16";
-	private static final Logger logger = Logger.getLogger(HighVoltageDataReceiver.class);
+	private static final Logger logger = Logger
+			.getLogger(HighVoltageDataReceiver.class);
 
 	public HighVoltageDataReceiver() {
 		super();
@@ -84,39 +85,46 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	}
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead(ChannelHandlerContext ctx, Object msg)
+			throws Exception {
 		String data = (String) msg;// 查询后回来的报文
-		System.out.println(data);
 		data = data.replace(" ", "");
 		String controlCode = data.substring(14, 16);
 		// EB 90 EB 90 EB 90 01 00 16
 		// 将接收到的客户端信息分类处理
-		
+		logger.info("数据---------"+data);
+
 		if (data.startsWith("EB90") || data.startsWith("eb90")) {
 			// 读通信地址
-			String address = new HighVoltageDeviceCommandUtil().reverseString(data.substring(12, 16));
-			logger.info(address + " is online!");
+			String address = new HighVoltageDeviceCommandUtil()
+					.reverseString(data.substring(12, 16));
 
 			SwitchGPRS gprs = CtxStore.get(ctx);
 			if (gprs != null) {
 
 				List<HighVoltageSwitch> list = switchService
-						.selectByParameters(MyBatisMapUtil.warp("address", address));
+						.selectByParameters(MyBatisMapUtil.warp("address",
+								address));
 				HighVoltageSwitch s = null;
-				if (list != null) {
+				if (list != null && list.size() != 0) {
 
 					s = list.get(0);
+					String id = s.getId();
+					gprs.setAddress(address);
+					gprs.setId(id);
+					logger.info(address + " is ready!");
+					ctx.channel().writeAndFlush(data);// 需要原样返回
+				}else {
+					logger.info("this device is not registered!!");
 				}
-				String id = s.getId();
-				gprs.setAddress(address);
-				gprs.setId(id);
 			} else {
 				logger.info("can not get gprs,there is an error in setting ctx");
 			}
+			
 
-		} else if (controlCode.equals("64")) {
+		} else if (controlCode.equals("09")) {
 			// 读数据(电流，电压)
-
+			logger.info("解析CV---------"+data);
 			String address = data.substring(10, 14);
 			address = new HighVoltageDeviceCommandUtil().reverseString(address);
 			System.out.println(address);
@@ -129,6 +137,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			}
 		} else {
 			logger.info("undefine message received!");
+			logger.error("接收到的非法数据--------------------"+data);
 		}
 
 	};
@@ -147,11 +156,16 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	 */
 	public void saveCV(String switchId, String data) {
 		data = data.replace(" ", "");
-		String ABVoltage = new HighVoltageDeviceCommandUtil().readABPhaseVoltage(data);
-		String BCVoltage = new HighVoltageDeviceCommandUtil().readBCPhaseVoltage(data);
-		String ACurrent = new HighVoltageDeviceCommandUtil().readAPhaseCurrent(data);
-		String BCurrent = new HighVoltageDeviceCommandUtil().readBPhaseCurrent(data);
-		String CCurrent = new HighVoltageDeviceCommandUtil().readCPhaseCurrent(data);
+		String ABVoltage = new HighVoltageDeviceCommandUtil()
+				.readABPhaseVoltage(data);
+		String BCVoltage = new HighVoltageDeviceCommandUtil()
+				.readBCPhaseVoltage(data);
+		String ACurrent = new HighVoltageDeviceCommandUtil()
+				.readAPhaseCurrent(data);
+		String BCurrent = new HighVoltageDeviceCommandUtil()
+				.readBPhaseCurrent(data);
+		String CCurrent = new HighVoltageDeviceCommandUtil()
+				.readCPhaseCurrent(data);
 		String[] dStrings_voltage = { ABVoltage, BCVoltage };
 
 		saveVoltage(switchId, dStrings_voltage);

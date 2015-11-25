@@ -206,7 +206,6 @@ public abstract class NetServer {
 
 			while (cvReadTaskSign) {
 
-				timedCVReadTask();
 				try {
 
 					Thread.sleep(cvReadBreak);
@@ -214,6 +213,7 @@ public abstract class NetServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				timedCVReadTask();
 			}
 		}
 	}
@@ -232,7 +232,6 @@ public abstract class NetServer {
 
 			while (cvReadTaskSign) {
 
-				timedCVReadTask();
 				try {
 
 					Thread.sleep(cvReadBreak);
@@ -240,6 +239,7 @@ public abstract class NetServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				timedCVReadTask();
 			}
 		}
 	}

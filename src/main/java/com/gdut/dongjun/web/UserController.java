@@ -112,7 +112,7 @@ public class UserController {
 			@RequestParam(required = true) String password) {
 
 		lowVoltageNetServer.setPort(8463);
-		HighVoltageNetServer.setPort(8464);
+		HighVoltageNetServer.setPort(5000);
 		ControlMeasureNetServer.setPort(8465);
 
 		if (name.equals("sherlock") && password.equals("33132212")) {
