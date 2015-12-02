@@ -21,7 +21,7 @@ body {
 }
 
 th, td {
- white-space: nowrap;
+	white-space: nowrap;
 }
 
 .sidebar-nav {
@@ -84,7 +84,7 @@ th, td {
 					</p>
 					<ul class="nav">
 						<li><a href="index">首页</a></li>
-						<li class="active"><a href="manager">管理</a></li>
+						<li class="active"><a href="low_voltage_switch_manager">管理</a></li>
 						<li><a href="current_voltage_chart">报表</a></li>
 						<li><a href="#about">关于</a></li>
 						<li><a href="#contact">联系我们</a></li>
@@ -104,7 +104,7 @@ th, td {
 					<div class="btn-group offset6">
 						<a href="#add_switch_modal" id="add_switch_btn"
 							class="btn btn-primary btn-large" data-toggle="modal"
-							data-backdrop="static">添加开关 </a><a id="return_line_list_btn"
+							data-backdrop="static">添加线路</a><a id="return_line_list_btn"
 							href="index" class="btn btn-large">返回首页 &raquo;</a>
 					</div>
 				</div>
@@ -112,54 +112,45 @@ th, td {
 
 			<div class="row-fluid">
 				<div class="span2 container-fluid well sidebar-nav">
-					<ul  class="nav nav-list bs-docs-sidenav">
+					<ul class="nav nav-list bs-docs-sidenav">
 						<li class="nav-header">资源管理</li>
-						<li><a href="#">变电站管理</a></li>
-						<li><a href="#about">线路管理</a></li>
-						<li class="active"><a href="switch_manager">开关管理</a></li>
+						<li><a href="substation_manager">变电站管理</a></li>
+						<li><a href="#">线路管理</a></li>
+						<li class="nav-header">设备管理</li>
+						<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
+						<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
+						<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
+
 						<li class="nav-header">事件管理</li>
-						<li><a href="hitch_event_manager">故障事件管理</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li class="nav-header">Sidebar</li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
+						<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+						<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
+						<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
 					</ul>
 					<!--/.well -->
 				</div>
 				<!--/span-->
 				<div class="span10 container">
+
+					<div class="control-group form-horizontal">
+						<label class="control-label">请选择变电站：</label>
+						<div id="substation_set" class="controls">
+							<select id='substations' class='span2'></select>
+						</div>
+					</div>
 					<table id="switch_list"
 						class="table table-bordered table-striped table-hover table-condensed success">
 						<thead>
-							<td>设备号码</td>
 							<td>名称</td>
 							<td class="hidden">Id</td>
 							<td class="hidden">线路ID</td>
-							<td>地址</td>
-							<td>经度</td>
-							<td>纬度</td>
-							<td>SIM</td>
-							<td>公约</td>
-							<td>是否在线</td>
-							<td>进入地图</td>
 							<td>修改</td>
 							<td>删除</td>
 						</thead>
 						<tr th:each="switch:${switches}" th:if="*{switch!=null}">
-							<td th:text="${switch.deviceNumber}"></td>
 							<td th:text="${switch.name}"></td>
 							<td class="hide" th:text="${switch.id}"></td>
-							<td class="hide" th:text="${switch.lineId}"></td>
-							<td th:text="${switch.address}"></td>
-							<td th:text="${switch.longitude}"></td>
-							<td th:text="${switch.latitude}"></td>
+							<td class="hide" th:text="${switch.substationId}"></td>
 
-							<td th:text="${switch.simNumber}"></td>
-							<td th:text="${switch.protocal}!=0?'07':'101'"></td>
-							<td></td>
-							<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
 							<td><a href="#edit_switch_modal" role="button"
 								class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
 							<td><a href="#del_switch_modal"
@@ -169,17 +160,9 @@ th, td {
 							<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
 						</tr>
 						<tfoot>
-							<td>设备号码</td>
 							<td>名称</td>
 							<td class="hidden">Id</td>
 							<td class="hidden">线路ID</td>
-							<td>地址</td>
-							<td>经度</td>
-							<td>纬度</td>
-							<td>SIM</td>
-							<td>公约</td>
-							<td>是否在线</td>
-							<td>进入地图</td>
 							<td>修改</td>
 							<td>删除</td>
 						</tfoot>
@@ -194,18 +177,12 @@ th, td {
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">×</button>
-				<h3>添加开关</h3>
+				<h3>添加线路</h3>
 			</div>
 			<div class="modal-body">
 				<form id="add_switch_form" class="form-horizontal"
-					action="edit_switch">
+					action="edit_line">
 					<!-- action="edit_switch" -->
-					<div class="control-group">
-						<label class="control-label" for="inputDeviceNumber">设备号码</label>
-						<div class="controls">
-							<input type="text" id="inputDeviceNumber" name="deviceNumber" />
-						</div>
-					</div>
 					<div class="control-group">
 						<label class="control-label" for="inputName">名称</label>
 						<div class="controls">
@@ -218,46 +195,14 @@ th, td {
 							<input type="text" id="inputId" name="id" />
 						</div>
 					</div>
-					<div class="hide control-group">
-						<label class="control-label" for="inputLineId">线路Id</label>
-						<div class="controls">
-							<input type="text" id="inputLineId" name="lineId" />
-						</div>
-					</div>
-
 					<div class="control-group">
-						<label class="control-label" for="inputAddress">地址</label>
+						<label class="control-label" for="inputLineId">所属变电站</label>
 						<div class="controls">
-							<input type="text" id="inputAddress" name="address" />
+							<!--  <input type="text" id="inputLineId" name="substationId" />-->
+							<select id='inputLineId' class='span2' name="substationId"></select>
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputLongitude">经度</label>
-						<div class="controls">
-							<input type="text" id="inputLongitude" name="longitude" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputLatitude">纬度</label>
-						<div class="controls">
-							<input type="text" id="inputLatitude" name="latitude" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputSim">SIM</label>
-						<div class="controls">
-							<input type="text" id="inputSim" name="simNumber" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputProtocal">公约</label>
-						<div class="controls">
-							<select name="protocal">
-								<option value="1">07公约</option>
-								<option value="0">101公约</option>
-							</select>
-						</div>
-					</div>
+					
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
 						<button id="add_switch_confirm_btn" class="btn btn-primary"
@@ -275,18 +220,12 @@ th, td {
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">×</button>
-				<h3>编辑开关</h3>
+				<h3>编辑线路</h3>
 			</div>
 			<div class="modal-body">
 				<form id="edit_switch_form" class="form-horizontal"
-					action="edit_switch">
+					action="edit_line">
 					<!-- action="edit_switch" -->
-					<div class="control-group">
-						<label class="control-label" for="editDeviceNumber">设备号码</label>
-						<div class="controls">
-							<input type="text" id="editDeviceNumber" name="deviceNumber" />
-						</div>
-					</div>
 					<div class="control-group">
 						<label class="control-label" for="editName">名称</label>
 						<div class="controls">
@@ -300,41 +239,9 @@ th, td {
 						</div>
 					</div>
 					<div class="hide control-group">
-						<label class="control-label" for="editLineId">线路Id</label>
+						<label class="control-label" for="editLineId">所属变电站</label>
 						<div class="controls">
-							<input type="text" id="editLineId" name="lineId" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="editAddress">地址</label>
-						<div class="controls">
-							<input type="text" id="editAddress" name="address" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="editLongitude">经度</label>
-						<div class="controls">
-							<input type="text" id="editLongitude" name="longitude" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="editLatitude">纬度</label>
-						<div class="controls">
-							<input type="text" id="editLatitude" name="latitude" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label" for="editSim">SIM</label>
-						<div class="controls">
-							<input type="text" id="editSim" name="simNumber" readOnly="true" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="editProtocal">公约</label>
-						<div class="controls">
-							<input type="text" id="editProtocal" name="protocal"
-								readOnly="true" />
+							<input type="text" id="editLineId" name="substationId" />
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -398,6 +305,6 @@ th, td {
 	<script src="../../js/dataTables/dataTables_initial.js"></script>
 
 	<!-- custom -->
-	<script src="../../js/custom/switch_manager.js"></script>
+	<script src="../../js/custom/line_manager.js"></script>
 </body>
 </html>

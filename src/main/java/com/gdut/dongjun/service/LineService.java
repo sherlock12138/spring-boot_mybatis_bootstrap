@@ -24,39 +24,39 @@ public interface LineService extends BaseService<Line> {
 	 * @return List<Line>
 	 * @throws
 	 */
-	public List<Line> selectAll();
-
-	/**
-	 * 
-	 * @Title: selectBySubstationId
-	 * @Description: TODO
-	 * @param @param substation_id
-	 * @param @return
-	 * @return List<Line>
-	 * @throws
-	 */
-	public List<Line> selectBySubstationId(String substationId);
-
-	/**
-	 * 
-	 * @Title: getLineBySwitchId
-	 * @Description: TODO
-	 * @param @param switchId
-	 * @param @return
-	 * @return Line
-	 * @throws
-	 */
-	public Line getLineBySwitchId(String switchId);
-
-	/**
-	 * @return
-	 * 
-	 * @Title: selectByKeyWord
-	 * @Description: TODO
-	 * @param @param keyWord
-	 * @return List<Line>
-	 * @throws
-	 */
-	public List<Line> selectByKeyWord(String keyWord);
+//	public List<Line> selectAll();
+//
+//	/**
+//	 * 
+//	 * @Title: selectBySubstationId
+//	 * @Description: TODO
+//	 * @param @param substation_id
+//	 * @param @return
+//	 * @return List<Line>
+//	 * @throws
+//	 */
+//	public List<Line> selectBySubstationId(String substationId);
+//
+//	/**
+//	 * 
+//	 * @Title: getLineBySwitchId
+//	 * @Description: TODO
+//	 * @param @param switchId
+//	 * @param @return
+//	 * @return Line
+//	 * @throws
+//	 */
+//	public Line getLineBySwitchId(String switchId);
+//
+//	/**
+//	 * @return
+//	 * 
+//	 * @Title: selectByKeyWord
+//	 * @Description: TODO
+//	 * @param @param keyWord
+//	 * @return List<Line>
+//	 * @throws
+//	 */
+//	public List<Line> selectByKeyWord(String keyWord);
 
 }

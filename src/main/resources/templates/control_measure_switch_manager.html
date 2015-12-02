@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Bootstrap, from Twitter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<!-- Le styles
+<link href="../../css/bootstrap.css" rel="stylesheet" /> 
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css"
+	rel="stylesheet" />
+-->
+
+<link href="../../css/bootstrap.css" rel="stylesheet" />
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+
+th, td {
+	white-space: nowrap;
+}
+
+.sidebar-nav {
+	padding: 9px;
+}
+
+td.dpass {display: none;}
+
+@media ( max-width : 980px) {
+	/* Enable use of floated navbar text */
+	.navbar-text.pull-right {
+		float: none;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
+</style>
+<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
+<link href="../../css/manager.css" rel="stylesheet" />
+
+<!-- dataTables -->
+<link href="../../css/dataTables/dataTables.tableTools.css"
+	rel="stylesheet" />
+<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
+<link href="../../css/dataTables/dataTables.bootstrap.css"
+	rel="stylesheet" />
+
+
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="../../js/html5shiv.js"></script>
+    <![endif]-->
+
+<!-- Fav and touch icons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+	href="../../ico/apple-touch-icon-144-precomposed.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114"
+	href="../../ico/apple-touch-icon-114-precomposed.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+	href="../../ico/apple-touch-icon-72-precomposed.png" />
+<link rel="apple-touch-icon-precomposed"
+	href="../../ico/apple-touch-icon-57-precomposed.png" />
+<link rel="shortcut icon" href="../../ico/favicon.png" />
+
+</head>
+
+<body>
+
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="brand" href="#">东君电气</a>
+				<div class="nav-collapse collapse">
+					<p class="navbar-text pull-right">
+						登录 <a href="greeting" class="navbar-link" th:text="${name}"></a>
+					</p>
+					<ul class="nav">
+						<li><a href="index">首页</a></li>
+						<li class="active"><a href="low_voltage_switch_manager">管理</a></li>
+						<li><a href="current_voltage_chart">报表</a></li>
+						<li><a href="#about">关于</a></li>
+						<li><a href="#contact">联系我们</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="hero-unit">
+				<h2>东君电气管理XXX管理者界面</h2>
+				<div>
+					上海东君电气有限公司 <a href="index" class="btn btn-primary ">了解更多
+						&raquo;</a>
+					<div class="btn-group offset6">
+						<a href="#add_switch_modal" id="add_switch_btn"
+							class="btn btn-primary btn-large" data-toggle="modal"
+							data-backdrop="static">添加开关 </a><a id="return_line_list_btn"
+							href="index" class="btn btn-large">返回首页 &raquo;</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="row-fluid">
+				<div class="span2 container-fluid well sidebar-nav">
+					<ul class="nav nav-list bs-docs-sidenav">
+						<li class="nav-header">资源管理</li>
+						<li><a href="substation_manager">变电站管理</a></li>
+						<li><a href="line_manager">线路管理</a></li>
+						<li class="nav-header">设备管理</li>
+						<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
+						<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
+						<li><a href="#">无功无场开关管理</a></li>
+
+						<li class="nav-header">事件管理</li>
+						<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+						<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
+						<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
+						
+					</ul>
+					<!--/.well -->
+				</div>
+				<!--/span-->
+				<div class="span10 container">
+
+					<div class="control-group form-horizontal">
+						<div class="controls span4">
+							<label class="control-label">请选择变电站：</label> <select
+								id='substations' class='span6'></select>
+						</div>
+						<div class="controls span4">
+							<label class="control-label">请选择线路：</label> <select id='lines'
+								class='span6'></select>
+						</div>
+					</div>
+					<table id="switch_list"
+						class="table table-bordered table-striped table-hover table-condensed success">
+						<thead>
+							<td>设备号码</td>
+							<td>名称</td>
+							<td class="hidden">Id</td>
+							<td class="hidden">线路ID</td>
+							<td>地址</td>
+							<td>经度</td>
+							<td>纬度</td>
+							<td>SIM</td>
+							<td>进入地图</td>
+							<td>修改</td>
+							<td>删除</td>
+						</thead>
+						<tr th:each="switch:${switches}" th:if="*{switch!=null}">
+							<td th:text="${switch.deviceNumber}"></td>
+							<td th:text="${switch.name}"></td>
+							<td class="hide" th:text="${switch.id}"></td>
+							<td class="hide" th:text="${switch.lineId}"></td>
+							<td th:text="${switch.address}"></td>
+							<td th:text="${switch.longitude}"></td>
+							<td th:text="${switch.latitude}"></td>
+
+							<td th:text="${switch.simNumber}"></td>
+							<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
+							<td><a href="#edit_switch_modal" role="button"
+								class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
+							<td><a href="#del_switch_modal"
+								class="del_switch_btn btn btn-danger" data-toggle="modal"
+								data-backdrop="static">删除&raquo; </a></td>
+
+							<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
+						</tr>
+						<tfoot>
+							<td>设备号码</td>
+							<td>名称</td>
+							<td class="hidden">Id</td>
+							<td class="hidden">线路ID</td>
+							<td>地址</td>
+							<td>经度</td>
+							<td>纬度</td>
+							<td>SIM</td>
+							<td>进入地图</td>
+							<td>修改</td>
+							<td>删除</td>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<!-- Add_Switch_Modal -->
+		<div id="add_switch_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3>添加开关</h3>
+			</div>
+			<div class="modal-body">
+				<form id="add_switch_form" class="form-horizontal"
+					action="edit_control_measure_switch">
+					<!-- action="edit_switch" -->
+					<div class="control-group">
+						<label class="control-label" for="inputDeviceNumber">设备号码</label>
+						<div class="controls">
+							<input type="text" id="inputDeviceNumber" name="deviceNumber" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputName">名称</label>
+						<div class="controls">
+							<input type="text" id="inputName" name="name" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="inputId">Id</label>
+						<div class="controls">
+							<input type="text" id="inputId" name="id" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="inputLineId">线路Id</label>
+						<div class="controls">
+							<input type="text" id="inputLineId" name="lineId" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="inputAddress">地址</label>
+						<div class="controls">
+							<input type="text" id="inputAddress" name="address" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputLongitude">经度</label>
+						<div class="controls">
+							<input type="text" id="inputLongitude" name="longitude" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputLatitude">纬度</label>
+						<div class="controls">
+							<input type="text" id="inputLatitude" name="latitude" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputSim">SIM</label>
+						<div class="controls">
+							<input type="text" id="inputSim" name="simNumber" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+						<button id="add_switch_confirm_btn" class="btn btn-primary"
+							type="submit">添加</button>
+						<!--  btn-primary -->
+					</div>
+				</form>
+
+			</div>
+		</div>
+
+		<!-- Edit_Switch_Modal -->
+		<div id="edit_switch_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3>编辑开关</h3>
+			</div>
+			<div class="modal-body">
+				<form id="edit_switch_form" class="form-horizontal"
+					action="edit_control_measure_switch">
+					<!-- action="edit_switch" -->
+					<div class="control-group">
+						<label class="control-label" for="editDeviceNumber">设备号码</label>
+						<div class="controls">
+							<input type="text" id="editDeviceNumber" name="deviceNumber" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="editName">名称</label>
+						<div class="controls">
+							<input type="text" id="editName" name="name" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="editId">Id</label>
+						<div class="controls">
+							<input type="text" id="editId" name="id" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="editLineId">线路Id</label>
+						<div class="controls">
+							<input type="text" id="editLineId" name="lineId" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="editAddress">地址</label>
+						<div class="controls">
+							<input type="text" id="editAddress" name="address" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="editLongitude">经度</label>
+						<div class="controls">
+							<input type="text" id="editLongitude" name="longitude" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="editLatitude">纬度</label>
+						<div class="controls">
+							<input type="text" id="editLatitude" name="latitude" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="editSim">SIM</label>
+						<div class="controls">
+							<input type="text" id="editSim" name="simNumber" readOnly="true" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+						<button id="edit_switch_confirm_btn" class="btn btn-primary"
+							type="submit">确定</button>
+						<!--  btn-primary -->
+					</div>
+				</form>
+
+			</div>
+		</div>
+		<!-- Modal -->
+		<div id="del_switch_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3 id="myModalLabel">警告</h3>
+			</div>
+			<div class="modal-body">
+				<p>您确定要删除这个开关吗？请慎重考虑</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+				<a id="del_confirm_btn" class="btn btn-danger">删除</a>
+			</div>
+		</div>
+
+
+		<footer>
+			<p>&copy; Company 2013</p>
+		</footer>
+
+	</div>
+	<!--/.fluid-container-->
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster 
+	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+	-->
+	<script src="../../js/jquery.js"></script>
+	<script src="../../js/bootstrap-transition.js"></script>
+	<script src="../../js/bootstrap-alert.js"></script>
+	<script src="../../js/bootstrap-modal.js"></script>
+	<script src="../../js/bootstrap-dropdown.js"></script>
+	<script src="../../js/bootstrap-scrollspy.js"></script>
+	<script src="../../js/bootstrap-tab.js"></script>
+	<script src="../../js/bootstrap-tooltip.js"></script>
+	<script src="../../js/bootstrap-popover.js"></script>
+	<script src="../../js/bootstrap-button.js"></script>
+	<script src="../../js/bootstrap-collapse.js"></script>
+	<script src="../../js/bootstrap-carousel.js"></script>
+	<script src="../../js/bootstrap-typeahead.js"></script>
+
+	<!-- dataTables -->
+	<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+	<script src="../../js/dataTables/jquery.dataTables.js"></script>
+	<script src="../../js/dataTables/dataTables.tableTools.js"></script>
+	<script src="../../js/dataTables/dataTables_initial.js"></script>
+
+	<!-- custom -->
+	<script src="../../js/custom/control_measure_switch_manager.js"></script>
+	<script src="../../js/custom/substation_line_set.js"></script>
+</body>
+</html>

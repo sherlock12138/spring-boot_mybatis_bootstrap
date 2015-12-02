@@ -84,7 +84,7 @@ th, td {
 					</p>
 					<ul class="nav">
 						<li><a href="index">首页</a></li>
-						<li class="active"><a href="manager">管理</a></li>
+						<li class="active"><a href="low_voltage_switch_manager">管理</a></li>
 						<li><a href="current_voltage_chart">报表</a></li>
 						<li><a href="#about">关于</a></li>
 						<li><a href="#contact">联系我们</a></li>
@@ -102,6 +102,10 @@ th, td {
 					上海东君电气有限公司 <a href="index" class="btn btn-primary ">了解更多
 						&raquo;</a>
 					<div class="btn-group offset6">
+						<a href="#add_switch_modal" id="add_switch_btn"
+							class="btn btn-primary btn-large" data-toggle="modal"
+							data-backdrop="static">添加变电站 </a><a id="return_line_list_btn"
+							href="index" class="btn btn-large">返回首页 &raquo;</a>
 					</div>
 				</div>
 			</div>
@@ -111,92 +115,47 @@ th, td {
 					<ul class="nav nav-list bs-docs-sidenav">
 						<li class="nav-header">资源管理</li>
 						<li><a href="#">变电站管理</a></li>
-						<li><a href="#about">线路管理</a></li>
-						<li><a href="switch_manager">开关管理</a></li>
+						<li><a href="line_manager">线路管理</a></li>
+						<li class="nav-header">设备管理</li>
+						<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
+						<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
+						<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
+
 						<li class="nav-header">事件管理</li>
-						<li class="active"><a href="hitch_event_manager">故障事件管理</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li class="nav-header">Sidebar</li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
+						<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+						<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
+						<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
 					</ul>
+					<!--/.well -->
 				</div>
 				<!--/span-->
 				<div class="span10 container">
-					<table id="hitch_event_list"
-						class="table table-bordered table-striped table-hover table-condensed success"
-						width="100%">
+					<table id="switch_list"
+						class="table table-bordered table-striped table-hover table-condensed success">
 						<thead>
-							<td>设备号码</td>
 							<td>名称</td>
 							<td class="hidden">Id</td>
-							<td class="hidden">开关ID</td>
-							<td>故障时间</td>
-							<td>故障相位</td>
-							<td>故障原因</td>
-							<td>A相电压</td>
-							<td>B相电压</td>
-							<td>C相电压</td>
-							<td>A相电流</td>
-							<td>B相电流</td>
-							<td>C相电流</td>
+							<td class="hidden">线路ID</td>
+							<td>修改</td>
 							<td>删除</td>
 						</thead>
-						<tr th:each="event:${hitch_events}" th:if="*{event!=null}">
-							<td th:text="${event.deviceNumber}"></td>
-							<td th:text="${event.switchName}"></td>
-							<td class="hide" th:text="${event.id}"></td>
-							<td class="hide" th:text="${event.switchId}"></td>
-							<td th:text="${event.hitchTime}"></td>
-							<td th:text="${event.hitchPhase}"></td>
-							<!-- 故障原因 -->
-							<td th:if="*{event.hitchReason==1}">剩余电流</td>
-							<td th:if="*{event.hitchReason==2}">缺零</td>
-							<td th:if="*{event.hitchReason==3}">过载</td>
-							<td th:if="*{event.hitchReason==4}">短路</td>
-							<td th:if="*{event.hitchReason==5}">缺相</td>
-							<td th:if="*{event.hitchReason==6}">欠压</td>
-							<td th:if="*{event.hitchReason==7}">过压</td>
-							<td th:if="*{event.hitchReason==8}">接地</td>
-							<td th:if="*{event.hitchReason==9}">停电</td>
-							<td th:if="*{event.hitchReason==10}">定时试验</td>
-							<td th:if="*{event.hitchReason==11}">远程</td>
-							<td th:if="*{event.hitchReason==12}">闭锁</td>
-							<td th:if="*{event.hitchReason==13}">手动</td>
-							<td th:if="*{event.hitchReason==14}">互感器故障</td>
-							<td th:if="*{event.hitchReason==15}">合闸失败</td>
-							<td th:if="*{event.hitchReason==16}">设置失败</td>
-
-							<td th:text="${event.behitchAPhaseVoltage}"></td>
-							<td th:text="${event.behitchBPhaseVoltage}"></td>
-							<td th:text="${event.behitchCPhaseVoltage}"></td>
-							<td th:text="${event.behitchAPhaseCurrent}"></td>
-							<td th:text="${event.behitchBPhaseCurrent}"></td>
-							<td th:text="${event.behitchCPhaseCurrent}"></td>
-							<!--  <td th:text="${event.protocal}!=0?'07':'101'"></td>-->
-
-							<td><a href="#del_event_modal"
-								class="del_event_btn btn btn-danger" data-toggle="modal"
+						<tr th:each="switch:${switches}" th:if="*{switch!=null}">
+							<td th:text="${switch.name}"></td>
+							<td class="hide" th:text="${switch.id}"></td>
+							<td class="hide" th:text="${switch.companyId}"></td>
+							<td><a href="#edit_switch_modal" role="button"
+								class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
+							<td><a href="#del_switch_modal"
+								class="del_switch_btn btn btn-danger" data-toggle="modal"
 								data-backdrop="static">删除&raquo; </a></td>
 
 							<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
 						</tr>
 						<tfoot>
-							<td>设备号码</td>
 							<td>名称</td>
 							<td class="hidden">Id</td>
-							<td class="hidden">开关ID</td>
-							<td>故障时间</td>
-							<td>故障相位</td>
-							<td>故障原因</td>
-							<td>A相电压</td>
-							<td>B相电压</td>
-							<td>C相电压</td>
-							<td>A相电流</td>
-							<td>B相电流</td>
-							<td>C相电流</td>
+							<td class="hidden">线路ID</td>
+							<td>修改</td>
 							<td>删除</td>
 						</tfoot>
 					</table>
@@ -204,9 +163,90 @@ th, td {
 			</div>
 		</div>
 		<hr />
+		<!-- Add_Switch_Modal -->
+		<div id="add_switch_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3>添加变电站</h3>
+			</div>
+			<div class="modal-body">
+				<form id="add_switch_form" class="form-horizontal"
+					action="edit_substation">
+					<!-- action="edit_switch" -->
+					<div class="control-group">
+						<label class="control-label" for="inputName">名称</label>
+						<div class="controls">
+							<input type="text" id="inputName" name="name" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="inputId">Id</label>
+						<div class="controls">
+							<input type="text" id="inputId" name="id" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="inputLineId">线路Id</label>
+						<div class="controls">
+							<input type="text" id="inputLineId" name="companyId" />
+						</div>
+					</div>
 
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+						<button id="add_switch_confirm_btn" class="btn btn-primary"
+							type="submit">添加</button>
+						<!--  btn-primary -->
+					</div>
+				</form>
+
+			</div>
+		</div>
+
+		<!-- Edit_Switch_Modal -->
+		<div id="edit_switch_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3>编辑变电站</h3>
+			</div>
+			<div class="modal-body">
+				<form id="edit_switch_form" class="form-horizontal"
+					action="edit_substation">
+					<!-- action="edit_switch" -->
+					<div class="control-group">
+						<label class="control-label" for="editName">名称</label>
+						<div class="controls">
+							<input type="text" id="editName" name="name" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="editId">Id</label>
+						<div class="controls">
+							<input type="text" id="editId" name="id" />
+						</div>
+					</div>
+					<div class="hide control-group">
+						<label class="control-label" for="editLineId">线路Id</label>
+						<div class="controls">
+							<input type="text" id="editLineId" name="companyId" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+						<button id="edit_switch_confirm_btn" class="btn btn-primary"
+							type="submit">确定</button>
+						<!--  btn-primary -->
+					</div>
+				</form>
+
+			</div>
+		</div>
 		<!-- Modal -->
-		<div id="del_event_modal" class="modal hide fade" tabindex="-1"
+		<div id="del_switch_modal" class="modal hide fade" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
@@ -214,7 +254,7 @@ th, td {
 				<h3 id="myModalLabel">警告</h3>
 			</div>
 			<div class="modal-body">
-				<p>您确定要删除这个故障事件吗？请慎重考虑</p>
+				<p>您确定要删除这个变电站吗？请慎重考虑</p>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -256,6 +296,6 @@ th, td {
 	<script src="../../js/dataTables/dataTables_initial.js"></script>
 
 	<!-- custom -->
-	<script src="../../js/custom/hitch_event_manager.js"></script>
+	<script src="../../js/custom/substation_manager.js"></script>
 </body>
 </html>

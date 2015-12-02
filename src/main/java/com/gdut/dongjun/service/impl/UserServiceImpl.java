@@ -63,4 +63,16 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
 		return LoginResult.USER_NO_EXIST;
 
 	}
+
+	@Override
+	protected boolean isExist(User record) {
+
+		if (record != null
+				&& userMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

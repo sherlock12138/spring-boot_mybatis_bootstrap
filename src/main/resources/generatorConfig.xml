@@ -7,45 +7,29 @@
 			connectionURL="jdbc:mysql://10.21.23.141:3306/ele" userId="root"
 			password="root">
 		</jdbcConnection>
-		<javaModelGenerator targetPackage="com.gdut.dongjun.domain.po.authc"
+		<javaModelGenerator targetPackage="com.gdut.dongjun.domain.po"
 			targetProject="E:\generator" />
 
-		<sqlMapGenerator targetPackage="com.gdut.dongjun.domain.dao.authc"
+		<sqlMapGenerator targetPackage="com.gdut.dongjun.domain.dao"
 			targetProject="E:\generator" />
 
-		<javaClientGenerator targetPackage="com.gdut.dongjun.domain.dao.authc"
+		<javaClientGenerator targetPackage="com.gdut.dongjun.domain.dao"
 			targetProject="E:\generator" type="XMLMAPPER" />
 
-		<table schema="root" tableName="user" domainObjectName="User"
+		<table schema="root" tableName="low_voltage_switch" domainObjectName="LowVoltageSwitch"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />
-		<table schema="root" tableName="user_role" domainObjectName="UserRole"
+			
+		<table schema="root" tableName="high_voltage_switch" domainObjectName="HighVoltageSwitch"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />
-		<table schema="root" tableName="role" domainObjectName="Role"
+			
+			<table schema="root" tableName="control_mearsure_switch" domainObjectName="ControlMearsureSwitch"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />
-		<table schema="root" tableName="module" domainObjectName="Module"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
-		<table schema="root" tableName="permission" domainObjectName="Permission"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
-
-
-		<table schema="root" tableName="role_module" domainObjectName="RoleModule"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
-		<table schema="root" tableName="role_module_permission"
-			domainObjectName="RoleModulePermission" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false" />
 
 		<!-- <table schema="root" tableName="control_mearsure_current" domainObjectName="ControlMearsureCurrent" 
 			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 

@@ -65,4 +65,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements
 		return roleMapper.selectUnarrangeRoleByUserId(map);
 	}
 
+	@Override
+	protected boolean isExist(Role record) {
+		return true;
+	}
+
 }

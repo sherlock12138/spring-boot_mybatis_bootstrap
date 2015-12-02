@@ -1,8 +1,10 @@
 package com.gdut.dongjun.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gdut.dongjun.domain.po.ControlMearsureVoltage;
+import com.gdut.dongjun.domain.po.LowVoltageVoltage;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**
@@ -20,4 +22,27 @@ public interface ControlMearsureVoltageService extends
 	 * @return	TODO
 	 */
 	public List<ControlMearsureVoltage> getRecentlyVoltage();
+	
+	/**
+	 * 
+	 * @Title: selectBySwitchId
+	 * @Description: TODO
+	 * @param @param switchId
+	 * @param @return
+	 * @return List<Voltage>
+	 * @throws
+	 */
+	public Map<String, Object> selectBySwitchId(String switchId);
+
+	/**
+	 * 
+	 * @Title: selectByTime
+	 * @Description: TODO
+	 * @param @param date
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	public Map<String, Object> selectByTime(String switchId, String date);
+
 }

@@ -64,13 +64,12 @@
 			<!--连接池 -->
 			<dataSource class="com.mchange.v2.c3p0.ComboPooledDataSource">
 				<driverClass>com.mysql.jdbc.Driver</driverClass>
-				<url>jdbc:mysql://10.21.23.141:3306/ele</url>
+				<url>jdbc:mysql://localhost:3306/ele</url>
 				<user>root</user>
 				<password>root</password>
 			</dataSource>
 		</connectionSource>
 	</appender>
-
 </configuration>
 
 

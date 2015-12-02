@@ -161,4 +161,9 @@ public class ModuleServiceImpl extends BaseServiceImpl<Module> implements
 		return moduleMapper.selectSonModuleListByRoleAndFatherModuleId(warp);
 	}
 
+	@Override
+	protected boolean isExist(Module record) {
+		return true;
+	}
+
 }

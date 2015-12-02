@@ -13,11 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
+import com.gdut.dongjun.domain.po.ControlMearsureVoltage;
+import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+import com.gdut.dongjun.domain.po.HighVoltageVoltage;
 import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.domain.po.LowVoltageVoltage;
+import com.gdut.dongjun.service.ControlMearsureCurrentService;
+import com.gdut.dongjun.service.ControlMearsureVoltageService;
+import com.gdut.dongjun.service.HighVoltageCurrentService;
+import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.LowVoltageCurrentService;
-import com.gdut.dongjun.service.LowVoltageHitchEventService;
-import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.LowVoltageVoltageService;
 import com.gdut.dongjun.service.device.Device;
 import com.gdut.dongjun.service.net_server.CtxStore;
@@ -28,13 +34,17 @@ import com.gdut.dongjun.service.net_server.SwitchGPRS;
 public class CommandController {
 
 	@Autowired
-	private LowVoltageSwitchService switchService;
-	@Autowired
 	private LowVoltageCurrentService currentService;
 	@Autowired
 	private LowVoltageVoltageService voltageService;
 	@Autowired
-	private LowVoltageHitchEventService hitchEventService;
+	private HighVoltageCurrentService currentService2;
+	@Autowired
+	private HighVoltageVoltageService voltageService2;
+	@Autowired
+	private ControlMearsureCurrentService currentService3;
+	@Autowired
+	private ControlMearsureVoltageService voltageService3;
 
 	@Resource(name = "LowVoltageDevice")
 	private Device lowVoltageDevice;
@@ -76,7 +86,6 @@ public class CommandController {
 		} else {
 			// return "error";
 		}
-
 
 		switch (sign) {
 		case 0:// 开
@@ -167,34 +176,88 @@ public class CommandController {
 	 */
 	@RequestMapping("/read_voltage")
 	@ResponseBody
-	public Object readVoltage(@RequestParam(required = true) String switchId) {
+	public Object readVoltage(@RequestParam(required = true) String switchId,
+			String type) {
 
-		// 从数据库中查询结果
-		List<LowVoltageVoltage> vliList = voltageService.getRecentlyVoltage();
 		Integer[] deStrings = new Integer[3];
+		switch (type) {
+		case "0":// 低压开关
+			// 从数据库中查询结果
+			List<LowVoltageVoltage> cliList = voltageService
+					.getRecentlyVoltage();
 
-		if (vliList != null) {
-			for (LowVoltageVoltage v : vliList) {
-				String p = v.getPhase();
-				switch (p) {
-				case "A":
-					deStrings[0] = v.getValue();
-					break;
-				case "B":
-					deStrings[1] = v.getValue();
-					break;
-				case "C":
-					deStrings[2] = v.getValue();
-					break;
-				default:
-					break;
+			if (cliList != null) {
+				for (LowVoltageVoltage current : cliList) {
+					String p = current.getPhase();
+					switch (p) {
+					case "A":
+						deStrings[0] = current.getValue();
+						break;
+					case "B":
+						deStrings[1] = current.getValue();
+						break;
+					case "C":
+						deStrings[2] = current.getValue();
+						break;
+					default:
+						break;
+					}
 				}
 			}
-			return deStrings;
-		} else {
-			return "";
-		}
+			break;
+		case "1":// 高压开关
+			// 从数据库中查询结果
+			List<HighVoltageVoltage> cliList2 = voltageService2
+					.getRecentlyVoltage();
 
+			if (cliList2 != null) {
+				for (HighVoltageVoltage current : cliList2) {
+					String p = current.getPhase();
+					switch (p) {
+					case "A":
+						deStrings[0] = current.getValue();
+						break;
+					case "B":
+						deStrings[1] = current.getValue();
+						break;
+					case "C":
+						deStrings[2] = current.getValue();
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			break;
+		case "2":// 管控开关
+			// 从数据库中查询结果
+			List<ControlMearsureVoltage> cliList3 = voltageService3
+					.getRecentlyVoltage();
+
+			if (cliList3 != null) {
+				for (ControlMearsureVoltage current : cliList3) {
+					String p = current.getPhase();
+					switch (p) {
+					case "A":
+						deStrings[0] = current.getValue();
+						break;
+					case "B":
+						deStrings[1] = current.getValue();
+						break;
+					case "C":
+						deStrings[2] = current.getValue();
+						break;
+					default:
+						break;
+					}
+				}
+
+			}
+			break;
+		default:
+			break;
+		}
+		return deStrings;
 	}
 
 	/**
@@ -210,33 +273,87 @@ public class CommandController {
 	@RequestMapping("/read_current")
 	@ResponseBody
 	public Object readCurrentVariable(
-			@RequestParam(required = true) String switchId) {
+			@RequestParam(required = true) String switchId, String type) {
 
-		// 从数据库中查询结果
-		List<LowVoltageCurrent> cliList = currentService.getRecentlyCurrent();
 		Integer[] deStrings = new Integer[3];
+		switch (type) {
+		case "0":// 低压开关
+			// 从数据库中查询结果
+			List<LowVoltageCurrent> cliList = currentService
+					.getRecentlyCurrent();
 
-		if (cliList != null) {
-			for (LowVoltageCurrent current : cliList) {
-				String p = current.getPhase();
-				switch (p) {
-				case "A":
-					deStrings[0] = current.getValue();
-					break;
-				case "B":
-					deStrings[1] = current.getValue();
-					break;
-				case "C":
-					deStrings[2] = current.getValue();
-					break;
-				default:
-					break;
+			if (cliList != null) {
+				for (LowVoltageCurrent current : cliList) {
+					String p = current.getPhase();
+					switch (p) {
+					case "A":
+						deStrings[0] = current.getValue();
+						break;
+					case "B":
+						deStrings[1] = current.getValue();
+						break;
+					case "C":
+						deStrings[2] = current.getValue();
+						break;
+					default:
+						break;
+					}
 				}
 			}
-			return deStrings;
-		} else {
-			return "";
+			break;
+		case "1":// 高压开关
+			// 从数据库中查询结果
+			List<HighVoltageCurrent> cliList2 = currentService2
+					.getRecentlyCurrent();
+
+			if (cliList2 != null) {
+				for (HighVoltageCurrent current : cliList2) {
+					String p = current.getPhase();
+					switch (p) {
+					case "A":
+						deStrings[0] = current.getValue();
+						break;
+					case "B":
+						deStrings[1] = current.getValue();
+						break;
+					case "C":
+						deStrings[2] = current.getValue();
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			break;
+		case "2":// 管控开关
+			// 从数据库中查询结果
+			List<ControlMearsureCurrent> cliList3 = currentService3
+					.getRecentlyCurrent();
+
+			if (cliList3 != null) {
+				for (ControlMearsureCurrent current : cliList3) {
+					String p = current.getPhase();
+					switch (p) {
+					case "A":
+						deStrings[0] = current.getValue();
+						break;
+					case "B":
+						deStrings[1] = current.getValue();
+						break;
+					case "C":
+						deStrings[2] = current.getValue();
+						break;
+					default:
+						break;
+					}
+				}
+
+			}
+			break;
+		default:
+			break;
 		}
+		return deStrings;
 	}
 
 	/**

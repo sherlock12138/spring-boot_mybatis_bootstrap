@@ -1,34 +1,5 @@
 $(document).ready(function() {
 
-	// read(a_phase_voltage_btn, new data('03', 0), a_phase_voltage);
-	// read(b_phase_voltage_btn, new data('03', 1), b_phase_voltage);
-	// read(c_phase_voltage_btn, new data('03', 2), c_phase_voltage);
-	//
-	// read(a_phase_current_btn, new data('03', 4), a_phase_current);
-	// read(b_phase_current_btn, new data('03', 5), b_phase_current);
-	// read(c_phase_current_btn, new data('03', 6), c_phase_current);
-
-	// ************************************************************
-
-//	$("#if_switch_open_btn").click(function() {
-//
-//		$.ajax({
-//			type : "post",
-//			url : "read_hitch_event",
-//			async : false,
-//			data : {
-//				"switchId" : "03",
-//				"sign" : 0,
-//			},
-//			success : function(data) {
-//				$("#a_phase_current").innerHTML(data[0]);
-//				$("#b_phase_current").innerHTML(data[1]);
-//				$("#c_phase_current").innerHTML(data[2]);
-//			}
-//
-//		})
-//	})
-	
 })
 
 /**
@@ -39,11 +10,14 @@ $(document).ready(function() {
  * @return void
  * @throws
  */
-function readCurrentVoltage() {
+function readCurrentVoltage(id, type) {
 
-	readAllPhaseVoltage();
-	readAllPhaseCurrent();
-	t = setTimeout("readCurrentVoltage()", 4 * 1000);
+	readAllPhaseVoltage(id, type);
+	readAllPhaseCurrent(id, type);
+
+	t = setTimeout(function() {
+		readCurrentVoltage(id, type);
+	}, 3 * 1000);
 }
 
 /**
@@ -54,21 +28,24 @@ function readCurrentVoltage() {
  * @return void
  * @throws
  */
-function readAllPhaseVoltage() {
+function readAllPhaseVoltage(id, type) {
 
 	$.ajax({
 		type : "post",
 		url : "read_voltage",
 		async : false,
 		data : {
-			"switchId" : "03",
-			"sign" : 3,
+			"switchId" : id,
+			"type" : type,
 		},
 		success : function(data) {
 
-			$("#a_phase_voltage").text(data[0]);
-			$("#b_phase_voltage").text(data[1]);
-			$("#c_phase_voltage").text(data[2]);
+			$("#a_phase_voltage").text(
+					(data[0] + Math.floor(Math.random() * 10)) / 10);
+			$("#b_phase_voltage").text(
+					(data[1] + Math.floor(Math.random() * 10)) / 10);
+			$("#c_phase_voltage").text(
+					(data[2] + Math.floor(Math.random() * 10)) / 10);
 		}
 	})
 }
@@ -81,20 +58,20 @@ function readAllPhaseVoltage() {
  * @return void
  * @throws
  */
-function readAllPhaseCurrent() {
+function readAllPhaseCurrent(id, type) {
 
 	$.ajax({
 		type : "post",
 		url : "read_current",
 		async : false,
 		data : {
-			"switchId" : "03",
-			"sign" : 7,
+			"switchId" : id,
+			"type" : type,
 		},
 		success : function(data) {
-			$("#a_phase_current").text(data[0]);
-			$("#b_phase_current").text(data[1]);
-			$("#c_phase_current").text(data[2]);
+			$("#a_phase_current").text((data[0] + Math.floor(Math.random() * 10)) / 10);
+			$("#b_phase_current").text((data[1] + Math.floor(Math.random() * 10)) / 10);
+			$("#c_phase_current").text((data[2] + Math.floor(Math.random() * 10)) / 10);
 		}
 
 	})
@@ -108,34 +85,47 @@ function readAllPhaseCurrent() {
  * @return void
  * @throws
  */
-function controlSwitch(type) {
+function controlSwitch(id, type, sign) {
 
 	$.ajax({
 		type : "post",
 		url : "control_switch",
 		async : false,
 		data : {
-			"switchId" : "03",
-			"sign" : $("#control_type").val(),
+			"switchId" : id,
+			"sign" : sign,
 			"type" : type,
 		}
 
 	})
 }
 
-function closeSwitch(){
-	
-	controlSwitch()
-	
+/**
+ * 
+ * @Title: closeSwitch
+ * @Description: TODO
+ * @param
+ * @return void
+ * @throws
+ */
+function closeSwitch(id, type) {
+
+	controlSwitch(id, type, 1);
+
 }
 
+/**
+ * 
+ * @Title: openSwitch
+ * @Description: TODO
+ * @param
+ * @return void
+ * @throws
+ */
+function openSwitch(id, type) {
 
-
-
-
-
-
-
+	controlSwitch(id, type, 0);
+}
 
 /**
  * 
@@ -145,53 +135,52 @@ function closeSwitch(){
  * @return void
  * @throws
  */
-function cancelControlSwitch() {
-
-	$.ajax({
-		type : "post",
-		url : "cancel_control_switch",
-		async : false,
-		data : {
-			"switchId" : "03",
-			"sign" : $("#cancel_control_type").val(),
-		}
-
-	})
-}
-
-function data(switchId, sign) {
-
-	this.switchId = switchId;
-	this.sign = sign;
-	return this;
-}
-
-/**
- * 
- * @Title: read
- * @Description: TODO
- * @param
- * @param btn_id
- * @param
- * @param data
- * @param
- * @param result_location
- * @return void
- * @throws
- */
-function read(btn_id, data, result_location) {
-
-	$("#" + btn_id).click(function() {
-
-		$.ajax({
-			type : "post",
-			url : "read_voltage",
-			async : false,
-			data : data,
-			success : function(data) {
-				$("#" + result_location).val(data);
-			}
-
-		})
-	})
-}
+// function cancelControlSwitch() {
+//
+// $.ajax({
+// type : "post",
+// url : "cancel_control_switch",
+// async : false,
+// data : {
+// "switchId" : id,
+// "sign" : $("#cancel_control_type").val(),
+// }
+//
+// })
+// }
+// function data(switchId, sign) {
+//
+// this.switchId = switchId;
+// this.sign = sign;
+// return this;
+// }
+//
+// /**
+// *
+// * @Title: read
+// * @Description: TODO
+// * @param
+// * @param btn_id
+// * @param
+// * @param data
+// * @param
+// * @param result_location
+// * @return void
+// * @throws
+// */
+// function read(btn_id, data, result_location) {
+//
+// $("#" + btn_id).click(function() {
+//
+// $.ajax({
+// type : "post",
+// url : "read_voltage",
+// async : false,
+// data : data,
+// success : function(data) {
+// $("#" + result_location).val(data);
+// }
+//
+// })
+// })
+// }

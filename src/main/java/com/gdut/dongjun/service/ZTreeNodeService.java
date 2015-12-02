@@ -15,6 +15,7 @@ import com.gdut.dongjun.service.impl.ZTreeNode;
 public interface ZTreeNodeService {
 
 	/**
+	 * @param type 
 	 * 
 	 * @Title: diplaySwitchTree
 	 * @Description: TODO
@@ -22,6 +23,6 @@ public interface ZTreeNodeService {
 	 * @return List<ZTreeNode>
 	 * @throws
 	 */
-	public List<ZTreeNode> getSwitchTree(String company_id);
+	public List<ZTreeNode> getSwitchTree(String company_id, String type);
 
 }

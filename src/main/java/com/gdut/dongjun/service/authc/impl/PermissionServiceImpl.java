@@ -76,4 +76,9 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission>
 			return permissionMapper.selectUserModulePermission(map);
 		}
 	}
+
+	@Override
+	protected boolean isExist(Permission record) {
+		return true;
+	}
 }

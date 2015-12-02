@@ -97,20 +97,5 @@ public class Array_ListUtil {
 
 	}
 
-	@Test
-	public void test() {
-
-		List<Line> list = new LinkedList<Line>();
-		Line line = new Line();
-		line.setId("01");
-		Line line2 = new Line();
-		line2.setId("02");
-		
-		list.add(line);
-		list.add(line2);
-		printDyadicArray(list2DyadicArrayColumnRestrict(Line.convert2Object(list), 3));
-//		printDyadicArray(list2DyadicArrayRowRestrict(list, 3));
-
-	}
 
 }

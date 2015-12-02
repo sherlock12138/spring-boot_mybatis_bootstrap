@@ -48,6 +48,18 @@ public class SubstationServiceImpl extends BaseServiceImpl<Substation>
 		}
 
 	}
+
+	@Override
+	protected boolean isExist(Substation record) {
+
+		if (record != null
+				&& substationMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	
 	

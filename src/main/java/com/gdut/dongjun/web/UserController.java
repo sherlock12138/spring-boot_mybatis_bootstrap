@@ -1,11 +1,10 @@
 package com.gdut.dongjun.web;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -24,9 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.UserService;
 import com.gdut.dongjun.service.impl.enums.LoginResult;
 import com.gdut.dongjun.service.net_server.server.NetServer;
+import com.gdut.dongjun.util.MyBatisMapUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -35,10 +36,10 @@ public class UserController {
 
 	@Resource(name = "LowVoltageServer")
 	private NetServer lowVoltageNetServer;
-	
+
 	@Resource(name = "HighVoltageServer")
 	private NetServer HighVoltageNetServer;
-	
+
 	@Resource(name = "ControlMeasureServer")
 	private NetServer ControlMeasureNetServer;
 	@Autowired
@@ -52,19 +53,33 @@ public class UserController {
 
 		return "login";
 	}
-
+	
 	@RequestMapping(value = "elecon/login_form")
 	@ResponseBody
 	public Object loginForm(String name, String password, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, HttpSession session) {
 
 		SecurityUtils.setSecurityManager(manager);
 		Subject currentUser = SecurityUtils.getSubject();
 
 		UsernamePasswordToken token = new UsernamePasswordToken(name, password);
 		token.setRememberMe(true);
+
+		Map<String, Object> map = MyBatisMapUtil.warp("name", name);
+		map.put("password", password);
+
+		List<User> users = userService.selectByParameters(map);
+		User user = null;
+		
+		// 数据库查找账号密码
+		if (users != null && users.get(0) != null) {
+
+			user = users.get(0);
+		}
+
 		try {
 			currentUser.login(token);
+			session.setAttribute("currentUser", user);
 			// if no exception, that's it, we're done!
 		} catch (UnknownAccountException uae) {
 			// username wasn't in the system, show them an error message?
@@ -97,11 +112,11 @@ public class UserController {
 			@RequestParam(required = true) String password) {
 
 		lowVoltageNetServer.setPort(8463);
-		HighVoltageNetServer.setPort(8464);
+		HighVoltageNetServer.setPort(5000);
 		ControlMeasureNetServer.setPort(8465);
-		
-		if (name.equals("sherlock") && password.equals("33132212")){
-			
+
+		if (name.equals("sherlock") && password.equals("33132212")) {
+
 			lowVoltageNetServer.start();
 			HighVoltageNetServer.start();
 			ControlMeasureNetServer.start();
@@ -125,8 +140,8 @@ public class UserController {
 			@RequestParam(required = true) String name,
 			@RequestParam(required = true) String password) {
 
-		if (name.equals("sherlock") && password.equals("33132212")){
-			
+		if (name.equals("sherlock") && password.equals("33132212")) {
+
 			lowVoltageNetServer.stop();
 			HighVoltageNetServer.stop();
 			ControlMeasureNetServer.stop();

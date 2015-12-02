@@ -67,4 +67,9 @@ public class RoleModuleServiceImpl extends BaseServiceImpl<RoleModuleKey>
 		return roleModuleMapper.deleteByRoleId(roleId);
 	}
 
+	@Override
+	protected boolean isExist(RoleModuleKey record) {
+		return true;
+	}
+
 }

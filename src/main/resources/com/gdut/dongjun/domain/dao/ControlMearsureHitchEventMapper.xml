@@ -20,6 +20,23 @@
     -->
     id, switch_id, hitch_reason, hitch_time
   </sql>
+  
+  <select id="selectByParameters" resultMap="BaseResultMap">
+		select * from control_mearsure_hitch_event where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+	</select>
+  
+  
+  
+  
+  
+  
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated

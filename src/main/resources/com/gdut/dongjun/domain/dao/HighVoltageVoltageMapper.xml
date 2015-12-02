@@ -21,6 +21,56 @@
     -->
     id, time, phase, value, switch_id
   </sql>
+  
+  <select id="selectByParameters" resultMap="BaseResultMap">
+		select * from high_voltage_voltage where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="selectBySwitchId" resultMap="BaseResultMap">
+		select * from high_voltage_voltage where 1 = 1
+		<if test="map != null">
+			<foreach item="item" index="key" collection="map.entrySet()">
+				and ${key} =
+				#{item}
+			</foreach>
+		</if>
+		order by time Asc
+	</select>
+
+
+	<select id="selectByTime" resultMap="BaseResultMap">
+		select * from
+		high_voltage_voltage where
+		switch_id = #{switchId} and phase = #{phase}
+		and
+		time like #{time}
+		order By time Asc
+	</select>
+
+	<select id="getRecentlyVoltage" resultMap="BaseResultMap">
+		select * from
+		high_voltage_voltage
+		where (time IN
+		(SELECT MAX(time)
+		FROM
+		high_voltage_voltage))
+	</select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--
       WARNING - @mbggenerated

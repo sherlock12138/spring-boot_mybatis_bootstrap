@@ -26,4 +26,16 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
 	 */
 	@Autowired
 	private CompanyMapper companyMapper;
+
+	@Override
+	protected boolean isExist(Company record) {
+		
+		if (record != null
+				&& companyMapper.selectByPrimaryKey(record.getId()) != null) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

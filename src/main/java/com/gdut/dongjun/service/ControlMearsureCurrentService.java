@@ -1,8 +1,10 @@
 package com.gdut.dongjun.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
+import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**
@@ -16,8 +18,39 @@ public interface ControlMearsureCurrentService extends
 	BaseService<ControlMearsureCurrent>{
 
 	/**
-	 * @description	读取实时电流
-	 * @return TODO
+	 * 
+	 * @Title: selectBySwitchId
+	 * @Description: TODO
+	 * @param @param switchId
+	 * @param @return
+	 * @return List<Current>
+	 * @throws
+	 */
+	public Map<String, Object> selectBySwitchId(String switchId);
+
+	/**
+	 * 
+	 * @Title: selectByTime
+	 * @Description: TODO
+	 * @param @param switchId
+	 * @param @param d
+	 * @return void
+	 * @throws
+	 */
+	public Map<String, Object> selectByTime(String switchId, String date);
+
+	/**
+	 * 
+	 * @Title: getRecentlyHitchEvent
+	 * @Description: 读取实时电流
+	 * @param @param switchId
+	 * @return void
+	 * @throws
 	 */
 	public List<ControlMearsureCurrent> getRecentlyCurrent();
+	
+	
+	
+	
+	
 }
