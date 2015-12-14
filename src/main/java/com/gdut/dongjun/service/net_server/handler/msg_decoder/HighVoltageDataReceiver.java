@@ -90,12 +90,12 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			throws Exception {
 		String data = (String) msg;// 查询后回来的报文
 		data = data.replace(" ", "");
-		//截取控制码
+		// 截取控制码
 		String controlCode = data.substring(14, 16);
-		//68 0c 0c 68 53 01 00 64 01 06 01 01 00 00 00 14 d5 16
+		// 68 0c 0c 68 53 01 00 64 01 06 01 01 00 00 00 14 d5 16
 		// EB 90 EB 90 EB 90 01 00 16
 		// 将接收到的客户端信息分类处理
-		logger.info("数据---------"+data);
+		logger.info("数据---------" + data);
 
 		// 读通信地址并将地址反转
 		if ((data.startsWith("EB90") || data.startsWith("eb90"))) {
@@ -103,42 +103,43 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					.reverseString(data.substring(12, 16));
 			SwitchGPRS gprs = CtxStore.get(ctx);
 			if (gprs != null) {
-				//根据反转后的地址查询得到highvoltageswitch的集合
+				// 根据反转后的地址查询得到highvoltageswitch的集合
 				List<HighVoltageSwitch> list = switchService
 						.selectByParameters(MyBatisMapUtil.warp("address",
-								address));
+								Integer.parseInt(address, 16)));
 				HighVoltageSwitch s = null;
 				if (list != null && list.size() != 0) {
-					
+
 					s = list.get(0);
 					String id = s.getId();
 					gprs.setAddress(address);
 					gprs.setId(id);
 					logger.info(address + " is ready!");
 					ctx.channel().writeAndFlush(data);// 需要原样返回
-				}else {
+				} else {
 					logger.info("this device is not registered!!");
 				}
 			} else {
 				logger.info("can not get gprs,there is an error in setting ctx");
 			}
-			
 
 		} else if (controlCode.equals("09")) {
 			// 读数据(电流，电压)
-			logger.info("解析CV---------"+data);
-			//根据地址从数据库取得highvoltageswitch集合
+			logger.info("解析CV---------" + data);
+			// 根据地址从数据库取得highvoltageswitch集合
 			String address = new HighVoltageDeviceCommandUtil()
 					.reverseString(data.substring(10, 14));
 			HighVoltageSwitch h = null;
 			String id = null;
-			
-			List<HighVoltageSwitch> list = switchService.selectByParameters(MyBatisMapUtil.warp("address",address));
-			if(list != null && list.size() !=0) {
+
+			List<HighVoltageSwitch> list = switchService
+					.selectByParameters(MyBatisMapUtil.warp("address",
+							Integer.parseInt(address, 16)));
+			if (list != null && list.size() != 0) {
 				h = list.get(0);
 				id = h.getId();
 			}
-			//String id = CtxStore.getId(address);
+			// String id = CtxStore.getId(address);
 			logger.info(id);
 			if (id != null && address != null) {
 				saveCV(id, data);
@@ -147,7 +148,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			}
 		} else {
 			logger.info("undefine message received!");
-			logger.error("接收到的非法数据--------------------"+data);
+			logger.error("接收到的非法数据--------------------" + data);
 		}
 
 	};
@@ -235,14 +236,14 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		Date date = new Date();
 		HighVoltageVoltage v1 = new HighVoltageVoltage();
 		v1.setId(UUIDUtil.getUUID());
-		v1.setPhase("AB");
+		v1.setPhase("A");
 		v1.setSwitchId(switchId);
 		v1.setTime(date);
 		v1.setValue(Integer.parseInt(dStrings[0]));
 
 		HighVoltageVoltage v2 = new HighVoltageVoltage();
 		v2.setId(UUIDUtil.getUUID());
-		v2.setPhase("BC");
+		v2.setPhase("B");
 		v2.setSwitchId(switchId);
 		v2.setTime(date);
 		v2.setValue(Integer.parseInt(dStrings[1]));

@@ -3,9 +3,9 @@ var voltages;
 
 $(document).ready(function() {
 
-	initail_current_chart();
-	initail_voltage_chart();
-	initail_power_chart();
+//	initail_current_chart();
+//	initail_voltage_chart();
+//	initail_power_chart();
 
 	loadSubstationSet();
 	initail_datetimepicker();
@@ -106,10 +106,28 @@ function search_chart() {
 			"switchId" : $("#switchs").val()
 		},
 		success : function(data) {
+			
+			//不同的设备有不同 的精确度
+			var vol_precision = 0;
+			var cur_precision = 0;
 
-			creat("current_chart", data.current);
-			creat("voltage_chart", data.voltage);
-			creat("power_chart", calculate_power(data.current, data.voltage));
+			switch ($("#zTree_node_type").val()) {
+
+			case '0':
+				vol_precision = 10;
+				cur_precision = 100;
+			case '1':
+				vol_precision = 100;
+				cur_precision = 100;
+			case '2':
+				vol_precision = 100;
+				cur_precision = 100;
+			}
+
+			creat("current_chart", data.current, cur_precision);
+			creat("voltage_chart", data.voltage, vol_precision);
+			creat("power_chart", calculate_power(data.current, data.voltage),
+					cur_precision * vol_precision);
 		}
 	})
 }
@@ -169,9 +187,9 @@ function initail_voltage_chart() {
 
 			for (var i = 0; i < data.A.length; i++) {
 
-				data.A[i].value = data.A[i].value / 10;
-				data.B[i].value = data.B[i].value / 10;
-				data.C[i].value = data.C[i].value / 10;
+				data.A[i].value = data.A[i].value / 100;
+				data.B[i].value = data.B[i].value / 100;
+				data.C[i].value = data.C[i].value / 100;
 			}
 			voltages = data;
 			creat("voltage_chart", voltages);
@@ -209,22 +227,6 @@ function initail_current_chart() {
 			}
 			currents = data;
 			creat("current_chart", currents);
-			// currents = data;
-			// var chart1 = lineChart();
-			// for (var i = 0; i < data.A.length; i++) {
-			//
-			// chart1.labels[i] = getFormatDateByLong(
-			// data.A[i].time, "MM-dd hh:mm");
-			// chart1.datasets[0].data[i] = data.A[i].value;
-			// chart1.datasets[1].data[i] = data.B[i].value;
-			// chart1.datasets[2].data[i] = data.C[i].value;
-			//
-			// }
-			// var ctx = $("#current_chart").get(0).getContext(
-			// "2d");
-			// current_chart = new Chart(ctx).Line(chart1, {
-			// responsive : true
-			// });
 		}
 	})
 }
@@ -253,9 +255,17 @@ function calculate_power(currents, voltages) {
 
 	for (var i = 0; i < len; i++) {
 
-		voltages.A[i].value = voltages.A[i].value * currents.A[i].value;
-		voltages.B[i].value = voltages.B[i].value * currents.B[i].value;
-		voltages.C[i].value = voltages.C[i].value * currents.C[i].value;
+		if (voltages.A[i] != null && currents.A[i] != null) {
+			voltages.A[i].value = voltages.A[i].value * currents.A[i].value;
+		}
+
+		if (voltages.B[i] != null && currents.B[i] != null) {
+			voltages.B[i].value = voltages.B[i].value * currents.B[i].value;
+		}
+
+		if (voltages.C[i] != null && currents.C[i] != null) {
+			voltages.C[i].value = voltages.C[i].value * currents.C[i].value;
+		}
 	}
 	return voltages;
 }
@@ -271,7 +281,7 @@ function calculate_power(currents, voltages) {
  * @return void
  * @throws
  */
-function creat(id, data) {
+function creat(id, data, precision) {
 
 	$("#" + id).remove(); // this is my <canvas> element
 	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
@@ -281,7 +291,7 @@ function creat(id, data) {
 	$("#" + id).css("height", 400);
 
 	var ctx = $("#" + id).get(0).getContext("2d");
-	new Chart(ctx).Line(load(data), {
+	new Chart(ctx).Line(load(data, precision), {
 		responsive : true,
 
 	});
@@ -296,15 +306,25 @@ function creat(id, data) {
  * @return any
  * @throws
  */
-function load(data) {
+function load(data, precision) {
 
 	var chart = lineChart();
 	for (var i = 0; i < data.A.length; i++) {
 
 		chart.labels[i] = getFormatDateByLong(data.A[i].time, "MM-dd hh:mm");
-		chart.datasets[0].data[i] = data.A[i].value;
-		chart.datasets[1].data[i] = data.B[i].value;
-		chart.datasets[2].data[i] = data.C[i].value;
+
+		if (data.A[i] != null && precision != 0) {
+			chart.datasets[0].data[i] = data.A[i].value / precision;
+		}
+		if (data.B[i] != null && precision != 0) {
+
+			chart.datasets[1].data[i] = data.B[i].value / precision;
+		}
+
+		if (data.C[i] != null && precision != 0) {
+			chart.datasets[2].data[i] = data.C[i].value / precision;
+		}
+
 	}
 	return chart;
 }

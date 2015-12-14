@@ -1,10 +1,10 @@
 package com.gdut.dongjun.service.impl.enums;
 
 public enum HighCommandControlCode {
-	PRE_OPEN_SWITCH("0","60 01 81","预置分闸"),OPEN_SWITCH("1","60 01 01","分闸"),
-	PRE_CLOSE_SWITCH("2","60 01 82","预置合闸"),CLOSE_SWITCH("3","60 01 02","合闸"),
-	PRE_CONTROL("4","73","预置控制域"),CONTROL("5","53","控制域"),COMMAND("6","2E 01 06 01","双点命令"),
-	READ_VOLTAGE_CURRENT("7","64 01 06 01","总站激活");
+	PRE_OPEN_SWITCH("0","600181","预置分闸"),OPEN_SWITCH("1","600101","分闸"),
+	PRE_CLOSE_SWITCH("2","600182","预置合闸"),CLOSE_SWITCH("3","600102","合闸"),
+	PRE_CONTROL("4","73","预置控制域"),CONTROL("5","53","控制域"),COMMAND("6","2E010601","双点命令"),
+	READ_VOLTAGE_CURRENT("7","64010601","总站激活");
 	private String sign;// 标示
 	private String code;// 16进制代码
 	private String statement;// 说明
