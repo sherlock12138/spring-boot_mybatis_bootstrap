@@ -1,5 +1,6 @@
 package com.gdut.dongjun.util;
 
+import org.junit.Test;
 import org.springframework.stereotype.Component;
 
 import com.gdut.dongjun.service.impl.enums.HighCommandControlCode;
@@ -18,9 +19,17 @@ public class HighVoltageDeviceCommandUtil {
 	private String address;// 地址
 	private String control;// 控制域
 	private String dataLength;// 报文长度
-	private String[] data;// 应用服务数据单元ASDU
+	private String data;// 应用服务数据单元ASDU
 	private String check;// 帧校验和CS
+	
+	public String getAddress() {
+		return address;
+	}
+	
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	// 预置合闸
 	public String closeSwitchPre(String address, String data) {
@@ -51,10 +60,10 @@ public class HighVoltageDeviceCommandUtil {
 	}
 	
 	public void setData(String data) {
-		this.data = data.split(" ");
 		int sum = 0, length = 0;
-		for (String s : this.data) {
-			sum += Integer.parseInt(s, 16);
+		System.out.println(data);
+		for(int i = 0;i <data.replace(" ", "").length();i = i + 2) {		
+			sum += Integer.parseInt(data.replace(" ", "").substring(i,i+2), 16);
 			length++;
 		}
 		sum %= 256;
@@ -91,7 +100,7 @@ public class HighVoltageDeviceCommandUtil {
 		for (int i = 0; i < data_reverse.length / 2; i++) {
 			temp = data_reverse[i];
 			data_reverse[i] = data_reverse[data_reverse.length / 2 + i];
-			data_reverse[data_reverse.length / 2 + i] = temp;
+			data_reverse[data_reverse.length / 2  + i] = temp;
 		}
 		for (int i = 0; i < data_reverse.length; i++) {
 			data += data_reverse[i];
@@ -99,10 +108,10 @@ public class HighVoltageDeviceCommandUtil {
 		return data;
 	}
 
-
 	//读取电压电流的报文
 	public String readVoltageAndCurrent(String address, String data) {
-		address = correctAddress(address);
+		this.address = address;
+		address = correctAddress(reverseString(address));
 		String msg = HighCommandControlCode.CONTROL + " " + address + " " + data + " " + address + " 00 00 14";
 		setData(msg);
 		return  "68 " + this.dataLength + " " + this.dataLength + " 68 " + msg  + " "+ this.check + " 16";
@@ -125,9 +134,12 @@ public class HighVoltageDeviceCommandUtil {
 //		System.out.println("B的电流"
 //				+ Double.parseDouble(Integer.parseInt(reverseString(data.substring(58, 62)), 16) + "") / 100 + "A");
 //		return Integer.parseInt(reverseString(data.substring(66, 70)), 16) / 100 + "";
-		return changToRight(data.substring(66, 70));
+		return changToRight(data.substring(30, 34));
 	}
-	
+//	@Test
+//	public void test() {
+//		 System.out.println( readVoltageAndCurrent("b900", HighCommandControlCode.READ_VOLTAGE_CURRENT.toString()));
+//	}
 	//将线电压装化为相电压
 	private String changToRight(String data) {
 		//返回相电压
@@ -140,7 +152,7 @@ public class HighVoltageDeviceCommandUtil {
 	//读BC电压
 	public String readBCPhaseVoltage(String data) {
 		
-		return changToRight(data.substring(74, 78));
+		return changToRight(data.substring(38, 42));
 	}
 
 
@@ -150,17 +162,17 @@ public class HighVoltageDeviceCommandUtil {
 
 	//读A电流
 	public String readAPhaseCurrent(String data) {
-		return Integer.parseInt(reverseString(data.substring(86, 90)), 16) / 100 + "";
+		return Integer.parseInt(reverseString(data.substring(50, 54)), 16) / 100 + "";
 	}
 
 	//读B电流
 	public String readBPhaseCurrent(String data) {
-		return Integer.parseInt(reverseString(data.substring(90, 94)), 16) / 100 + "";
+		return Integer.parseInt(reverseString(data.substring(54, 58)), 16) / 100 + "";
 	}
 
 	//读C的电流
 	public String readCPhaseCurrent(String data) {
-		return Integer.parseInt(reverseString(data.substring(94, 98)), 16) / 100 + "";
+		return Integer.parseInt(reverseString(data.substring(58, 62)), 16) / 100 + "";
 	}
 
 //	public static void main(String[] args) {

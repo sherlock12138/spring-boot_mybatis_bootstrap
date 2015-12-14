@@ -15,6 +15,7 @@
  */
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -89,25 +90,26 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			throws Exception {
 		String data = (String) msg;// 查询后回来的报文
 		data = data.replace(" ", "");
+		//截取控制码
 		String controlCode = data.substring(14, 16);
+		//68 0c 0c 68 53 01 00 64 01 06 01 01 00 00 00 14 d5 16
 		// EB 90 EB 90 EB 90 01 00 16
 		// 将接收到的客户端信息分类处理
 		logger.info("数据---------"+data);
 
-		if (data.startsWith("EB90") || data.startsWith("eb90")) {
-			// 读通信地址
+		// 读通信地址并将地址反转
+		if ((data.startsWith("EB90") || data.startsWith("eb90"))) {
 			String address = new HighVoltageDeviceCommandUtil()
 					.reverseString(data.substring(12, 16));
-
 			SwitchGPRS gprs = CtxStore.get(ctx);
 			if (gprs != null) {
-
+				//根据反转后的地址查询得到highvoltageswitch的集合
 				List<HighVoltageSwitch> list = switchService
 						.selectByParameters(MyBatisMapUtil.warp("address",
 								address));
 				HighVoltageSwitch s = null;
 				if (list != null && list.size() != 0) {
-
+					
 					s = list.get(0);
 					String id = s.getId();
 					gprs.setAddress(address);
@@ -125,11 +127,19 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		} else if (controlCode.equals("09")) {
 			// 读数据(电流，电压)
 			logger.info("解析CV---------"+data);
-			String address = data.substring(10, 14);
-			address = new HighVoltageDeviceCommandUtil().reverseString(address);
-			System.out.println(address);
-			String id = CtxStore.getId(address);
-
+			//根据地址从数据库取得highvoltageswitch集合
+			String address = new HighVoltageDeviceCommandUtil()
+					.reverseString(data.substring(10, 14));
+			HighVoltageSwitch h = null;
+			String id = null;
+			
+			List<HighVoltageSwitch> list = switchService.selectByParameters(MyBatisMapUtil.warp("address",address));
+			if(list != null && list.size() !=0) {
+				h = list.get(0);
+				id = h.getId();
+			}
+			//String id = CtxStore.getId(address);
+			logger.info(id);
 			if (id != null && address != null) {
 				saveCV(id, data);
 			} else {
