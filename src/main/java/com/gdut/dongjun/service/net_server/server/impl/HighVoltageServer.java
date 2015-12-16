@@ -37,7 +37,7 @@ public class HighVoltageServer extends NetServer {
 	public void setInitializer(ServerInitializer initializer) {
 
 		super.initializer = initializer;
-		super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
+//		super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
 	}
 
 	@Override

@@ -112,7 +112,7 @@ public class UserController {
 			@RequestParam(required = true) String password) {
 
 		lowVoltageNetServer.setPort(8463);
-		HighVoltageNetServer.setPort(8464);
+		HighVoltageNetServer.setPort(5000);
 		ControlMeasureNetServer.setPort(8465);
 
 		if (name.equals("sherlock") && password.equals("33132212")) {
@@ -149,25 +149,6 @@ public class UserController {
 		return "";
 	}
 
-	/**
-	 * 
-	 * @Title: handleError
-	 * @Description: TODO
-	 * @param @return
-	 * @return String
-	 * @throws
-	 */
-	@RequestMapping(value = "/error")
-	public String handleError() {
-		return "pages/404";
-	}
 
-	@RequestMapping("/f")
-	public String greeting(
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name,
-			Model model) {
-
-		return "fluid";
-	}
 
 }

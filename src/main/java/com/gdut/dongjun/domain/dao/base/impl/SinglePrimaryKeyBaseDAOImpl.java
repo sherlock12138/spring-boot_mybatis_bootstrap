@@ -26,131 +26,69 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 	private static final Logger logger = Logger
 			.getLogger(SinglePrimaryKeyBaseMapper.class);
 
-	@Transactional
 	public int deleteByPrimaryKey(String id) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("deleteByPrimaryKey(String) - start"); //$NON-NLS-1$
-		}
 
-		template.delete(getNamespace("deleteByPrimaryKey"), id);
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("deleteByPrimaryKey(String) - end"); //$NON-NLS-1$
-		}
-		return 0;
+		return template.delete(getNamespace("deleteByPrimaryKey"), id);
 	}
 
-	@Transactional
 	public int insert(T record) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("insert(T) - start"); //$NON-NLS-1$
-		}
 
-		template.insert(getNamespace("insert"), record);
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("insert(T) - end"); //$NON-NLS-1$
-		}
-		return 0;
+		return template.insert(getNamespace("insert"), record);
 	}
 
-	@Transactional
 	public int insertSelective(T record) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("insertSelective(T) - start"); //$NON-NLS-1$
-		}
-		// com.a. + inse
-		template.insert(getNamespace("insertSelective"), record);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("insertSelective(T) - end"); //$NON-NLS-1$
-		}
-		return 0;
+		return template.insert(getNamespace("insertSelective"), record);
 	}
 
 	public T selectByPrimaryKey(String id) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("selectByPrimaryKey(String) - start"); //$NON-NLS-1$
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("selectByPrimaryKey(String) - end"); //$NON-NLS-1$
-		}
+
 		return template.selectOne(getNamespace("selectByPrimaryKey"), id);
 	}
 
 	public List<T> selectByParameters(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		if (logger.isDebugEnabled()) {
-			logger.debug("selectByParamsters(Map<String, Object>) - start"); //$NON-NLS-1$
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("selectByParamsters(Map<String, Object>) - end"); //$NON-NLS-1$
-		}
+
 		return template.selectList(getNamespace("selectByParameters"), map);
 	}
 
-	@Transactional
 	public int updateByPrimaryKey(T record) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("updateByPrimaryKey(T) - start"); //$NON-NLS-1$
-		}
 
-		template.update(getNamespace("updateByPrimaryKey"), record);
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("updateByPrimaryKey(T) - end"); //$NON-NLS-1$
-		}
-		return 0;
+		return template.update(getNamespace("updateByPrimaryKey"), record);
 	}
 
 	@Transactional
 	public int updateByPrimaryKeySelective(T record) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("updateByPrimaryKeySelective(T) - start"); //$NON-NLS-1$
-		}
 
-		template.update(getNamespace("updateByPrimaryKeySelective"), record);
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("updateByPrimaryKeySelective(T) - end"); //$NON-NLS-1$
-		}
-		return 0;
+		return template.update(getNamespace("updateByPrimaryKeySelective"),
+				record);
 	}
 
 	/**
 	 * 
-	 * @author Sherlock-lee 功能: 返回类实现的第一个接口名称
-	 * @return 第一个接口名称
+	 * @Title: getFirstInterface
+	 * @Description: 返回类实现的第一个接口名称
+	 * @param @return
+	 * @return String
+	 * @throws
 	 */
 	public String getFirstInterface() {
-		if (logger.isDebugEnabled()) {
-			logger.debug("getFirstInterface() - start"); //$NON-NLS-1$
-		}
-		// String string = this.getClass().toString();
-		String returnString = this.getClass().getInterfaces()[0].toString()
-				.split(" ")[1].toString();
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getFirstInterface() - end"); //$NON-NLS-1$
-		}
-		return returnString;
+		return this.getClass().getInterfaces()[0].toString().split(" ")[1]
+				.toString();
 	}
 
 	/**
 	 * 
-	 * @author Sherlock-lee 功能:为获取namespace特别提供的方法
-	 * @return namespace
+	 * @Title: getNamespace
+	 * @Description: 为获取namespace特别提供的方法
+	 * @param @param methodName
+	 * @param @return
+	 * @return String
+	 * @throws
 	 */
 	public String getNamespace(String methodName) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("getNamespace(int) - start"); //$NON-NLS-1$
-		}
 
-		String returnString = getFirstInterface() + "." + methodName;
-		if (logger.isDebugEnabled()) {
-			logger.debug("getNamespace(int) - end"); //$NON-NLS-1$
-		}
-		return returnString;
+		return getFirstInterface() + "." + methodName;
 	}
 
 }

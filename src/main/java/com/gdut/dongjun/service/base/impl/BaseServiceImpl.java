@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gdut.dongjun.domain.dao.base.SinglePrimaryKeyBaseMapper;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**
@@ -35,31 +34,31 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	@Override
 	public int insert(T record) {
-		// TODO Auto-generated method stub
+		
 		return baseMapper.insert(record);
 	}
 
 	@Override
 	public int insertSelective(T record) {
-		// TODO Auto-generated method stub
+		
 		return baseMapper.insertSelective(record);
 	}
 
 	@Override
 	public T selectByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
+		
 		return baseMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
 	public List<T> selectByParameters(Map<String, Object> map) {
-		// TODO Auto-generated method stub
+		
 		return baseMapper.selectByParameters(map);
 	}
 
 	@Override
 	public int updateByPrimaryKey(T record) {
-		// TODO Auto-generated method stub
+		
 		if (isExist(record)) {
 
 			return baseMapper.updateByPrimaryKey(record);
@@ -71,7 +70,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	@Override
 	public int updateByPrimaryKeySelective(T record) {
-		// TODO Auto-generated method stub
+		
 		if (isExist(record)) {
 
 			return baseMapper.updateByPrimaryKeySelective(record);
