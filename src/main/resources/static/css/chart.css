@@ -1,0 +1,25 @@
+.thumbnail {
+	padding: 10px;
+	overflow: auto;
+}
+
+.a_phase {
+	width: 10px;
+	height: 10px;
+	background-color: #7EBBF9;
+	display: block;
+}
+
+.b_phase {
+	width: 10px;
+	height: 10px;
+	background-color: #2975B5;
+	display: block;
+}
+
+.c_phase {
+	width: 10px;
+	height: 10px;
+	background-color: #A572AA;
+	display: block;
+}
