@@ -4254,12 +4254,16 @@ input[type="submit"].btn.btn-mini {
 
 .tab-content > .tab-pane,
 .pill-content > .pill-pane {
-  display: none;
+  /*display: none;*/
+  position: absolute;
+  top: -999999px;
 }
 
 .tab-content > .active,
 .pill-content > .active {
-  display: block;
+  /*display: block;*/
+  position: absolute;
+  top: 0;
 }
 
 .tabs-below > .nav-tabs {

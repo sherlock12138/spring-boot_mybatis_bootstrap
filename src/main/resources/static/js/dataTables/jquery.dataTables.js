@@ -2246,19 +2246,19 @@
 				/* Pagination */
 				featureNode = _fnFeatureHtmlPaginate( oSettings );
 			}
-			else if ( DataTable.ext.feature.length !== 0 )
-			{
-				/* Plug-in features */
-				var aoFeatures = DataTable.ext.feature;
-				for ( var k=0, kLen=aoFeatures.length ; k<kLen ; k++ )
-				{
-					if ( cOption == aoFeatures[k].cFeature )
-					{
-						featureNode = aoFeatures[k].fnInit( oSettings );
-						break;
-					}
-				}
-			}
+			// else if ( DataTable.ext.feature.length !== 0 )
+			// {
+			// 	/* Plug-in features */
+			// 	var aoFeatures = DataTable.ext.feature;
+			// 	for ( var k=0, kLen=aoFeatures.length ; k<kLen ; k++ )
+			// 	{
+			// 		if ( cOption == aoFeatures[k].cFeature )
+			// 		{
+			// 			featureNode = aoFeatures[k].fnInit( oSettings );
+			// 			break;
+			// 		}
+			// 	}
+			// }
 	
 			/* Add to the 2D features array */
 			if ( featureNode )

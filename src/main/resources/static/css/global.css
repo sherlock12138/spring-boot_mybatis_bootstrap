@@ -2,6 +2,11 @@ body {
 	margin-top: 15px;
 }
 
+.container-fluid {
+	height: 95.5vh;
+}
+
+/* banner style start */
 .hero-unit {
 	padding: 20px;
 	height: 81px;
@@ -36,6 +41,7 @@ body {
 .banner-btn > .fa {
 	margin: 0 5px;
 }
+/* banner style end */
 
 footer p {
 	margin: 0;

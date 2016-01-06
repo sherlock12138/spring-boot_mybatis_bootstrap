@@ -11,7 +11,112 @@ $(document).ready(function() {
 	initail_datetimepicker();
 
 	$("#search_btn").click(search_chart);
-})
+
+
+	/*
+		侧栏树
+	*/
+	// 初始化ZTree
+	$.fn.zTree.init($("#treeDemo"), set_tree(0));// 0表示默认显示低压的数据
+
+	// 添加搜索栏监听
+	$("#searchNode").click(function() {
+
+		zTreeSearch($("#search_node_key").val());
+	});
+
+	// 切换ZTree显示的开关种类
+	$("#zTree_node_type_side").change(function() {
+
+		$.fn.zTree.getZTreeObj("treeDemo").destroy();
+		$.fn.zTree.init($("#treeDemo"), set_tree(this.value));
+	});
+
+});
+
+/**
+ * 
+ * @Title: 设置ZTree属性
+ * @Description: TODO
+ * @param
+ * @returns {___anonymous258_608}
+ * @return ___anonymous258_608
+ * @throws
+ */
+function set_tree(zTreeNodeType) {
+
+	var setting = {
+		async : {
+			enable : true,
+			url : "switch_tree",// 数据源
+			autoParam : [ "id", "name=n", "level=lv" ],
+			otherParam : {
+				"type" : zTreeNodeType,// 0低压 1高压 2管测
+			},
+			dataFilter : data_filter,// 添加节点名称过滤器
+		},
+		// callback : {
+		// 	onAsyncSuccess : zTreeOnAsyncSuccess,// 添加动态加载成功回调函数
+		// 	onClick : zTreeOnClick,// 添加节点点击事件回调函数
+		// },
+		view : {
+			showLine : false,
+			fontCss : getFontCss
+		}
+	};
+	return setting;
+}
+
+/**
+ * 
+ * @Title: 节点名称过滤
+ * @Description: TODO
+ * @param
+ * @param treeId
+ * @param
+ * @param parentNode
+ * @param
+ * @param childNodes
+ * @param
+ * @returns
+ * @return any
+ * @throws
+ */
+function data_filter(treeId, parentNode, childNodes) {
+	if (!childNodes)
+		return null;
+	for (var i = 0, l = childNodes.length; i < l; i++) {
+		childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+	}
+	return childNodes;
+}
+
+
+/**
+ * 
+ * @Title: getFontCss
+ * @Description: TODO
+ * @param
+ * @param treeId
+ * @param
+ * @param treeNode
+ * @param
+ * @returns
+ * @return any
+ * @throws
+ */
+function getFontCss(treeId, treeNode) {
+
+	return (!!treeNode.highlight) ? {
+		color : "#5C297F",
+		"font-weight" : "bold"
+	} : {
+		color : "#999999",
+		"font-weight" : "bold"
+	};
+}
+
+
 
 // 切换ZTree显示的开关种类
 $("#zTree_node_type").click(
@@ -286,14 +391,16 @@ function creat(id, data, precision) {
 	$("#" + id).remove(); // this is my <canvas> element
 	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
 
-	$("#" + id).parent().css("width", data.A.length * 80 + "px");
-	$("#" + id).css("width", data.A.length * 160);
-	$("#" + id).css("height", 400);
+	var height = parseInt($("#parent_" + id).css('height')) - 10;
+	height = height - (height % 5);
+
+	$("#" + id).parent().css("width", data.A.length * height / 5 + "px");
+	$("#" + id).css("width", data.A.length * height / 5);
+	$("#" + id).css("height", height);
 
 	var ctx = $("#" + id).get(0).getContext("2d");
 	new Chart(ctx).Line(load(data, precision), {
 		responsive : true,
-
 	});
 }
 
