@@ -43,6 +43,23 @@ body {
 }
 /* banner style end */
 
+/* sidebar span2 style start */
+
+.row-fluid > .span2 {
+	margin-bottom: 0;
+	height: 100%
+}
+
+/* sidebar span2 style end */
+
+/* sidebar span10 style start */
+
+.row-fluid > .span10 {
+	height: 100%
+}
+
+/* sidebar span10 style end */
+
 footer p {
 	margin: 0;
 }
