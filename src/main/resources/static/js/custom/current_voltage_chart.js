@@ -3,212 +3,35 @@ var voltages;
 
 $(document).ready(function() {
 
-//	initail_current_chart();
-//	initail_voltage_chart();
-//	initail_power_chart();
-
-	loadSubstationSet();
 	initail_datetimepicker();
 
-	$("#search_btn").click(search_chart);
+	$("#search_btn").click(search_chart_by_switch_id);//右侧搜索按钮
 
-
-	/*
-		侧栏树
-	*/
-	// 初始化ZTree
-	$.fn.zTree.init($("#treeDemo"), set_tree(0));// 0表示默认显示低压的数据
-
-	// 添加搜索栏监听
-	$("#searchNode").click(function() {
-
-		zTreeSearch($("#search_node_key").val());
-	});
-
-	// 切换ZTree显示的开关种类
-	$("#zTree_node_type_side").change(function() {
-
-		$.fn.zTree.getZTreeObj("treeDemo").destroy();
-		$.fn.zTree.init($("#treeDemo"), set_tree(this.value));
-	});
 
 });
 
-/**
- * 
- * @Title: 设置ZTree属性
- * @Description: TODO
- * @param
- * @returns {___anonymous258_608}
- * @return ___anonymous258_608
- * @throws
- */
-function set_tree(zTreeNodeType) {
+var search_chart_switch_id;//用于搜索报表的开关id
+function zTreeOnClick(event, treeId, treeNode) {
 
-	var setting = {
-		async : {
-			enable : true,
-			url : "switch_tree",// 数据源
-			autoParam : [ "id", "name=n", "level=lv" ],
-			otherParam : {
-				"type" : zTreeNodeType,// 0低压 1高压 2管测
-			},
-			dataFilter : data_filter,// 添加节点名称过滤器
-		},
-		// callback : {
-		// 	onAsyncSuccess : zTreeOnAsyncSuccess,// 添加动态加载成功回调函数
-		// 	onClick : zTreeOnClick,// 添加节点点击事件回调函数
-		// },
-		view : {
-			showLine : false,
-			fontCss : getFontCss
-		}
-	};
-	return setting;
-}
+	//点击事件
+	search_chart_switch_id = treeNode.id;
+	search_chart_by_switch_id();
+	
+	
+	
+};
 
-/**
- * 
- * @Title: 节点名称过滤
- * @Description: TODO
- * @param
- * @param treeId
- * @param
- * @param parentNode
- * @param
- * @param childNodes
- * @param
- * @returns
- * @return any
- * @throws
- */
-function data_filter(treeId, parentNode, childNodes) {
-	if (!childNodes)
-		return null;
-	for (var i = 0, l = childNodes.length; i < l; i++) {
-		childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
-	}
-	return childNodes;
-}
-
-
-/**
- * 
- * @Title: getFontCss
- * @Description: TODO
- * @param
- * @param treeId
- * @param
- * @param treeNode
- * @param
- * @returns
- * @return any
- * @throws
- */
-function getFontCss(treeId, treeNode) {
-
-	return (!!treeNode.highlight) ? {
-		color : "#5C297F",
-		"font-weight" : "bold"
-	} : {
-		color : "#999999",
-		"font-weight" : "bold"
-	};
-}
-
-
-
-// 切换ZTree显示的开关种类
-$("#zTree_node_type").click(
-		function() {
-
-			// $.fn.zTree.getZTreeObj("treeDemo").destroy();
-			// $.fn.zTree.init($("#treeDemo"), set_tree(this.value));
-			var url = "";
-			switch (this.value) {
-			case '0':
-				url = "switch_list_by_line_id";
-				break;
-			case '1':
-				url = "high_voltage_switch_list_by_line_id";
-				break;
-			case '2':
-				url = "control_measure_switch_list_by_line_id";
-				break;
-			}
-
-			$.ajax({
-				type : "post",
-				url : url,
-				async : false,
-				data : {
-					"lineId" : $("#lines").val()
-				},
-				success : function(data) {
-
-					data = data.data;
-					var options = "";
-					for (var i = 0; i < data.length; i++) {
-
-						options += "<option value='" + data[i].id + "'>"
-								+ data[i].name + "</option>";
-					}
-					$("#switchs").empty();
-					$("#switchs").append(options);
-				}
-			})
-
-		})
-
-// 按照开关找记录
-$("#switchs").click(search_chart);
-
-// function updateChart(id, data) {
-//
-// $("#" + id).parent().css("width", data.A.length * 80 + "px");
-// $("#" + id).css("width", data.A.length * 160);
-// $("#" + id).css("height", 400);
-// // $("#" + id).datasets[0] = data.A;
-// // $("#" + id).datasets[1] = data.B;
-// // $("#" + id).datasets[2] = data.C;
-//
-// var ctx = $("#" + id).get(0).getContext("2d");
-//
-// // ctx.canvas.datasets[0] = data.A;
-// // ctx.canvas.datasets[1] = data.B;
-// // ctx.canvas.datasets[2] = data.C;
-//	
-//	
-// new Chart(ctx).Line(load(data), {
-// responsive : true,
-//
-// });
-//	
-//	
-//	
-//	
-// // $("#" + id).update();
-// console.log(data.A.length)
-// }
-
-/**
- * 
- * @Title: search_chart
- * @Description: TODO
- * @param
- * @return void
- * @throws
- */
-function search_chart() {
-
+function search_chart_by_switch_id(){
+	
 	$.ajax({
 		type : "post",
 		url : "select_chart_by_switch_id",
 		async : false,
 		data : {
 			"type" : $("#zTree_node_type").val(),
-			"date" : $("#search_date").val(),
-			"switchId" : $("#switchs").val()
+			"beginDate" : $("#begin_search_date").val(),
+			"endDate" : $("#end_search_date").val(),
+			"switchId" : search_chart_switch_id
 		},
 		success : function(data) {
 			
@@ -236,6 +59,40 @@ function search_chart() {
 		}
 	})
 }
+
+/**
+ * 
+ * @Title: creat
+ * @Description: TODO
+ * @param
+ * @param id
+ * @param
+ * @param data
+ * @return void
+ * @throws
+ */
+function creat(id, data, precision) {
+
+	$("#" + id).remove(); // this is my <canvas> element
+	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
+
+	var height = parseInt($("#parent_" + id).css('height')) - 10;
+	height = height - (height % 5);
+
+	$("#" + id).parent().css("width", data.A.length * height / 5 + "px");
+	$("#" + id).css("width", data.A.length * height / 5);
+	$("#" + id).css("height", height);
+
+	var ctx = $("#" + id).get(0).getContext("2d");
+	new Chart(ctx).Line(load(data, precision), {
+		responsive : true,
+	});
+}
+
+
+
+
+
 
 /**
  * 
@@ -375,34 +232,7 @@ function calculate_power(currents, voltages) {
 	return voltages;
 }
 
-/**
- * 
- * @Title: creat
- * @Description: TODO
- * @param
- * @param id
- * @param
- * @param data
- * @return void
- * @throws
- */
-function creat(id, data, precision) {
 
-	$("#" + id).remove(); // this is my <canvas> element
-	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
-
-	var height = parseInt($("#parent_" + id).css('height')) - 10;
-	height = height - (height % 5);
-
-	$("#" + id).parent().css("width", data.A.length * height / 5 + "px");
-	$("#" + id).css("width", data.A.length * height / 5);
-	$("#" + id).css("height", height);
-
-	var ctx = $("#" + id).get(0).getContext("2d");
-	new Chart(ctx).Line(load(data, precision), {
-		responsive : true,
-	});
-}
 
 /**
  * 

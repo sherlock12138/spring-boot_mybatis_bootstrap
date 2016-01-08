@@ -19,13 +19,13 @@ import com.gdut.dongjun.util.MyBatisMapUtil;
  * @author Xiaomian_Link <972192420@qq.com>
  * @className ControlMearsureCurrentServiceImpl.java
  * @description
- * @Date 2015年11月19日 下午3:30:35 
+ * @Date 2015年11月19日 下午3:30:35
  * @version V1.0
  */
 @Service
-public class ControlMearsureCurrentServiceImpl extends 
-	BaseServiceImpl<ControlMearsureCurrent>
-		implements ControlMearsureCurrentService {
+public class ControlMearsureCurrentServiceImpl extends
+		BaseServiceImpl<ControlMearsureCurrent> implements
+		ControlMearsureCurrentService {
 
 	@Autowired
 	private ControlMearsureCurrentMapper currentMapper;
@@ -52,12 +52,14 @@ public class ControlMearsureCurrentServiceImpl extends
 	}
 
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String date) {
+	public Map<String, Object> selectByTime(String switchId, String beginDate,
+			String endDate) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> xx = MapUtil.warp("switchId", switchId);
 		xx.put("phase", "A");
-		xx.put("time", date);
+		xx.put("beginDate", beginDate);
+		xx.put("endDate", endDate);
 		result.put("A", currentMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "B");
@@ -85,5 +87,5 @@ public class ControlMearsureCurrentServiceImpl extends
 			return false;
 		}
 	}
-	
+
 }

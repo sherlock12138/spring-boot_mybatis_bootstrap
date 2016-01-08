@@ -20,7 +20,8 @@ import com.gdut.dongjun.service.base.BaseService;
  * @date 2015年7月24日 下午2:34:11
  * @version V1.0
  */
-public interface LowVoltageCurrentService extends BaseService<LowVoltageCurrent> {
+public interface LowVoltageCurrentService extends
+		BaseService<LowVoltageCurrent> {
 
 	/**
 	 * 
@@ -38,11 +39,14 @@ public interface LowVoltageCurrentService extends BaseService<LowVoltageCurrent>
 	 * @Title: selectByTime
 	 * @Description: TODO
 	 * @param @param switchId
-	 * @param @param d
-	 * @return void
+	 * @param @param date
+	 * @param @param string
+	 * @param @return
+	 * @return Map<String,Object>
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date);
+	public Map<String, Object> selectByTime(String switchId, String date,
+			String string);
 
 	/**
 	 * 

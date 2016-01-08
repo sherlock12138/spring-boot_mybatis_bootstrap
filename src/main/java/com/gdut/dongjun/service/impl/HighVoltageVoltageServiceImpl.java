@@ -49,13 +49,15 @@ HighVoltageVoltageService {
 	}
 
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String date) {
+	public Map<String, Object> selectByTime(String switchId, String beginDate,
+			String endDate) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> xx = new HashMap<String, Object>();
 		xx.put("switchId", switchId);
 		xx.put("phase", "A");
-		xx.put("time", date);
+		xx.put("beginDate", beginDate);
+		xx.put("endDate", endDate);
 		result.put("A", voltageMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "B");

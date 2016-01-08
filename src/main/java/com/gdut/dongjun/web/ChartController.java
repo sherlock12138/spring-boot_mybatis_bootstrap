@@ -1,5 +1,7 @@
 package com.gdut.dongjun.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,7 +72,7 @@ public class ChartController {
 	/**
 	 * 
 	 * @Title: selectChartByDate
-	 * @Description: TODO
+	 * @Description: deporte
 	 * @param @param search_date
 	 * @param @return
 	 * @return Object
@@ -79,12 +81,15 @@ public class ChartController {
 	@RequestMapping("/select_chart_by_date")
 	@ResponseBody
 	public Object selectChartByDate(
-			@RequestParam(required = true) String switchId, String date) {
+			@RequestParam(required = true) String switchId, String beginDate,
+			String endDate) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		map.put("current", currentService.selectByTime(switchId, date + "%"));
-		map.put("voltage", voltageService.selectByTime(switchId, date + "%"));
+		map.put("current",
+				currentService.selectByTime(switchId, beginDate, endDate));
+		map.put("voltage",
+				voltageService.selectByTime(switchId, beginDate, endDate));
 		return map;
 	}
 
@@ -92,34 +97,41 @@ public class ChartController {
 	@ResponseBody
 	public Object selectChartBySwitchId(
 			@RequestParam(required = true) String switchId,
-			@RequestParam(required = true) String type, String date) {
+			@RequestParam(required = true) String type, String beginDate,
+			String endDate) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (date == null) {
-			date = "";
+		if (beginDate == null || beginDate == "") {// 使用当前日期
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+			beginDate = df.format(new Date());
 		}
+		if (endDate == null || endDate == "") {// 使用当前日期
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+			endDate = df.format(new Date());
+		}
+
 		if (type == null) {
 			type = "0";
 		}
 		switch (type) {
 		case "0":
 			map.put("current",
-					currentService.selectByTime(switchId, date + "%"));
+					currentService.selectByTime(switchId, beginDate, endDate));
 			map.put("voltage",
-					voltageService.selectByTime(switchId, date + "%"));
+					voltageService.selectByTime(switchId, beginDate, endDate));
 			break;
 		case "1":
 			map.put("current",
-					currentService2.selectByTime(switchId, date + "%"));
+					currentService2.selectByTime(switchId, beginDate, endDate));
 			map.put("voltage",
-					voltageService2.selectByTime(switchId, date + "%"));
+					voltageService2.selectByTime(switchId, beginDate, endDate));
 			break;
 		case "2":
 			map.put("current",
-					currentService3.selectByTime(switchId, date + "%"));
+					currentService3.selectByTime(switchId, beginDate, endDate));
 			map.put("voltage",
-					voltageService3.selectByTime(switchId, date + "%"));
+					voltageService3.selectByTime(switchId, beginDate, endDate));
 			break;
 
 		default:

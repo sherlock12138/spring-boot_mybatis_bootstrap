@@ -49,7 +49,7 @@
 		high_voltage_voltage where
 		switch_id = #{switchId} and phase = #{phase}
 		and
-		time like #{time}
+		time between #{beginDate} and #{endDate}
 		order By time Asc
 	</select>
 

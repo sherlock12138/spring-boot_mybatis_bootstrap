@@ -56,12 +56,14 @@ public class LowVoltageCurrentServiceImpl extends BaseServiceImpl<LowVoltageCurr
 	}
 
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String date) {
+	public Map<String, Object> selectByTime(String switchId, String beginDate,
+			String endDate) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> xx = MapUtil.warp("switchId", switchId);
 		xx.put("phase", "A");
-		xx.put("time", date);
+		xx.put("beginDate", beginDate);
+		xx.put("endDate", endDate);
 		result.put("A", currentMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "B");

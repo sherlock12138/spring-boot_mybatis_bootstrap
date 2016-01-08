@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
 import com.gdut.dongjun.service.base.BaseService;
+
 /**
  * 
  * @author zjd
@@ -13,7 +14,8 @@ import com.gdut.dongjun.service.base.BaseService;
  * @description
  * @package com.gdut.dongjun.service
  */
-public interface HighVoltageCurrentService extends BaseService<HighVoltageCurrent> {
+public interface HighVoltageCurrentService extends
+		BaseService<HighVoltageCurrent> {
 
 	/**
 	 * 
@@ -31,11 +33,14 @@ public interface HighVoltageCurrentService extends BaseService<HighVoltageCurren
 	 * @Title: selectByTime
 	 * @Description: TODO
 	 * @param @param switchId
-	 * @param @param d
-	 * @return void
+	 * @param @param date
+	 * @param @param string
+	 * @param @return
+	 * @return Map<String,Object>
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date);
+	public Map<String, Object> selectByTime(String switchId, String date,
+			String string);
 
 	/**
 	 * 

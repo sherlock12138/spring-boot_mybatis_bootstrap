@@ -27,6 +27,7 @@ public interface HighVoltageVoltageService extends BaseService<HighVoltageVoltag
 	public Map<String, Object> selectBySwitchId(String switchId);
 
 	/**
+	 * @param string 
 	 * 
 	 * @Title: selectByTime
 	 * @Description: TODO
@@ -35,7 +36,7 @@ public interface HighVoltageVoltageService extends BaseService<HighVoltageVoltag
 	 * @return Object
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date);
+	public Map<String, Object> selectByTime(String switchId, String date, String string);
 
 	/**
 	 * 

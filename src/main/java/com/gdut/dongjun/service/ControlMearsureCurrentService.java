@@ -29,6 +29,7 @@ public interface ControlMearsureCurrentService extends
 	public Map<String, Object> selectBySwitchId(String switchId);
 
 	/**
+	 * @param string 
 	 * 
 	 * @Title: selectByTime
 	 * @Description: TODO
@@ -37,7 +38,7 @@ public interface ControlMearsureCurrentService extends
 	 * @return void
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date);
+	public Map<String, Object> selectByTime(String switchId, String date, String string);
 
 	/**
 	 * 

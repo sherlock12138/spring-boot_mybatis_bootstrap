@@ -34,6 +34,7 @@ public interface LowVoltageVoltageService extends BaseService<LowVoltageVoltage>
 	public Map<String, Object> selectBySwitchId(String switchId);
 
 	/**
+	 * @param string 
 	 * 
 	 * @Title: selectByTime
 	 * @Description: TODO
@@ -42,7 +43,7 @@ public interface LowVoltageVoltageService extends BaseService<LowVoltageVoltage>
 	 * @return Object
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date);
+	public Map<String, Object> selectByTime(String switchId, String date, String string);
 
 	/**
 	 * 

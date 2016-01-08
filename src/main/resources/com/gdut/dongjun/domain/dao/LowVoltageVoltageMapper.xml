@@ -45,7 +45,8 @@
 		low_voltage_voltage where
 		switch_id = #{switchId} and phase = #{phase}
 		and
-		time like #{time}
+		time between #{beginDate} and #{endDate}
+		<!--  like #{time}-->
 		order By time Asc
 	</select>
 

@@ -1,3 +1,12 @@
+/**
+ * 
+* @Title: loadSwitchListWithLineId 
+* @Description: 根据线路加载开关
+* @param @param _url
+* @param @param lineId   
+* @return void   
+* @throws
+ */
 function loadSwitchListWithLineId(_url, lineId) {
 
 	$.ajax({
@@ -24,6 +33,9 @@ function loadSwitchListWithLineId(_url, lineId) {
 
 }
 
+/**
+ * 报警事件重加载
+ */
 function loadEventListWithSwitchId(_url, switchId) {
 
 	// alert(switchId)
