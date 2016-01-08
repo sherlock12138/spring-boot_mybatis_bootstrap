@@ -1,8 +1,3 @@
-.row-fluid > .span2 {
-	margin-bottom: 0;
-	height: 100%
-}
-
 .sidebar-nav {
   padding: 7px 0;
   height: calc(100% - 56px);
@@ -12,10 +7,6 @@
 .form-horizontal > .controls > label {
 	line-height: 30px;
 	margin: 0;
-}
-
-.row-fluid > .span10 {
-	height: 100%
 }
 
 .row-fluid > .span10 > .tab-content {

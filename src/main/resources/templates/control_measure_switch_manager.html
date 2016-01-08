@@ -1,201 +1,121 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-<meta charset="utf-8" />
-<title>Bootstrap, from Twitter</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="" />
-<meta name="author" content="" />
+	<meta charset="utf-8" />
+	<title>电网智能监控系统 - 上海东君电气有限公司</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Le styles
-<link href="../../css/bootstrap.css" rel="stylesheet" /> 
-<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css"
-	rel="stylesheet" />
--->
+	<link href="../../css/bootstrap.css" rel="stylesheet" />
+	<style type="text/css">
+		th, td {
+			white-space: nowrap;
+		}
+	</style>
+	<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
+	<link href="../../css/manager.css" rel="stylesheet" />
+	<link href="../../css/global.css" rel="stylesheet" />
 
-<link href="../../css/bootstrap.css" rel="stylesheet" />
-<style type="text/css">
-body {
-	padding-top: 60px;
-	padding-bottom: 40px;
-}
+	<!-- dataTables -->
+	<link href="../../css/dataTables/dataTables.tableTools.css" rel="stylesheet" />
+	<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
+	<link href="../../css/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
 
-th, td {
-	white-space: nowrap;
-}
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+    <script src="../../js/html5shiv.js"></script>
+  <![endif]-->
 
-.sidebar-nav {
-	padding: 9px;
-}
-
-td.dpass {display: none;}
-
-@media ( max-width : 980px) {
-	/* Enable use of floated navbar text */
-	.navbar-text.pull-right {
-		float: none;
-		padding-left: 5px;
-		padding-right: 5px;
-	}
-}
-</style>
-<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
-<link href="../../css/manager.css" rel="stylesheet" />
-
-<!-- dataTables -->
-<link href="../../css/dataTables/dataTables.tableTools.css"
-	rel="stylesheet" />
-<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
-<link href="../../css/dataTables/dataTables.bootstrap.css"
-	rel="stylesheet" />
-
-
-
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-      <script src="../../js/html5shiv.js"></script>
-    <![endif]-->
-
-<!-- Fav and touch icons -->
-<link rel="apple-touch-icon-precomposed" sizes="144x144"
-	href="../../ico/apple-touch-icon-144-precomposed.png" />
-<link rel="apple-touch-icon-precomposed" sizes="114x114"
-	href="../../ico/apple-touch-icon-114-precomposed.png" />
-<link rel="apple-touch-icon-precomposed" sizes="72x72"
-	href="../../ico/apple-touch-icon-72-precomposed.png" />
-<link rel="apple-touch-icon-precomposed"
-	href="../../ico/apple-touch-icon-57-precomposed.png" />
-<link rel="shortcut icon" href="../../ico/favicon.png" />
+	<!-- Fav and touch icons -->
+	<link rel="shortcut icon" href="../../ico/favicon.png" />
+	<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 </head>
 
 <body>
 
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container-fluid">
-				<button type="button" class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="brand" href="#">东君电气</a>
-				<div class="nav-collapse collapse">
-					<p class="navbar-text pull-right">
-						登录 <a href="greeting" class="navbar-link" th:text="${name}"></a>
-					</p>
-					<ul class="nav">
-						<li><a href="index">首页</a></li>
-						<li class="active"><a href="low_voltage_switch_manager">管理</a></li>
-						<li><a href="current_voltage_chart">报表</a></li>
-						<li><a href="#about">关于</a></li>
-						<li><a href="#contact">联系我们</a></li>
-					</ul>
-				</div>
-				<!--/.nav-collapse -->
-			</div>
-		</div>
-	</div>
 	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="hero-unit">
-				<h2>东君电气管理XXX管理者界面</h2>
-				<div>
-					上海东君电气有限公司 <a href="index" class="btn btn-primary ">了解更多
-						&raquo;</a>
-					<div class="btn-group offset6">
-						<a href="#add_switch_modal" id="add_switch_btn"
-							class="btn btn-primary btn-large" data-toggle="modal"
-							data-backdrop="static">添加开关 </a><a id="return_line_list_btn"
-							href="index" class="btn btn-large">返回首页 &raquo;</a>
-					</div>
-				</div>
-			</div>
 
+		<div class="hero-unit">
 			<div class="row-fluid">
-				<div class="span2 container-fluid well sidebar-nav">
-					<ul class="nav nav-list bs-docs-sidenav">
-						<li class="nav-header">资源管理</li>
-						<li><a href="substation_manager">变电站管理</a></li>
-						<li><a href="line_manager">线路管理</a></li>
-						<li class="nav-header">设备管理</li>
-						<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
-						<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
-						<li><a href="#">无功无场开关管理</a></li>
-
-						<li class="nav-header">事件管理</li>
-						<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
-						<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
-						<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
-						
-					</ul>
-					<!--/.well -->
+				<div class="span4">
+					<h2><img src="../../img/logo.png" style="height: 60px" />电网智能监控系统</h2>
 				</div>
-				<!--/span-->
-				<div class="span10 container">
-
-					<div class="control-group form-horizontal">
-						<div class="controls span4">
-							<label class="control-label">请选择变电站：</label> <select
-								id='substations' class='span6'></select>
-						</div>
-						<div class="controls span4">
-							<label class="control-label">请选择线路：</label> <select id='lines'
-								class='span6'></select>
-						</div>
-					</div>
-					<table id="switch_list"
-						class="table table-bordered table-striped table-hover table-condensed success">
-						<thead>
-							<td>设备号码</td>
-							<td>名称</td>
-							<td class="hidden">Id</td>
-							<td class="hidden">线路ID</td>
-							<td>地址</td>
-							<td>经度</td>
-							<td>纬度</td>
-							<td>SIM</td>
-							<td>进入地图</td>
-							<td>修改</td>
-							<td>删除</td>
-						</thead>
-						<tr th:each="switch:${switches}" th:if="*{switch!=null}">
-							<td th:text="${switch.deviceNumber}"></td>
-							<td th:text="${switch.name}"></td>
-							<td class="hide" th:text="${switch.id}"></td>
-							<td class="hide" th:text="${switch.lineId}"></td>
-							<td th:text="${switch.address}"></td>
-							<td th:text="${switch.longitude}"></td>
-							<td th:text="${switch.latitude}"></td>
-
-							<td th:text="${switch.simNumber}"></td>
-							<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
-							<td><a href="#edit_switch_modal" role="button"
-								class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
-							<td><a href="#del_switch_modal"
-								class="del_switch_btn btn btn-danger" data-toggle="modal"
-								data-backdrop="static">删除&raquo; </a></td>
-
-							<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
-						</tr>
-						<tfoot>
-							<td>设备号码</td>
-							<td>名称</td>
-							<td class="hidden">Id</td>
-							<td class="hidden">线路ID</td>
-							<td>地址</td>
-							<td>经度</td>
-							<td>纬度</td>
-							<td>SIM</td>
-							<td>进入地图</td>
-							<td>修改</td>
-							<td>删除</td>
-						</tfoot>
-					</table>
+				<div class="span8">
+					<a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
+					<a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
+					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
+					<a href="#system" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
+					<a href="#about" class="btn banner-btn btn-primary"><i class="fa fa-info-circle"></i>关于</a>
+					<a href="#contact" class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
 				</div>
 			</div>
 		</div>
-		<hr />
+
+		<div class="row-fluid">
+
+			<div class="span2 container-fluid well sidebar-nav">
+				<ul class="nav nav-list bs-docs-sidenav">
+					<li class="nav-header">资源管理</li>
+					<li><a href="substation_manager">变电站管理</a></li>
+					<li><a href="line_manager">线路管理</a></li>
+					<li class="nav-header">设备管理</li>
+					<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
+					<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
+					<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
+
+					<li class="nav-header">事件管理</li>
+					<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+					<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
+					<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
+				</ul>
+			</div>
+
+			<div class="span10 container">
+
+				<div class="form-inline">
+					<div class="form-group span3">
+						<label class="span3">变电站:</label>
+						<select id='substations' class="span9"></select>
+					</div>
+					<div class="form-group span3">
+						<label class="span3">线路：</label>
+						<select id='lines' class='span9'></select>
+					</div>
+				</div>
+
+				<table id="switch_list" class="table table-bordered table-striped table-hover table-condensed success">
+					<thead>
+						<td>设备号码</td>
+						<td>名称</td>
+						<td class="hidden">Id</td>
+						<td class="hidden">线路ID</td>
+						<td>地址</td>
+						<td>经度</td>
+						<td>纬度</td>
+						<td>SIM</td>
+						<td>进入地图</td>
+						<td>修改</td>
+						<td>删除</td>
+					</thead>
+					<tr th:each="switch:${switches}" th:if="*{switch!=null}">
+						<td th:text="${switch.deviceNumber}"></td>
+						<td th:text="${switch.name}"></td>
+						<td class="hide" th:text="${switch.id}"></td>
+						<td class="hide" th:text="${switch.lineId}"></td>
+						<td th:text="${switch.address}"></td>
+						<td th:text="${switch.longitude}"></td>
+						<td th:text="${switch.latitude}"></td>
+
+						<td th:text="${switch.simNumber}"></td>
+						<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
+						<td><a href="#edit_switch_modal" role="button"
+							class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
+						<td><a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
 		<!-- Add_Switch_Modal -->
 		<div id="add_switch_modal" class="modal hide fade" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
