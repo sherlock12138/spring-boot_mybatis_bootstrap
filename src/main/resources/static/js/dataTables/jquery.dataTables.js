@@ -2246,19 +2246,19 @@
 				/* Pagination */
 				featureNode = _fnFeatureHtmlPaginate( oSettings );
 			}
-			else if ( DataTable.ext.feature.length !== 0 )
-			{
-				/* Plug-in features */
-				var aoFeatures = DataTable.ext.feature;
-				for ( var k=0, kLen=aoFeatures.length ; k<kLen ; k++ )
-				{
-					if ( cOption == aoFeatures[k].cFeature )
-					{
-						featureNode = aoFeatures[k].fnInit( oSettings );
-						break;
-					}
-				}
-			}
+			// else if ( DataTable.ext.feature.length !== 0 )
+			// {
+			// 	/* Plug-in features */
+			// 	var aoFeatures = DataTable.ext.feature;
+			// 	for ( var k=0, kLen=aoFeatures.length ; k<kLen ; k++ )
+			// 	{
+			// 		if ( cOption == aoFeatures[k].cFeature )
+			// 		{
+			// 			featureNode = aoFeatures[k].fnInit( oSettings );
+			// 			break;
+			// 		}
+			// 	}
+			// }
 	
 			/* Add to the 2D features array */
 			if ( featureNode )
@@ -11152,7 +11152,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "从 _START_ 到 _END_ 共 _TOTAL_ 条数据",
 	
 	
 			/**
@@ -11173,7 +11173,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": "没有任务数据",
 	
 	
 			/**
@@ -11195,7 +11195,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "(从 _MAX_ 条数据中检索)",
 	
 	
 			/**
@@ -11313,7 +11313,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "Show _MENU_ entries",
+			"sLengthMenu": "每页显示 _MENU_ 数据",
 	
 	
 			/**
@@ -11393,7 +11393,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "Search:",
+			"sSearch": "搜索:",
 	
 	
 			/**

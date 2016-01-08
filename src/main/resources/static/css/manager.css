@@ -1,21 +1,49 @@
-
-.hero-unit {
-  padding: 20px;
-  line-height: 50px;
- 	
-}
-
-.row-fluid{
-	padding:5px;
-}
-
 div.DTTT {
 	margin-bottom: 0.5em;
 	float: right;
 }
 
+.row-fluid > .span2 {
+	margin-bottom: 0;
+	height: 100%
+}
+
+.row-fluid > .span10 {
+	height: 100%
+}
+
+.row-fluid > .span10 > .form-inline label {
+	line-height: 30px;
+	margin: 0;
+}
+
 div.dataTables_wrapper {
+	height: calc(100% - 30px);
 	clear: both;
 }
 
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .DTTT_container {
+	margin: 10px 10px 10px 0;
+	height: 30px;
+}
+
+.dataTables_scroll {
+	height: calc(100% - 70px);
+}
+
+.dataTables_scroll > .dataTables_scrollBody {
+	height: calc(100% - 48px);
+}
+
+th, td {
+  white-space: nowrap;
+}
+
+.sidebar-nav {
+  padding: 9px;
+}
+
+td.dpass {display: none;}
 

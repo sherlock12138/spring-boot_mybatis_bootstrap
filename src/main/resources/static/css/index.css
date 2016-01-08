@@ -1,0 +1,12 @@
+.row-fluid > .span2 {
+	height: 100%
+}
+
+.sidebar-nav {
+  padding: 7px 0;
+  height: calc(100% - 56px);
+}
+
+#baidu_map {
+  height: 100%;
+}

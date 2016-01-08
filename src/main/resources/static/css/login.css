@@ -1,0 +1,43 @@
+.title > h2{
+	line-height: 65px;
+	letter-spacing: 3px;
+	font-size: 170%;
+	text-indent: 5em;
+}
+
+.title > h2 > img{
+	margin: -10px 5px 0 0;
+}
+
+.banner {
+	background: url(../../img/loginbg.jpg) no-repeat center;
+	background-size: 100%;
+	padding: 0;
+	height: 80vh;
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+
+#login_form {
+	background: #fff;
+	width: 240px;
+	padding: 30px 50px;
+}
+
+#login_form input {
+	height: 32px;
+	width: 226px;
+}
+
+.container-fluid {
+	margin-top: 10%;
+}
+
+#login_form_btn {
+	width: 240px;
+	height: 40px;
+}
+
+footer {
+	margin-left: 20px;
+}

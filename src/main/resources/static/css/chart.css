@@ -1,0 +1,66 @@
+.row-fluid > .span2 {
+	margin-bottom: 0;
+	height: 100%
+}
+
+.sidebar-nav {
+  padding: 7px 0;
+  height: calc(100% - 56px);
+}
+
+
+.form-horizontal > .controls > label {
+	line-height: 30px;
+	margin: 0;
+}
+
+.row-fluid > .span10 {
+	height: 100%
+}
+
+.row-fluid > .span10 > .tab-content {
+	height: calc(100% - 85px);
+	position: relative;
+}
+
+.row-fluid > .span10 > .tab-content > .tab-pane {
+	height: 100%;
+	width: 100%;
+}
+
+.control-group > .input-append {
+	float: right;
+	margin-right: 5px;
+}
+
+.control-group + .nav {
+	margin-bottom: 10px;
+	height: 35px;
+}
+
+.thumbnail {
+	height: 100%;
+	padding: 10px;
+	overflow: auto;
+}
+
+.a_phase {
+	width: 10px;
+	height: 10px;
+	background-color: #7EBBF9;
+	display: block;
+}
+
+.b_phase {
+	width: 10px;
+	height: 10px;
+	background-color: #2975B5;
+	display: block;
+}
+
+.c_phase {
+	width: 10px;
+	height: 10px;
+	background-color: #A572AA;
+	display: block;
+}

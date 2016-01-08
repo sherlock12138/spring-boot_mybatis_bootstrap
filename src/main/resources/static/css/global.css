@@ -1,0 +1,48 @@
+body {
+	margin-top: 15px;
+}
+
+.container-fluid {
+	height: 95.5vh;
+}
+
+/* banner style start */
+.hero-unit {
+	padding: 20px;
+	height: 81px;
+	margin-bottom: 25px;
+}
+
+.hero-unit + .row-fluid {
+	height: calc(100% - 155px);
+}
+
+.hero-unit > .row-fluid > .span8 {
+	padding: 20px;
+}
+
+.hero-unit > .row-fluid > .span4 > h2{
+	line-height: 65px;
+	letter-spacing: 6px;
+}
+
+.hero-unit > .row-fluid > .span4 > h2 > img{
+	margin: -10px 5px 0 0;
+}
+
+.banner-btn {
+	width: 75px;
+	line-height: 30px;
+	font-size: 20px;
+	text-align: left;
+	margin-right: 5px;
+}
+
+.banner-btn > .fa {
+	margin: 0 5px;
+}
+/* banner style end */
+
+footer p {
+	margin: 0;
+}
