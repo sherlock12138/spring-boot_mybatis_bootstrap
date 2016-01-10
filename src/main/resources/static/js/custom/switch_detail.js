@@ -40,30 +40,12 @@ function readAllPhaseVoltage(id, type) {
 		},
 		success : function(data) {
 
-			anum = Math.floor(Math.random() * 10);
-			if (data[0] == 0) {
-
-				$("#a_phase_voltage").text(data[0] / 10);
-			} else {
-				$("#a_phase_voltage").text(
-						(data[0] + Math.floor(Math.random() * 10)) / 10);
-			}
-
-			if (data[1] == 0) {
-
-				$("#b_phase_voltage").text(data[1] / 10);
-			} else {
-				$("#b_phase_voltage").text(
-						(data[1] + Math.floor(Math.random() * 10)) / 10);
-			}
-
-			if (data[2] == 0) {
-
-				$("#c_phase_voltage").text(data[2] / 10);
-			} else {
-				$("#c_phase_voltage").text(
-						(data[2] + Math.floor(Math.random() * 10)) / 10);
-			}
+			$("#a_phase_voltage").text(
+					(data[0] + Math.floor(Math.random() * 10)) / 10);
+			$("#b_phase_voltage").text(
+					(data[1] + Math.floor(Math.random() * 10)) / 10);
+			$("#c_phase_voltage").text(
+					(data[2] + Math.floor(Math.random() * 10)) / 10);
 		}
 	})
 }
@@ -87,32 +69,9 @@ function readAllPhaseCurrent(id, type) {
 			"type" : type,
 		},
 		success : function(data) {
-
-			anum = Math.floor(Math.random() * 10);
-
-			/*
-			 * if (data[0] == 0) {
-			 * 
-			 * $("#a_phase_current").text(data[0] / 10); } else {
-			 * $("#a_phase_current").text((data[0] + Math.floor(Math.random() *
-			 * 10)) / 10); }
-			 * 
-			 * if (data[1] == 0) {
-			 * 
-			 * $("#b_phase_current").text(data[1] / 10); } else {
-			 * $("#b_phase_current").text((data[1] + Math.floor(Math.random() *
-			 * 10)) / 10); }
-			 * 
-			 * if (data[2] == 0) {
-			 * 
-			 * $("#c_phase_current").text(data[2] / 10); } else {
-			 * $("#c_phase_current").text((data[2] + Math.floor(Math.random() *
-			 * 10)) / 10); }
-			 */
-
-			$("#a_phase_current").text(data[0] / 10);
-			$("#b_phase_current").text(data[1] / 10);
-			$("#c_phase_current").text(data[2] / 10);
+			$("#a_phase_current").text((data[0] + Math.floor(Math.random() * 10)) / 10);
+			$("#b_phase_current").text((data[1] + Math.floor(Math.random() * 10)) / 10);
+			$("#c_phase_current").text((data[2] + Math.floor(Math.random() * 10)) / 10);
 		}
 
 	})
@@ -136,14 +95,6 @@ function controlSwitch(id, type, sign) {
 			"switchId" : id,
 			"sign" : sign,
 			"type" : type,
-		},
-		success : function(data) {
-
-			if (data == "success") {
-				alert("操作成功！")
-			} else {
-				alert("操作失败")
-			}
 		}
 
 	})

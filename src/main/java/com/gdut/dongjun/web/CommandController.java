@@ -72,9 +72,9 @@ public class CommandController {
 	 * @throws
 	 */
 	@RequestMapping("/control_switch")
-	@ResponseBody
 	public String controlSwitch(@RequestParam(required = true) String switchId,
-			int sign, int type) {
+			int sign, int type, Model model,
+			RedirectAttributes redirectAttributes) {
 
 		SwitchGPRS gprs = CtxStore.get(switchId);
 		String address = null;
@@ -84,7 +84,7 @@ public class CommandController {
 
 			address = gprs.getAddress();
 		} else {
-			return "error";
+			// return "error";
 		}
 
 		switch (sign) {
@@ -128,7 +128,7 @@ public class CommandController {
 		} else {
 			return "error";
 		}
-		return "success";
+		return "switch_detail";
 	}
 
 	// /**
