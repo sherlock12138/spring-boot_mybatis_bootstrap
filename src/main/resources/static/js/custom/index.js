@@ -418,7 +418,7 @@ function click_low_voltage_switch() {
 			+ "<ul class='inline'>" + "<li>C相电流:</li>"
 			+ "<li id='c_phase_current' class='value_block'></li>" + "</ul>"
 			+ "</div>" + "</div>" + "<br/><div class='span4'>"
-			+ "<a id='close_switch_btn'" + "class='btn btn-primary'>合闸</a> <a "
+			+ "<a id='close_switch_btn'" + "class='btn btn-primary'>合闸</a> <a"
 			+ "id='open_switch_btn' class='btn btn-primary'" + ">分闸</a>"
 			+ "</div>";
 
@@ -451,18 +451,15 @@ function click_low_voltage_switch() {
 	// 还没有提报警处理的需求 ==！
 	// ********************************************************************
 
-	id = this.id;
-	type = this.type;
-	
 	// 绑定控制监听
 	$("#open_switch_btn").click(function() {
 
-		openSwitch(id, type);
+		openSwitch(this.id, this.type);
 	})
 
 	$("#close_switch_btn").click(function() {
 
-		closeSwitch(id, type);
+		closeSwitch(this.id, this.type);
 	})
 
 	// ********************************************************************

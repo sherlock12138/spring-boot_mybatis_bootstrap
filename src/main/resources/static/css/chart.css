@@ -10,8 +10,7 @@
 }
 
 .row-fluid > .span10 > .tab-content {
-	margin-top: 10px;
-	height: calc(100% - 84px);
+	height: calc(100% - 55px);
 	position: relative;
 }
 
@@ -25,13 +24,9 @@
 	margin-right: 5px;
 }
 
-.container > .nav {
+.control-group + .nav {
 	margin-bottom: 10px;
 	height: 35px;
-}
-
-.clean {
-	clear: both;
 }
 
 .thumbnail {
