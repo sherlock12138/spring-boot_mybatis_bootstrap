@@ -6,3 +6,20 @@
 #baidu_map {
   height: 100%;
 }
+
+.BDM_custom_popup {
+  text-align: center;
+}
+
+.BDM_custom_popup > h4 {
+  margin-top: 0;
+}
+
+.BDM_custom_popup > .btn {
+  margin-right: 10px;
+  width: 60px;
+}
+
+.BDM_custom_popup .red {
+  color: red;
+}

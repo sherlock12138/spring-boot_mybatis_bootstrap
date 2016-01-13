@@ -402,6 +402,8 @@ function click_low_voltage_switch() {
 
 	// var p = this.getPosition();
 	// alert(this.id)
+
+  /* 
 	var content = "<h4>开关控制</h4>" + "<div class='container offset2'>"
 			+ "<div class='row'>" + "<div class='span2'>"
 			+ "<ul class='inline'>" + "<li>A相电压:</li>"
@@ -421,6 +423,19 @@ function click_low_voltage_switch() {
 			+ "<a id='close_switch_btn'" + "class='btn btn-primary'>合闸</a> <a "
 			+ "id='open_switch_btn' class='btn btn-primary'" + ">分闸</a>"
 			+ "</div>";
+  */ 
+  var content = "<div class='BDM_custom_popup'>" 
+      + "<h4>开关控制</h4>"
+      + "<table class='table table-bordered table-condensed'>"
+      + "<thead><tr><th></th><th>电压</th><th>电流</th></tr></thead>"
+      + "<tbody>"
+      + "<tr><td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td></tr>"
+      + "<tr><td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td></tr>"
+      + "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
+      + "</tbody></table>"
+      + "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
+      + "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+      + "</div>"
 
 	// + "<div class='row'>"
 	// + "<div class='span4 text-center'>"
@@ -433,8 +448,8 @@ function click_low_voltage_switch() {
 	// + "</div>" + "</div>" + "</div>";
 
 	var opts = {
-		width : 415, // 信息窗口宽度
-		height : 180, // 信息窗口高度
+		width : 380, // 信息窗口宽度
+		height : 200, // 信息窗口高度
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
