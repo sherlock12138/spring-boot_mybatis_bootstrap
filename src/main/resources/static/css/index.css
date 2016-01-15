@@ -23,3 +23,17 @@
 .BDM_custom_popup .red {
   color: red;
 }
+
+.green_point {
+	width: 10px;
+	height: 10px;
+	background-color: #4CB549;
+	display: block;
+}
+
+.red_point {
+	width: 10px;
+	height: 10px;
+	background-color: #F03726;
+	display: block;
+}

@@ -20,7 +20,7 @@ public class SwitchGPRS {
 	private String id;//ID
 	private String address;//地址
 	private ChannelHandlerContext ctx;//上下文对象，可以用于发送报文
-	private boolean isOpen = false;//开关是否跳闸的标志
+	private boolean isOpen = false;//开关是否跳闸的标志(从合闸->分闸才算跳闸)
 
 	public String getId() {
 		return id;

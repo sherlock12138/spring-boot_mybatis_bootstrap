@@ -16,8 +16,8 @@ $(document).ready(function() {
 		$.fn.zTree.init($("#treeDemo"), set_tree(this.value));
 	})
 
-	// // 添加跳闸事件监听
-	// hitchEventSpy();
+	// 添加跳闸事件监听
+	hitchEventSpy();
 
 });
 
@@ -49,6 +49,7 @@ function set_tree(zTreeNodeType) {
 		view : {
 			showLine : false,
 			fontCss : getFontCss
+		// 设置颜色
 		}
 	};
 	return setting;
@@ -110,12 +111,12 @@ function zTreeSearch(value) {
 	if (last_value != null) {
 
 		nodeList = zTree.getNodesByParamFuzzy("name", last_value);
-		update(nodeList, false);// 重置状态
+		update(nodeList, 0);// 重置状态
 	}
 	last_value = value;
 
 	nodeList = zTree.getNodesByParamFuzzy("name", value);
-	update(nodeList, true);
+	update(nodeList, 1);
 }
 
 /**
@@ -136,7 +137,7 @@ function update(nodes, highlight) {
 	for (var i = 0, l = nodes.length; i < l; i++) {
 
 		nodes[i].highlight = highlight;
-		zTree.updateNode(nodes[i]);// 调用库函数，高亮显示
+		zTree.updateNode(nodes[i]);
 	}
 }
 
@@ -155,13 +156,25 @@ function update(nodes, highlight) {
  */
 function getFontCss(treeId, treeNode) {
 
-	return (!!treeNode.highlight) ? {
-		color : "#5C297F",
-		"font-weight" : "bold"
-	} : {
-		color : "#999999",
-		"font-weight" : "bold"
-	};
+	if (treeNode.highlight == 0) {
+
+		return {
+			color : "#999999",
+			"font-weight" : "bold"
+		}
+	} else if (treeNode.highlight == 1) {// 搜索
+
+		return {
+			color : "#5C297F",
+			"font-weight" : "bold"
+		}
+	} else if (treeNode.highlight == 2) {// 报警
+
+		return {
+			color : "red",
+			"font-weight" : "bold"
+		}
+	}
 }
 
 /**
@@ -232,7 +245,6 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	forDrawPoint(low_voltage_nodes, low_voltage_switch_icon,// 描绘低压开关
 	click_low_voltage_switch);
 
-	
 	forDrawPoint(getAllHighVoltageSwitch(), high_voltage_switch_icon,// 描绘高压开关
 	click_high_voltage_switch);
 
@@ -388,7 +400,6 @@ function switchs_draw(node, switch_icon, click_switch) {
 
 }
 
-
 /**
  * 
  * @Title: click_low_voltage_switch
@@ -401,72 +412,45 @@ var old_icon = "";
 
 function click_high_voltage_switch() {
 
-	// zTree.reAsyncChildNodes(null, "refresh");
-
-	// var p = this.getPosition();
-
-  var content = "<div class='BDM_custom_popup'>" 
-      + "<table class='table table-bordered table-condensed'>"
-      + "<tbody>"
-      + "<tr>"
-      + "<td></td><td>电压</td><td>电流</td>"
-      + "<td>过渡I段保护</td>"
-      + "<td>00</td>"
-      + "</tr>"
-      + "<tr>"
-      + "<td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td>"
-      + "<td>过渡II段保护</td>"
-      + "<td>01</td>"
-      + "</tr>"
-      + "<tr>"
-      + "<td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td>"
-      + "<td>过渡III段保护</td>"
-      + "<td>00</td>"
-      + "</tr>"
-      + "<tr>"
-      + "<td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td>"
-      + "<td>零序过流保护</td>"
-      + "<td>01</td>"
-      + "</tr>"
-      + "</tbody></table>"
-      + "<table class='table table-bordered table-condensed'>"
-      + "<tbody>"
-      + "<tr>"
-      + "<td>重合闸动作</td>"
-      + "<td>00</td>"
-      + "<td>PT2过压告警</td>"
-      + "<td>01</td>"
-      + "<td>断路器位置</td>"
-      + "<td>01</td>"
-      + "</tr>"
-      + "<tr>"
-      + "<td>PT1有压</td>"
-      + "<td>00</td>"
-      + "<td>交流失电告警</td>"
-      + "<td>00</td>"
-      + "<td>遥控复归</td>"
-      + "<td>01</td>"
-      + "</tr>"
-      + "<tr>"
-      + "<td>PT2有压</td>"
-      + "<td>01</td>"
-      + "<td>手动合闸动作</td>"
-      + "<td>01</td>"
-      + "<td>遥控器合闸</td>"
-      + "<td>01</td>"
-      + "</tr>"
-      + "<tr>"
-      + "<td>PT1过压告警</td>"
-      + "<td>00</td>"
-      + "<td>手动分闸动作</td>"
-      + "<td>01</td>"
-      + "<td>遥控器分闸</td>"
-      + "<td>01</td>"
-      + "</tr>"
-      + "</tbody></table>"
-      + "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
-      + "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
-      + "</div>"
+	var content = "<div class='BDM_custom_popup'>"
+			+ "<table class='table table-bordered table-condensed'>"
+			+ "<tbody>"
+			+ "<tr>"
+			+ "<td></td><td>电压</td><td>电流</td>"
+			+ "<td>过渡I段保护</td>"
+			+ "<td id='guo_liu_yi_duan'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td>"
+			+ "<td>过渡II段保护</td>"
+			+ "<td id='guo_liu_er_duan'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td>"
+			+ "<td>过渡III段保护</td>"
+			+ "<td id='guo_liu_san_duan'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td>"
+			+ "<td>零序过流保护</td>" + "<td id='ling_xu_guo_liu_'></td>" + "</tr>"
+			+ "</tbody></table>"
+			+ "<table class='table table-bordered table-condensed'>"
+			+ "<tbody>" + "<tr>" + "<td>断路器位置</td>" + "<td id='status'></td>"
+			+ "<td>PT2过压告警</td>" + "<td id='pt2_guo_ya'></td>"
+			+ "<td>重合闸动作</td>" + "<td id='chong_he_zha'></td>" + "</tr>"
+			+ "<tr>" + "<td>PT1有压</td>" + "<td id='pt1_you_ya'></td>"
+			+ "<td>交流失电告警</td>" + "<td id='jiao_liu_shi_dian'></td>"
+			+ "<td>遥控复归</td>" + "<td id='yao_kong_fu_gui'></td>" + "</tr>"
+			+ "<tr>" + "<td>PT2有压</td>" + "<td id='pt2_you_ya'></td>"
+			+ "<td>手动合闸动作</td>" + "<td id='shou_dong_he_zha'></td>"
+			+ "<td>遥控器合闸</td>" + "<td id='yao_kong_he_zha'></td>" + "</tr>"
+			+ "<tr>" + "<td>PT1过压告警</td>" + "<td id='pt1_guo_ya'></td>"
+			+ "<td>手动分闸动作</td>" + "<td id='shou_dong_fen_zha'></td>"
+			+ "<td>遥控器分闸</td>" + "<td id='yao_kong_fen_zha'></td>" + "</tr>"
+			+ "</tbody></table>"
+			+ "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
+			+ "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+			+ "</div>"
 
 	// + "<div class='row'>"
 	// + "<div class='span4 text-center'>"
@@ -499,7 +483,7 @@ function click_high_voltage_switch() {
 
 	id = this.id;
 	type = this.type;
-	
+
 	// 绑定控制监听
 	$("#open_switch_btn").click(function() {
 
@@ -515,6 +499,9 @@ function click_high_voltage_switch() {
 	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
 	// ********************************************************************
 
+	// 高压开关状态
+	hvswitchStatusSpy(this.id);
+
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
 		clearTimeout(t);
@@ -524,24 +511,25 @@ function click_high_voltage_switch() {
 
 function click_low_voltage_switch() {
 
-  console.log('low');
+	console.log('low');
 
 	// zTree.reAsyncChildNodes(null, "refresh");
 
 	// var p = this.getPosition();
 
-  var content = "<div class='BDM_custom_popup'>" 
-      + "<h4>开关控制</h4>"
-      + "<table class='table table-bordered table-condensed'>"
-      + "<thead><tr><th></th><th>电压</th><th>电流</th></tr></thead>"
-      + "<tbody>"
-      + "<tr><td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td></tr>"
-      + "<tr><td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td></tr>"
-      + "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
-      + "</tbody></table>"
-      + "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
-      + "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
-      + "</div>"
+	var content = "<div class='BDM_custom_popup'>"
+			//+ "<h4>开关控制</h4>"
+			+ "<table class='table table-bordered table-condensed'>"
+			+ "<thead><tr><th>开关控制</th><th>状态</th><th id='status'></th></tr></thead>"
+			+ "<tbody>"
+			+ "<tr><td></td><td>电压</td><td>电流</td></tr>"
+			+ "<tr><td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td></tr>"
+			+ "<tr><td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td></tr>"
+			+ "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
+			+ "</tbody></table>"
+			+ "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
+			+ "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+			+ "</div>"
 
 	// + "<div class='row'>"
 	// + "<div class='span4 text-center'>"
@@ -574,7 +562,7 @@ function click_low_voltage_switch() {
 
 	id = this.id;
 	type = this.type;
-	
+
 	// 绑定控制监听
 	$("#open_switch_btn").click(function() {
 
@@ -590,6 +578,8 @@ function click_low_voltage_switch() {
 	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
 	// ********************************************************************
 
+	readlvSwitchStatus(this.id);
+
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
 		clearTimeout(t);
@@ -597,7 +587,44 @@ function click_low_voltage_switch() {
 
 }
 
+/**
+ * 
+ * @Title: readlvSwitchStatus
+ * @Description: TODO
+ * @param
+ * @param id
+ * @return void
+ * @throws
+ */
+function readlvSwitchStatus(id) {
 
+	$.ajax({
+		type : "post",
+		url : "read_lvswitch_status",
+		async : false,
+		data : {
+
+			"id" : id
+		},
+		success : function(data) {
+
+			if (data == null || data == "") {
+
+				$("#status").text("离线");
+			} else if (data.isOpen) {
+
+				$("#status").text("分");
+			} else {
+
+				$("#status").text("合");
+			}
+		}
+	})
+
+	h = setTimeout(function() {
+		readlvSwitchStatus(id);
+	}, 5 * 1000);
+}
 
 /**
  * 
@@ -617,18 +644,119 @@ function hitchEventSpy() {
 		data : {},
 		success : function(data) {
 
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
-				for (var j = 0; j < nodes.length; j++) {
 
-					if (data[i].id == nodes[j].id) {
-						worning_switchs_draw(nodes[j]);
-					}
+				if (data[i].open == true) {
+
+					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+
+					update(nodeList, 2);
+					worning_switchs_draw();
 				}
 			}
 		}
 
 	})
-	h = setTimeout("hitchEventSpy()", 5 * 60 * 1000);
+	h = setTimeout(function() {
+		hitchEventSpy();
+	}, 5 * 60 * 1000);
+
+}
+
+/**
+ * 
+ * @Title: hvswitchStatusSpy
+ * @Description: TODO
+ * @param
+ * @param id
+ * @return void
+ * @throws
+ */
+function hvswitchStatusSpy(id) {
+
+	$.ajax({
+		type : "post",
+		url : "read_hvswitch_status",
+		async : false,
+		data : {
+
+			"id" : id,
+		},
+		success : function(data) {
+
+			if (data == null || data == "") {
+
+				$("#status").text("离线");
+			} else {
+
+				$("#guo_liu_yi_duan").addClass(
+						green_or_red(data.guo_liu_yi_duan));
+				$("#guo_liu_er_duan").addClass(
+						green_or_red(data.guo_liu_er_duan));
+				$("#guo_liu_san_duan").addClass(
+						green_or_red(data.guo_liu_san_duan));
+
+				$("#pt1_you_ya").addClass(green_or_red(data.pt1_you_ya));
+				$("#pt2_you_ya").addClass(green_or_red(data.pt2_you_ya));
+				$("#pt1_guo_ya").addClass(green_or_red(data.pt1_guo_ya));
+				$("#pt2_guo_ya").addClass(green_or_red(data.pt2_guo_ya));
+
+				$("#shou_dong_he_zha").addClass(
+						green_or_red(data.shou_dong_he_zha));
+				$("#shou_dong_fen_zha").addClass(
+						green_or_red(data.shou_dong_fen_zha));
+
+				$("#yao_kong_fu_gui").addClass(
+						green_or_red(data.yao_kong_fu_gui));
+				$("#yao_kong_fen_zha").addClass(
+						green_or_red(data.yao_kong_fen_zha));
+				$("#yao_kong_he_zha").addClass(
+						green_or_red(data.yao_kong_he_zha));
+
+				$("#jiao_liu_shi_dian").addClass(
+						green_or_red(data.jiao_liu_shi_dian));
+				$("#chong_he_zha").addClass(green_or_red(data.chong_he_zha));
+				$("#ling_xu_guo_liu_").addClass(
+						green_or_red(data.ling_xu_guo_liu_));
+
+				if (data.status == "00") {
+
+					$("#status").text("分");
+				} else if (data.status == "01") {
+
+					$("#status").text("合");
+				}
+
+			}
+		}
+	})
+	h = setTimeout(function() {
+		hvswitchStatusSpy(id);
+	}, 3 * 1000);
+}
+
+/**
+ * 
+ * @Title: green_or_red
+ * @Description: TODO
+ * @param
+ * @param sign
+ * @param
+ * @returns {String}
+ * @return String
+ * @throws
+ */
+function green_or_red(sign) {
+
+	if (sign == "00") {
+
+		return "green_point";
+	} else if (sign == "01") {
+
+		return "red_point";
+	}
+
 }
 
 /**
@@ -642,26 +770,22 @@ function hitchEventSpy() {
  */
 function worning_switchs_draw(node) {
 
-	// var marker = new BMap.Marker(new BMap.Point(116.404,
-	// 39.915)); //创建点
-	// map.addOverlay(marker); // 增加点
-	old_icon = myIcon;// 保存原来的icon
-	// 创建标注
-	var pt = new BMap.Point(node.longitude, node.latitude);
-	var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));
-	var marker2 = new BMap.Marker(pt, {
-		icon : myIcon
-	}); // 创建标注
-	map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
+	// old_icon = myIcon;// 保存原来的icon
+	// // 创建标注
+	// var pt = new BMap.Point(node.longitude, node.latitude);
+	// var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));
+	// var marker2 = new BMap.Marker(pt, {
+	// icon : myIcon
+	// }); // 创建标注
+	// map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
+	//
+	// // 不用添加文字提示
+	// // 需要重复添加点击事件
+	// marker2.addEventListener("click", click_switch);
 
-	// 不用添加文字提示
-	// 需要重复添加点击事件
-	marker2.addEventListener("click", click_switch);
-
-	$("body")
-			.append(
-					"<audio src='../../audio/wornning.wav' autoplay='true' loop='true'></audio>");
-
+	$("body").append(
+			"<audio src='../../audio/wornning.wav' autoplay='true'></audio>");
+	// loop='true'
 }
 
 // //**************************************************************************

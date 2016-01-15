@@ -42,12 +42,7 @@ public class HighVoltageServer extends NetServer {
 
 	@Override
 	protected void hitchEventSpy() {
-
-	}
-
-	@Override
-	protected void timedCVReadTask() {
-
+		
 		String msg = null;
 		List<HighVoltageSwitch> switchs = lowVoltageSwitchService
 				.selectByParameters(null);
@@ -63,12 +58,17 @@ public class HighVoltageServer extends NetServer {
 							.readVoltageAndCurrent(s.getAddress(),
 									HighCommandControlCode.READ_VOLTAGE_CURRENT
 											.toString());
-					logger.info(msg);
-					logger.info("读取 "+ s.getAddress()+" 的电流电压");
+					
 					gprs.getCtx().writeAndFlush(msg);// 读取电压
 				}
 			}
 		}
+
+	}
+
+	@Override
+	protected void timedCVReadTask() {
+
 	}
 
 }

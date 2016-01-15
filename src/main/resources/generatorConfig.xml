@@ -21,7 +21,7 @@
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />
 			
-		<table schema="root" tableName="high_voltage_switch" domainObjectName="HighVoltageSwitch"
+		<table schema="root" tableName="high_voltage_hitch_event" domainObjectName="HighVoltageHitchEvent"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />

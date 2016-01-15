@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
@@ -36,6 +37,7 @@ import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
+import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.UUIDUtil;
@@ -89,16 +91,15 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		String data = (String) msg;// 查询后回来的报文
 		data = data.replace(" ", "");
 		// 截取控制码
-		String controlCode = data.substring(14, 16);
-		// 68 0c 0c 68 53 01 00 64 01 06 01 01 00 00 00 14 d5 16
-		// EB 90 EB 90 EB 90 01 00 16
+		String infoIdenCode = data.substring(14, 16);
+
 		// 将接收到的客户端信息分类处理
-		logger.info("数据---------" + data);
 
 		// 读通信地址并将地址反转
 		if ((data.startsWith("EB90") || data.startsWith("eb90"))) {
 
 			SwitchGPRS gprs = CtxStore.get(ctx);
+
 			String address = data.substring(12, 16);
 			gprs.setAddress(address);
 
@@ -115,7 +116,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					s = list.get(0);
 					String id = s.getId();
 					gprs.setId(id);
-					
+
 					logger.info(address + " is ready!");
 					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
@@ -125,65 +126,100 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 				logger.info("can not get gprs,there is an error in setting ctx");
 			}
 
-		} else if (controlCode.equals("09")) {
+		} else if (infoIdenCode.equals("09")) {
 			// 读数据(电流，电压)
 			logger.info("解析CV---------" + data);
-			// 根据地址从数据库取得highvoltageswitch集合
-			String address = new HighVoltageDeviceCommandUtil()
-					.reverseString(data.substring(10, 14));
-			HighVoltageSwitch h = null;
-			String id = null;
 
-			List<HighVoltageSwitch> list = switchService
-					.selectByParameters(MyBatisMapUtil.warp("address",
-							Integer.parseInt(address, 16)));
-			if (list != null && list.size() != 0) {
-				h = list.get(0);
-				id = h.getId();
-			}
-			// String id = CtxStore.getId(address);
-			logger.info(id);
-			if (id != null && address != null) {
+			String address = data.substring(10, 14);
+			String id = CtxStore.getIdbyAddress(address);
+
+			if (id != null) {
+
 				saveCV(id, data);
 			} else {
 				logger.error("there is an error in saving CV!");
 			}
-		} else if (controlCode.equals("F4")) {
-			// 读数据(电流，电压)
-			logger.info("解析CV---------" + data);
-			// 根据地址从数据库取得highvoltageswitch集合
-			String address = new HighVoltageDeviceCommandUtil()
-					.reverseString(data.substring(10, 14));
-			HighVoltageSwitch h = null;
-			String id = null;
+		} else if (infoIdenCode.equals("01")) {
 
-			List<HighVoltageSwitch> list = switchService
-					.selectByParameters(MyBatisMapUtil.warp("address",
-							Integer.parseInt(address, 16)));
-			if (list != null && list.size() != 0) {
-				h = list.get(0);
-				id = h.getId();
-			}
-			// String id = CtxStore.getId(address);
-			logger.info(id);
+			System.out.println(data);
+			String address = data.substring(10, 14);
+			String id = CtxStore.getIdbyAddress(address);
+
 			if (id != null && address != null) {
 
+				HighVoltageStatus s = CtxStore.getStatusbyId(id);
 				SwitchGPRS gprs = CtxStore.get(id);
-				String status = data.substring(66, 68);
 
-				switch (status) {
-				case "00":
-					gprs.setOpen(true);
-					logger.info("当前状态为-----------分闸");
-					break;
-				case "01":
-					gprs.setOpen(false);
-					logger.info("当前状态为-----------合闸");
-					break;
-				default:
-					break;
+				if (s == null) {
+
+					s = new HighVoltageStatus();
+					s.setId(id);
+					CtxStore.addStatus(s);
 				}
-				logger.info("状态变为-----------" + status);
+
+				s.setGuo_liu_yi_duan(data.substring(30, 32));
+				s.setGuo_liu_er_duan(data.substring(32, 34));
+				s.setGuo_liu_san_duan(data.substring(34, 36));
+
+				s.setLing_xu_guo_liu_(data.substring(38, 40));
+
+				if (data.substring(40, 42).equals("01")
+						|| data.substring(42, 44).equals("01")
+						|| data.substring(44, 46).equals("01")) {
+					s.setChong_he_zha("01");
+				} else {
+					s.setChong_he_zha("00");
+				}
+
+				s.setPt1_you_ya(data.substring(48, 50));
+				s.setPt2_you_ya(data.substring(50, 52));
+
+				s.setPt1_guo_ya(data.substring(52, 54));
+				s.setPt2_guo_ya(data.substring(54, 56));
+
+				String new_status = data.substring(66, 68);
+
+				if ("01".equals(s.getStatus()) && "00".equals(new_status)) {
+
+					gprs.setOpen(true);
+
+					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
+
+					event.setHitchTime(new Date());
+					event.setHitchReason(0);
+					event.setHitchPhase("A");
+					event.setId(UUIDUtil.getUUID());
+					event.setSwitchId(id);
+					hitchEventService.insert(event);
+
+					logger.info("-----------跳闸");
+				} else if ("01".equals(new_status)
+						&& "00".equals(s.getStatus())) {
+
+					gprs.setOpen(false);
+
+					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
+
+					event.setHitchTime(new Date());
+					event.setHitchReason(1);
+					event.setHitchPhase("A");
+					event.setId(UUIDUtil.getUUID());
+					event.setSwitchId(id);
+					hitchEventService.insert(event);
+					logger.info("-----------合闸");
+				}
+				s.setStatus(new_status);
+
+				s.setJiao_liu_shi_dian(data.substring(76, 78));
+
+				s.setShou_dong_he_zha(data.substring(78, 80));
+				s.setShou_dong_fen_zha(data.substring(80, 82));
+
+				s.setYao_kong_he_zha(data.substring(84, 86));
+				s.setYao_kong_fen_zha(data.substring(86, 88));
+				s.setYao_kong_fu_gui(data.substring(88, 90));
+
+				logger.info("状态变为-----------" + new_status);
 
 			} else {
 				logger.error("there is an error in saving CV!");

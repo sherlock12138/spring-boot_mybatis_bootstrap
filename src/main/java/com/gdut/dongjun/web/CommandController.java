@@ -1,6 +1,8 @@
 package com.gdut.dongjun.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -58,17 +60,16 @@ public class CommandController {
 	private static final Logger logger = Logger
 			.getLogger(CommandController.class);
 
-	
-//	@RequestMapping("/read_switch_status")
-//	@ResponseBody
-//	public String switchStatus(@RequestParam(required = true) String switchId,
-//			int sign, int type) {
-//		
-//		
-//		
-//	}
-	
-	
+	// @RequestMapping("/read_switch_status")
+	// @ResponseBody
+	// public String switchStatus(@RequestParam(required = true) String
+	// switchId,
+	// int sign, int type) {
+	//
+	//
+	//
+	// }
+
 	/**
 	 * 
 	 * @Title: controlSwitch
@@ -97,8 +98,8 @@ public class CommandController {
 		} else {
 			return "error";
 		}
-		
-//		address = "7700";
+
+		// address = "7700";
 
 		switch (sign) {
 		case 0:// 开
@@ -134,7 +135,7 @@ public class CommandController {
 		default:
 			break;
 		}
-		logger.info("发送报文"+msg);
+		logger.info("发送报文" + msg);
 		// 发送报文
 		if (msg != null && gprs != null && gprs.getCtx() != null) {
 
@@ -384,7 +385,35 @@ public class CommandController {
 	@ResponseBody
 	public Object readHitchEvent() {
 
+		// Map<String, Object> res = new HashMap<String, Object>();
+		//
+		// res.put("switchs", CtxStore.getInstance());
+		// res.put("high_voltage_status", CtxStore.getHighVoltageStatus());
 		return CtxStore.getInstance();
+	}
+
+	@RequestMapping("/read_lvswitch_status")
+	@ResponseBody
+	public Object read_lvswitch_status(String id) {
+
+		return CtxStore.get(id);
+	}
+	
+	
+	/**
+	 * 
+	 * @Title: read_hvswitch_status
+	 * @Description: 高压开关状态
+	 * @param @param id
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/read_hvswitch_status")
+	@ResponseBody
+	public Object read_hvswitch_status(String id) {
+
+		return CtxStore.getStatusbyId(id);
 	}
 
 }
