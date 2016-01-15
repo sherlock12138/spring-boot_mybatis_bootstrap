@@ -1,5 +1,6 @@
 package com.gdut.dongjun.service.device_message_engine.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.service.device_message_engine.ControlMessageEngine;
@@ -16,57 +17,70 @@ import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
  * @since 1.0
  */
 @Service("HighVoltageSwitchMessageEngine")
-public class HighVoltageSwitchMessageEngine implements ControlMessageEngine, DataMessageEngine, EventMessageEngine {
+public class HighVoltageSwitchMessageEngine implements ControlMessageEngine,
+		DataMessageEngine, EventMessageEngine {
+
+	private HighVoltageDeviceCommandUtil util = new HighVoltageDeviceCommandUtil();
 
 	@Override
 	public String generateCloseSwitchMessage(String address) {
-		String test = new HighVoltageDeviceCommandUtil().closeSwitchPre(address,
+
+		Logger.getLogger(HighVoltageSwitchMessageEngine.class).info("执行合闸");
+		String test = util.closeSwitchPre(address,
 				HighCommandControlCode.PRE_CLOSE_SWITCH.toString())
-				+ new HighVoltageDeviceCommandUtil().closeSwitch(address,
-						HighCommandControlCode.CLOSE_SWITCH.toString());
-		System.out.println(test);
-		return new HighVoltageDeviceCommandUtil().closeSwitchPre(address,
-				HighCommandControlCode.PRE_CLOSE_SWITCH.toString())
-				+ new HighVoltageDeviceCommandUtil().closeSwitch(address,
-						HighCommandControlCode.CLOSE_SWITCH.toString());
+				+ util.closeSwitch(address,
+						HighCommandControlCode.CLOSE_SWITCH.toString())
+				+ util.readVoltageAndCurrent(address,
+						HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return test;
 	}
 
 	@Override
 	public String generateOpenSwitchMessage(String address) {
 
-		return new HighVoltageDeviceCommandUtil().openSwitchPre(address,
+		Logger.getLogger(HighVoltageSwitchMessageEngine.class).info("执行分闸");
+		return util.openSwitchPre(address,
 				HighCommandControlCode.PRE_OPEN_SWITCH.toString())
-				+ new HighVoltageDeviceCommandUtil().openSwitch(address, HighCommandControlCode.OPEN_SWITCH.toString());
+				+ util.openSwitch(address,
+						HighCommandControlCode.OPEN_SWITCH.toString())
+				+ util.readVoltageAndCurrent(address,
+						HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadAPhaseCurrentMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return util.readVoltageAndCurrent(address,
+				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadBPhaseCurrentMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return util.readVoltageAndCurrent(address,
+				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadCPhaseCurrentMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return util.readVoltageAndCurrent(address,
+				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadAPhaseVoltageMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return util.readVoltageAndCurrent(address,
+				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadBPhaseVoltageMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return util.readVoltageAndCurrent(address,
+				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override
 	public String generateReadCPhaseVoltageMessage(String address) {
-		return new HighVoltageDeviceCommandUtil().readVoltageAndCurrent(address, HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		return util.readVoltageAndCurrent(address,
+				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -30,6 +31,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class Application extends SpringBootServletInitializer {
 
 	@Override

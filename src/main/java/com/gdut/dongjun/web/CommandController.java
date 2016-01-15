@@ -58,6 +58,17 @@ public class CommandController {
 	private static final Logger logger = Logger
 			.getLogger(CommandController.class);
 
+	
+//	@RequestMapping("/read_switch_status")
+//	@ResponseBody
+//	public String switchStatus(@RequestParam(required = true) String switchId,
+//			int sign, int type) {
+//		
+//		
+//		
+//	}
+	
+	
 	/**
 	 * 
 	 * @Title: controlSwitch
@@ -86,6 +97,8 @@ public class CommandController {
 		} else {
 			return "error";
 		}
+		
+//		address = "7700";
 
 		switch (sign) {
 		case 0:// 开
@@ -121,6 +134,7 @@ public class CommandController {
 		default:
 			break;
 		}
+		logger.info("发送报文"+msg);
 		// 发送报文
 		if (msg != null && gprs != null && gprs.getCtx() != null) {
 

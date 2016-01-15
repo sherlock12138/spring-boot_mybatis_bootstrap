@@ -34,7 +34,6 @@ public class HighVoltageDeviceCommandUtil {
 	// 预置合闸
 	public String closeSwitchPre(String address, String data) {
 		
-		address = toHexaddress(address);
 		String msg = HighCommandControlCode.PRE_CONTROL + address
 				+ HighCommandControlCode.COMMAND + address + data;
 		this.setData(msg);
@@ -44,19 +43,7 @@ public class HighVoltageDeviceCommandUtil {
 
 	// 合闸
 	public String closeSwitch(String address, String data) {
-		
-		address = toHexaddress(address);
-		String msg = HighCommandControlCode.CONTROL + address
-				+ HighCommandControlCode.COMMAND + address + data;
-		this.setData(msg);
-		return "68" + this.dataLength + this.dataLength + "68" + msg
-				+ this.check + "16";
-	}
 
-	// 预置合闸
-	public String openSwitchPre(String address, String data) {
-		
-		address = toHexaddress(address);
 		String msg = HighCommandControlCode.PRE_CONTROL + address
 				+ HighCommandControlCode.COMMAND + address + data;
 		this.setData(msg);
@@ -64,11 +51,20 @@ public class HighVoltageDeviceCommandUtil {
 				+ this.check + "16";
 	}
 
-	// 合闸
+	// 预置分闸
+	public String openSwitchPre(String address, String data) {
+	
+		String msg = HighCommandControlCode.PRE_CONTROL + address
+				+ HighCommandControlCode.COMMAND + address + data;
+		this.setData(msg);
+		return "68" + this.dataLength + this.dataLength + "68" + msg
+				+ this.check + "16";
+	}
+
+	// 分闸
 	public String openSwitch(String address, String data) {
 		
-		address = toHexaddress(address);
-		String msg = HighCommandControlCode.CONTROL + address
+		String msg = HighCommandControlCode.PRE_CONTROL + address
 				+ HighCommandControlCode.COMMAND + address + data;
 		this.setData(msg);
 		return "68" + this.dataLength + this.dataLength + "68" + msg
@@ -77,7 +73,7 @@ public class HighVoltageDeviceCommandUtil {
 
 	public void setData(String data) {
 		int sum = 0, length = 0;
-		System.out.println(data);
+		
 		for (int i = 0; i < data.replace(" ", "").length(); i = i + 2) {
 			sum += Integer.parseInt(data.replace(" ", "").substring(i, i + 2),
 					16);
@@ -129,9 +125,6 @@ public class HighVoltageDeviceCommandUtil {
 	// 读取电压电流的报文
 	public String readVoltageAndCurrent(String address, String data) {
 
-		address = toHexaddress(address);
-
-		address = correctAddress(reverseString(address));
 		String msg = HighCommandControlCode.CONTROL + address + data + address
 				+ "000014";
 		setData(msg);

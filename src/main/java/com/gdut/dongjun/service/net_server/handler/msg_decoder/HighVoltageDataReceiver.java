@@ -15,7 +15,10 @@
  */
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
-import java.util.ArrayList;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +41,6 @@ import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.UUIDUtil;
 import com.gdut.dongjun.web.UserController;
 
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-
 @Service
 @Sharable
 public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
@@ -58,7 +57,6 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	private HighVoltageDeviceCommandUtil commandUtil;
 	@Autowired
 	private UserController controller;
-	private static final String READ_ADDRESS = "68AAAAAAAAAAAA681300DF16";
 	private static final Logger logger = Logger
 			.getLogger(HighVoltageDataReceiver.class);
 
@@ -99,9 +97,13 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 		// 读通信地址并将地址反转
 		if ((data.startsWith("EB90") || data.startsWith("eb90"))) {
-			String address = new HighVoltageDeviceCommandUtil()
-					.reverseString(data.substring(12, 16));
+
 			SwitchGPRS gprs = CtxStore.get(ctx);
+			String address = data.substring(12, 16);
+			gprs.setAddress(address);
+
+			address = new HighVoltageDeviceCommandUtil().reverseString(address);
+
 			if (gprs != null) {
 				// 根据反转后的地址查询得到highvoltageswitch的集合
 				List<HighVoltageSwitch> list = switchService
@@ -112,8 +114,8 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 					s = list.get(0);
 					String id = s.getId();
-					gprs.setAddress(address);
 					gprs.setId(id);
+					
 					logger.info(address + " is ready!");
 					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
@@ -143,6 +145,46 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			logger.info(id);
 			if (id != null && address != null) {
 				saveCV(id, data);
+			} else {
+				logger.error("there is an error in saving CV!");
+			}
+		} else if (controlCode.equals("F4")) {
+			// 读数据(电流，电压)
+			logger.info("解析CV---------" + data);
+			// 根据地址从数据库取得highvoltageswitch集合
+			String address = new HighVoltageDeviceCommandUtil()
+					.reverseString(data.substring(10, 14));
+			HighVoltageSwitch h = null;
+			String id = null;
+
+			List<HighVoltageSwitch> list = switchService
+					.selectByParameters(MyBatisMapUtil.warp("address",
+							Integer.parseInt(address, 16)));
+			if (list != null && list.size() != 0) {
+				h = list.get(0);
+				id = h.getId();
+			}
+			// String id = CtxStore.getId(address);
+			logger.info(id);
+			if (id != null && address != null) {
+
+				SwitchGPRS gprs = CtxStore.get(id);
+				String status = data.substring(66, 68);
+
+				switch (status) {
+				case "00":
+					gprs.setOpen(true);
+					logger.info("当前状态为-----------分闸");
+					break;
+				case "01":
+					gprs.setOpen(false);
+					logger.info("当前状态为-----------合闸");
+					break;
+				default:
+					break;
+				}
+				logger.info("状态变为-----------" + status);
+
 			} else {
 				logger.error("there is an error in saving CV!");
 			}
