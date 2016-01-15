@@ -232,8 +232,9 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	forDrawPoint(low_voltage_nodes, low_voltage_switch_icon,// 描绘低压开关
 	click_low_voltage_switch);
 
+	
 	forDrawPoint(getAllHighVoltageSwitch(), high_voltage_switch_icon,// 描绘高压开关
-	click_low_voltage_switch);
+	click_high_voltage_switch);
 
 	forDrawPoint(getAllControlMeasureSwitch(), control_measure_switch_icon,// 描绘管测开关
 	click_low_voltage_switch);
@@ -387,6 +388,7 @@ function switchs_draw(node, switch_icon, click_switch) {
 
 }
 
+
 /**
  * 
  * @Title: click_low_voltage_switch
@@ -396,31 +398,75 @@ function switchs_draw(node, switch_icon, click_switch) {
  * @throws
  */
 var old_icon = "";
-function click_low_voltage_switch() {
+
+function click_high_voltage_switch() {
 
 	// zTree.reAsyncChildNodes(null, "refresh");
 
 	// var p = this.getPosition();
-	// alert(this.id)
-	var content = "<h4>开关控制</h4>" + "<div class='container offset2'>"
-			+ "<div class='row'>" + "<div class='span2'>"
-			+ "<ul class='inline'>" + "<li>A相电压:</li>"
-			+ "<li id='a_phase_voltage' class='value_block'></li>" + "</ul>"
-			+ "<ul class='inline'>" + "<li>B相电压:</li>"
-			+ "<li id='b_phase_voltage' class='value_block'></li>" + "</ul>"
-			+ "<ul class='inline'>" + "<li>C相电压:</li>"
-			+ "<li id='c_phase_voltage' class='value_block'></li>" + "</ul>"
-			+ "</div>" + "<div class='span2'>" + "<ul class='inline'>"
-			+ "<li>A相电流:</li>"
-			+ "<li id='a_phase_current' class='value_block'></li>" + "</ul>"
-			+ "<ul class='inline'>" + "<li>B相电流:</li>"
-			+ "<li id='b_phase_current' class='value_block'></li>" + "</ul>"
-			+ "<ul class='inline'>" + "<li>C相电流:</li>"
-			+ "<li id='c_phase_current' class='value_block'></li>" + "</ul>"
-			+ "</div>" + "</div>" + "<br/><div class='span4'>"
-			+ "<a id='close_switch_btn'" + "class='btn btn-primary'>合闸</a> <a "
-			+ "id='open_switch_btn' class='btn btn-primary'" + ">分闸</a>"
-			+ "</div>";
+
+  var content = "<div class='BDM_custom_popup'>" 
+      + "<table class='table table-bordered table-condensed'>"
+      + "<tbody>"
+      + "<tr>"
+      + "<td></td><td>电压</td><td>电流</td>"
+      + "<td>过渡I段保护</td>"
+      + "<td>00</td>"
+      + "</tr>"
+      + "<tr>"
+      + "<td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td>"
+      + "<td>过渡II段保护</td>"
+      + "<td>01</td>"
+      + "</tr>"
+      + "<tr>"
+      + "<td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td>"
+      + "<td>过渡III段保护</td>"
+      + "<td>00</td>"
+      + "</tr>"
+      + "<tr>"
+      + "<td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td>"
+      + "<td>零序过流保护</td>"
+      + "<td>01</td>"
+      + "</tr>"
+      + "</tbody></table>"
+      + "<table class='table table-bordered table-condensed'>"
+      + "<tbody>"
+      + "<tr>"
+      + "<td>重合闸动作</td>"
+      + "<td>00</td>"
+      + "<td>PT2过压告警</td>"
+      + "<td>01</td>"
+      + "<td>断路器位置</td>"
+      + "<td>01</td>"
+      + "</tr>"
+      + "<tr>"
+      + "<td>PT1有压</td>"
+      + "<td>00</td>"
+      + "<td>交流失电告警</td>"
+      + "<td>00</td>"
+      + "<td>遥控复归</td>"
+      + "<td>01</td>"
+      + "</tr>"
+      + "<tr>"
+      + "<td>PT2有压</td>"
+      + "<td>01</td>"
+      + "<td>手动合闸动作</td>"
+      + "<td>01</td>"
+      + "<td>遥控器合闸</td>"
+      + "<td>01</td>"
+      + "</tr>"
+      + "<tr>"
+      + "<td>PT1过压告警</td>"
+      + "<td>00</td>"
+      + "<td>手动分闸动作</td>"
+      + "<td>01</td>"
+      + "<td>遥控器分闸</td>"
+      + "<td>01</td>"
+      + "</tr>"
+      + "</tbody></table>"
+      + "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
+      + "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+      + "</div>"
 
 	// + "<div class='row'>"
 	// + "<div class='span4 text-center'>"
@@ -433,8 +479,83 @@ function click_low_voltage_switch() {
 	// + "</div>" + "</div>" + "</div>";
 
 	var opts = {
-		width : 415, // 信息窗口宽度
-		height : 180, // 信息窗口高度
+		width : 580, // 信息窗口宽度
+		height : 310, // 信息窗口高度
+	}
+	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
+	// -47);
+
+	var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
+	this.openInfoWindow(infoWindow);
+
+	// 窗口打开读取实时数据,switch_detail.js 中定义
+	// ********************************************************************
+	if (old_icon != "") {
+
+		this.setIcon(old_icon);// 打开窗口就代表去处理了报警
+	}
+	// 还没有提报警处理的需求 ==！
+	// ********************************************************************
+
+	id = this.id;
+	type = this.type;
+	
+	// 绑定控制监听
+	$("#open_switch_btn").click(function() {
+
+		openSwitch(id, type);
+	})
+
+	$("#close_switch_btn").click(function() {
+
+		closeSwitch(id, type);
+	})
+
+	// ********************************************************************
+	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+	// ********************************************************************
+
+	// 添加窗口关闭监听，停止读取实时数据
+	infoWindow.addEventListener("close", function() {
+		clearTimeout(t);
+	});
+
+}
+
+function click_low_voltage_switch() {
+
+  console.log('low');
+
+	// zTree.reAsyncChildNodes(null, "refresh");
+
+	// var p = this.getPosition();
+
+  var content = "<div class='BDM_custom_popup'>" 
+      + "<h4>开关控制</h4>"
+      + "<table class='table table-bordered table-condensed'>"
+      + "<thead><tr><th></th><th>电压</th><th>电流</th></tr></thead>"
+      + "<tbody>"
+      + "<tr><td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td></tr>"
+      + "<tr><td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td></tr>"
+      + "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
+      + "</tbody></table>"
+      + "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
+      + "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+      + "</div>"
+
+	// + "<div class='row'>"
+	// + "<div class='span4 text-center'>"
+	// + "<select id='cancel_control_type'>"
+	// + "<option value='1'>取消预约跳闸</option>"
+	// + "<option value='3'>取消预约合闸</option>"
+	// + "<option value='5'>取消测试预约跳闸</option>"
+	// + "</select> <a id='cancel_control_switch_btn' class='btn btn-primary'
+	// onclick='cancelControlSwitch()'>确定</a>"
+	// + "</div>" + "</div>" + "</div>";
+
+	var opts = {
+		width : 380, // 信息窗口宽度
+		height : 200, // 信息窗口高度
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
