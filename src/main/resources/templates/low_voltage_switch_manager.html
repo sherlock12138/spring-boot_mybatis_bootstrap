@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>电网智能监控系统 - 上海东君电气有限公司</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="../../css/bootstrap.css" rel="stylesheet" />
-  <link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
-  <link href="../../css/manager.css" rel="stylesheet" />
-  <link href="../../css/global.css" rel="stylesheet" />
-  <!-- dataTables -->
-  <link href="../../css/dataTables/dataTables.tableTools.css" rel="stylesheet" />
-  <link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
-  <link href="../../css/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+<meta charset="utf-8" />
+<title>电网智能监控系统 - 上海东君电气有限公司</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="../../css/bootstrap.css" rel="stylesheet" />
+<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
+<link href="../../css/manager.css" rel="stylesheet" />
+<link href="../../css/global.css" rel="stylesheet" />
+<!-- dataTables -->
+<link href="../../css/dataTables/dataTables.tableTools.css"
+	rel="stylesheet" />
+<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
+<link href="../../css/dataTables/dataTables.bootstrap.css"
+	rel="stylesheet" />
 
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
     <script src="../../js/html5shiv.js"></script>
   <![endif]-->
 
-  <!-- Fav and touch icons -->
-  <link rel="shortcut icon" href="../../ico/favicon.png" />
-  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Fav and touch icons -->
+<link rel="shortcut icon" href="../../ico/favicon.png" />
+<link
+	href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"
+	rel="stylesheet" />
 
 </head>
 
@@ -30,15 +34,21 @@
 		<div class="hero-unit">
 			<div class="row-fluid">
 				<div class="span4">
-					<h2><img src="../../img/logo.png" style="height: 60px" />电网智能监控系统</h2>
+					<h2>
+						<img src="../../img/logo.png" style="height: 60px" />电网智能监控系统
+					</h2>
 				</div>
 				<div class="span8">
-					<a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
-					<a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
-					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
-					<a href="#system" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
-					<a href="#about" class="btn banner-btn btn-primary"><i class="fa fa-info-circle"></i>关于</a>
-					<a href="#contact" class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
+					<a href="index" class="btn banner-btn btn-primary"><i
+						class="fa fa-map-marker"></i>监控</a> <a
+						href="low_voltage_switch_manager"
+						class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
+					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i
+						class="fa fa-area-chart"></i>报表</a> <a href="#system"
+						class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
+					<a href="#about" class="btn banner-btn btn-primary"><i
+						class="fa fa-info-circle"></i>关于</a> <a href="#contact"
+						class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
 				</div>
 			</div>
 		</div>
@@ -64,19 +74,27 @@
 			<div class="span10 container">
 				<div class="form-inline">
 					<div class="form-group span3">
-						<label class="span3">变电站:</label>
-						<select id='substations' class="span9"></select>
+						<label class="span3">变电站:</label> <select
+							class="substations span9"></select>
 					</div>
 					<div class="form-group span3">
-						<label class="span3">线路:</label>
-						<select id='lines' class='span9'></select>
+						<label class="span3">线路:</label> <select class='lines span9'></select>
 					</div>
-					<div class="form-group span3">
-						<a href="#add_switch_modal" class="btn btn-primary" id="add_switch_btn" data-toggle="modal" data-backdrop="static">添加开关</a>
+					<div class="form-group span5">
+						<a href="#add_switch_modal" class="btn btn-primary"
+							id="add_switch_btn" data-toggle="modal" data-backdrop="static">添加开关</a>
+						<a href="downloadEmptylvExcel" class="btn btn-primary"
+							id="export_model_btn" data-backdrop="static">导出模板</a> <a
+							href="#upload_modal" class="btn btn-primary" id="add_switch_btn"
+							data-toggle="modal" data-backdrop="static">批量导入</a> <a
+							href="downloadlvExcel" class="btn btn-primary"
+							id="export_switch_btn" data-backdrop="static">导出excel</a>
+
 					</div>
 				</div>
 
-				<table id="switch_list" class="table table-bordered table-striped table-hover table-condensed success">
+				<table id="switch_list"
+					class="table table-bordered table-striped table-hover table-condensed success">
 					<thead>
 						<td>设备号码</td>
 						<td>名称</td>
@@ -100,17 +118,56 @@
 						<td th:text="${switch.latitude}"></td>
 						<td th:text="${switch.simNumber}"></td>
 						<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
-						<td>
-							<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>
-						</td>
-						<td>
-							<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo;</a>
-						</td>
+						<td><a href="#edit_switch_modal" role="button"
+							class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
+						<td><a href="#del_switch_modal"
+							class="del_switch_btn btn btn-danger" data-toggle="modal"
+							data-backdrop="static">删除&raquo;</a></td>
 					</tr>
 				</table>
 
 			</div>
 		</div>
+
+		<div id="upload_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3 id="myModalLabel">上传excel</h3>
+			</div>
+			<div class="modal-body">
+				<form id="upload_form" class="form-horizontal"
+					action="uploadlvSwitchExcel" enctype="multipart/form-data"
+					method="post">
+					<div class="control-group">
+						<label class="control-label">变电站:</label>
+						<div class="controls">
+							<select class='substations'></select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">线路:</label>
+						<div class="controls">
+							<select class='lines' name="lineId"></select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="file">文件位置</label>
+						<div class="controls">
+							<input type="file" id="file" name="file" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+						<button id="uploadxls_btn" class="btn btn-primary" type="submit">添加</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+
 
 		<div id="add_switch_modal" class="modal hide fade" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

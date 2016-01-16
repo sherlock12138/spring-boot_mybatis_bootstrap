@@ -12,12 +12,12 @@ $(document)
 					/**
 					 * 绑定线路的切换
 					 */
-					$("#lines").click(
+					$(".lines").click(
 							function() {
 
 								loadSwitchListWithLineId(
 										"high_voltage_switch_list_by_line_id",
-										$("#lines").val());
+										$(".lines").val());
 							})
 
 					$("#switchs")

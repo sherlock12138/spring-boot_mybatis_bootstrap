@@ -12,13 +12,13 @@ $(document)
 					/**
 					 * 绑定线路的切换
 					 */
-					$("#lines")
+					$(".lines")
 							.click(
 									function() {
 
 										loadSwitchListWithLineId(
 												"control_measure_switch_list_by_line_id",
-												$("#lines").val());
+												$(".lines").val());
 									})
 
 					$("#switchs")

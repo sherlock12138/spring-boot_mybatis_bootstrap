@@ -35,7 +35,7 @@ function loadSubstationSet() {
 				options += "<option value='" + data[i].id + "'>" + data[i].name
 						+ "</option>";
 			}
-			$("#substations").append(options);
+			$(".substations").append(options);
 			$("#inputLineId").append(options);
 		}
 	})
@@ -44,7 +44,7 @@ function loadSubstationSet() {
 /**
  * 切换变电站时的监听
  */
-$("#substations").click(function(){
+$(".substations").click(function(){
 	
 	$('#switch_list').DataTable( {
 		destroy: true,// destroy之后才能重新加载

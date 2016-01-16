@@ -14,7 +14,7 @@ function loadSubstationSet() {
 				options += "<option value='" + data[i].id + "'>" + data[i].name
 						+ "</option>";
 			}
-			$("#substations").append(options);
+			$(".substations").append(options);
 		}
 	})
 }
@@ -22,7 +22,7 @@ function loadSubstationSet() {
 /**
  * 切换变电站时的监听
  */
-$("#substations").click(function(){
+$(".substations").click(function(){
 	
 	$.ajax({
 		type : "post",
@@ -41,8 +41,8 @@ $("#substations").click(function(){
 				options += "<option value='" + data[i].id + "'>" + data[i].name
 						+ "</option>";
 			}
-			$("#lines").empty();
-			$("#lines").append( options);
+			$(".lines").empty();
+			$(".lines").append( options);
 		}
 	})
 	

@@ -2,8 +2,12 @@ package com.gdut.dongjun.service;
 
 import java.util.List;
 
+import org.apache.poi.ss.formula.functions.T;
+
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.base.BaseService;
+
 /**
  * 
  * @author zjd
@@ -12,7 +16,8 @@ import com.gdut.dongjun.service.base.BaseService;
  * @description
  * @package com.gdut.dongjun.service
  */
-public interface HighVoltageSwitchService extends BaseService<HighVoltageSwitch> {
+public interface HighVoltageSwitchService extends
+		BaseService<HighVoltageSwitch> {
 	/**
 	 * 
 	 * @Title: delSwitchByLineId
@@ -76,5 +81,29 @@ public interface HighVoltageSwitchService extends BaseService<HighVoltageSwitch>
 	 * @throws
 	 */
 	public String getSwitchId(String address);
+
+	/**
+	 * 
+	 * @Title: createSwitchExcel
+	 * @Description: TODO
+	 * @param @param filePath
+	 * @param @param object
+	 * @param @return
+	 * @return boolean
+	 * @throws
+	 */
+	public boolean createSwitchExcel(String filePath,
+			List<HighVoltageSwitch> sapis);
+
+	/**
+	 * 
+	 * @Title: uploadSwitch
+	 * @Description: TODO
+	 * @param @param f
+	 * @param @param lineId
+	 * @return void
+	 * @throws
+	 */
+	public boolean uploadSwitch(String f, String lineId);
 
 }

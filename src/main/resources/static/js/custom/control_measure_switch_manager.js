@@ -24,7 +24,7 @@ $(document).ready(function() {
 	});
 	
 	
-	$("#lines").click(function(){
+	$(".lines").click(function(){
 		$('#switch_list').DataTable( {
 			"destroy": true,// destroy之后才能重新加载
 			"ajax": "control_measure_switch_list_by_line_id.action?lineId="+this.value,
@@ -85,12 +85,12 @@ function addSwitch() {
 
 	$("#inputId").val("");
 	
-	if($("#lines").val() == null){
+	if($(".lines").val() == null){
 		
 		$("#inputLineId").val(
 				$(".edit_switch_btn").parent("td").prevAll()[5].innerHTML);
 	}else{
-		$("#inputLineId").val($("#lines").val());
+		$("#inputLineId").val($(".lines").val());
 	}
 	$("#inputAddress").val("");
 	$("#inputLongitude").val("");

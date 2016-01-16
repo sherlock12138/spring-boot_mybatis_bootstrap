@@ -9,9 +9,9 @@ $(document).ready(function() {
 	/**
 	 * 绑定线路的切换
 	 */
-	$("#lines").click(function() {
+	$(".lines").click(function() {
 
-		loadSwitchListWithLineId("switch_list_by_line_id", $("#lines").val());
+		loadSwitchListWithLineId("switch_list_by_line_id", $(".lines").val());
 	})
 	
 	$("#switchs").click(function() {
