@@ -1,6 +1,7 @@
 .sidebar-nav {
   padding: 7px 0;
   height: calc(100% - 56px);
+  overflow-y :auto;
 }
 
 #baidu_map {
