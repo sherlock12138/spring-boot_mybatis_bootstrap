@@ -41,6 +41,7 @@ $(document).ready(function() {
 		        { "data": "longitude" },   
 		        { "data": "latitude" }, 
 		        { "data": "simNumber" },
+		        { "data": "inlineIndex" },
 		        { "data": null},
 	            { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
 	            { "data": null }// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
@@ -88,7 +89,7 @@ function addSwitch() {
 	if($(".lines").val() == null){
 		
 		$("#inputLineId").val(
-				$(".edit_switch_btn").parent("td").prevAll()[5].innerHTML);
+				$(".edit_switch_btn").parent("td").prevAll()[6].innerHTML);
 	}else{
 		$("#inputLineId").val($(".lines").val());
 	}
@@ -98,6 +99,7 @@ function addSwitch() {
 	$("#inputDeviceNumber").val("");
 	$("#inputName").val("");
 	$("#inputSim").val("");
+	$("#inlineIndex").val("");
 }
 
 /**
@@ -111,15 +113,16 @@ function addSwitch() {
 function editSwitch() {
 
 	var column = $(this).parent("td").prevAll();
-	$("#editDeviceNumber").val(column[8].innerHTML);
-	$("#editName").val(column[7].innerHTML);
-	$("#editId").val(column[6].innerHTML);
-	$("#editLineId").val(column[5].innerHTML);
-	$("#editAddress").val(column[4].innerHTML);
-	$("#editLongitude").val(column[3].innerHTML);
-	$("#editLatitude").val(column[2].innerHTML);
+	$("#editDeviceNumber").val(column[9].innerHTML);
+	$("#editName").val(column[8].innerHTML);
+	$("#editId").val(column[7].innerHTML);
+	$("#editLineId").val(column[6].innerHTML);
+	$("#editAddress").val(column[5].innerHTML);
+	$("#editLongitude").val(column[4].innerHTML);
+	$("#editLatitude").val(column[3].innerHTML);
 
-	$("#editSim").val(column[1].innerHTML);
+	$("#editSim").val(column[2].innerHTML);
+	$("#editinlineIndex").val(column[1].innerHTML);
 }
 
 /**
@@ -134,7 +137,7 @@ function delSwitch() {
 
 	var column = $(this).parent("td").prevAll();
 	$("#del_confirm_btn").attr("href",
-			"del_control_measure_switch?switchId=" + column[7].innerHTML);
+			"del_control_measure_switch?switchId=" + column[8].innerHTML);
 }
 
 /**

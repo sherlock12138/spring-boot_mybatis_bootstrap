@@ -104,6 +104,27 @@ public class LowVoltageSwitchController {
 
 	/**
 	 * 
+	 * @Title: selectByLineIdInAsc
+	 * @Description: TODO
+	 * @param @param lineId
+	 * @param @param model
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/selectLVByLineIdInAsc")
+	@ResponseBody
+	public Object selectByLineIdInAsc(
+			@RequestParam(required = true) String lineId, Model model) {
+
+		List<LowVoltageSwitch> switchs = switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
+		
+		return switchs;
+	}
+
+	/**
+	 * 
 	 * @Title: delSwitch
 	 * @Description: TODO
 	 * @param @param switchId
@@ -249,13 +270,13 @@ public class LowVoltageSwitchController {
 		// 1.保存文件到服务器
 		String[] fileNames = DownloadAndUploadUtil.fileUpload(files, realPath);
 		String f = realPath + "\\" + fileNames[0];
-		
+
 		// 2.解析excel并保存到数据库
-		if(lineId == null || "".equals(lineId)){
-			
+		if (lineId == null || "".equals(lineId)) {
+
 			return false;
-		}else {
-			
+		} else {
+
 			switchService.uploadSwitch(f, lineId);
 		}
 		// 3.数据读取完后删除掉文件

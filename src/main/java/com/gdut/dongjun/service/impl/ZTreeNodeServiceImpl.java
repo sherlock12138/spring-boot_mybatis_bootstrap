@@ -111,6 +111,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 												.getLongitude().toString());
 										n3.setLatitude(switchs.get(k)
 												.getLatitude().toString());
+										n3.setLineId(switchs.get(k).getLineId());
 									}
 									switchNodes.add(n3);
 								}
@@ -132,6 +133,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 												.getLongitude().toString());
 										n3.setLatitude(switchs2.get(k)
 												.getLatitude().toString());
+										n3.setLineId(switchs2.get(k).getLineId());
 									}
 									switchNodes.add(n3);
 								}
@@ -153,6 +155,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 												.getLongitude().toString());
 										n3.setLatitude(switchs3.get(k)
 												.getLatitude().toString());
+										n3.setLineId(switchs3.get(k).getLineId());
 									}
 									switchNodes.add(n3);
 								}

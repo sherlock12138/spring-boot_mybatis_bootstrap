@@ -1,19 +1,17 @@
 package com.gdut.dongjun.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
 import com.gdut.dongjun.domain.po.ControlMearsureVoltage;
@@ -21,6 +19,7 @@ import com.gdut.dongjun.domain.po.HighVoltageCurrent;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
 import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.domain.po.LowVoltageVoltage;
+import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
@@ -33,6 +32,7 @@ import com.gdut.dongjun.service.net_server.SwitchGPRS;
 
 @Controller
 @RequestMapping("/dongjun")
+@SessionAttributes("currentUser")
 public class CommandController {
 
 	@Autowired
@@ -72,6 +72,34 @@ public class CommandController {
 
 	/**
 	 * 
+	 * @Title: securityConfirm
+	 * @Description: TODO
+	 * @param @param controlCode
+	 * @param @param session
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/security_confirm")
+	@ResponseBody
+	public Object securityConfirm(
+			@RequestParam(required = true) String controlCode,
+			HttpSession session) {
+
+		User u = (User) session.getAttribute("currentUser");
+
+		if (controlCode != null && u != null && u.getControlCode() != null
+				&& controlCode.equals(u.getControlCode())) {
+
+			return true;
+		} else {
+
+			return false;
+		}
+	}
+
+	/**
+	 * 
 	 * @Title: controlSwitch
 	 * @Description: TODO
 	 * @param @param switchId
@@ -87,6 +115,7 @@ public class CommandController {
 	@ResponseBody
 	public String controlSwitch(@RequestParam(required = true) String switchId,
 			int sign, int type) {
+		System.out.println(type);
 
 		SwitchGPRS gprs = CtxStore.get(switchId);
 		String address = null;
@@ -398,8 +427,7 @@ public class CommandController {
 
 		return CtxStore.get(id);
 	}
-	
-	
+
 	/**
 	 * 
 	 * @Title: read_hvswitch_status
