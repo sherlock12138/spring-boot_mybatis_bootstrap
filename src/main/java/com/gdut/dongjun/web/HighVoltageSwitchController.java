@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
+import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.util.ClassLoaderUtil;
@@ -100,6 +101,27 @@ public class HighVoltageSwitchController {
 		map.put("data", switchs);
 		map.put("recordsFiltered", size);
 		return map;
+	}
+
+	/**
+	 * 
+	 * @Title: selectHVByLineIdInAsc
+	 * @Description: TODO
+	 * @param @param lineId
+	 * @param @param model
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/selectHVByLineIdInAsc")
+	@ResponseBody
+	public Object selectHVByLineIdInAsc(
+			@RequestParam(required = true) String lineId, Model model) {
+
+		List<HighVoltageSwitch> switchs = switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
+
+		return switchs;
 	}
 
 	/**

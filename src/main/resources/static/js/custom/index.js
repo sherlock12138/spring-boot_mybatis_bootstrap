@@ -14,10 +14,11 @@ $(document).ready(function() {
 
 		$.fn.zTree.getZTreeObj("treeDemo").destroy();
 		$.fn.zTree.init($("#treeDemo"), set_tree(this.value));
+
 	})
 
 	// 添加跳闸事件监听
-	hitchEventSpy();
+	// hitchEventSpy();
 
 });
 
@@ -190,10 +191,90 @@ function getFontCss(treeId, treeNode) {
  * @return void
  * @throws
  */
+var polylines = new Array();//旧的线
 function zTreeOnClick(event, treeId, treeNode) {
 
+	// 地图定位
 	map.panTo(new BMap.Point(treeNode.longitude, treeNode.latitude));
+
+	var url;
+	var type = $("#zTree_node_type").val();
+	switch (type) {
+
+	case '0':
+		url = "selectLVByLineIdInAsc";
+		break;
+	case '1':
+		url = "selectHVByLineIdInAsc";
+		break;
+	case '2':
+		url = "selectCMByLineIdInAsc";
+		break;
+	}
+
+	// 隐藏旧的线路
+	if (polylines != null && polylines.length != 0) {
+
+		for (var i = 0; i < polylines.length - 1; i++) {
+
+			if (polylines != null && polylines[i] != null) {
+
+				polylines[i].hide();
+			}
+		}
+	}
+
+	// 描绘新的线路
+	$.ajax({
+		type : "post",
+		url : url,
+		async : false,
+		data : {
+			"lineId" : treeNode.lineId
+		},
+		success : function(data) {
+
+			for (var i = 0; i < data.length - 1; i++) {
+
+				if (data[i] != null && data[i + 1] != null) {
+
+					var point1 = new BMap.Point(data[i].longitude,
+							data[i].latitude);
+					var point2 = new BMap.Point(data[i + 1].longitude,
+							data[i + 1].latitude);
+
+					drawLine(point1, point2, i, map);
+				}
+			}
+		}
+
+	})
+
 };
+
+/**
+ * 
+ * @Title: drawLine
+ * @Description: TODO
+ * @param
+ * @param point1
+ * @param
+ * @param point2
+ * @param
+ * @param map
+ * @return void
+ * @throws
+ */
+function drawLine(point1, point2, i, map) {
+
+	var polyline = new BMap.Polyline([ point1, point2 ], {
+		strokeColor : "blue",
+		strokeWeight : 2,
+		strokeOpacity : 0.5
+	});
+	map.addOverlay(polyline); // 增加折线
+	polylines[i] = polyline;//记录旧的线
+}
 
 var map = new BMap.Map("baidu_map"); // 创建地图实例
 var nodes;// 所有的节点
@@ -409,6 +490,8 @@ function switchs_draw(node, switch_icon, click_switch) {
  * @throws
  */
 var old_icon = "";
+var id;// 被点击的开关的id
+var type;// 被点击的开关的type
 
 function click_high_voltage_switch() {
 
@@ -432,24 +515,47 @@ function click_high_voltage_switch() {
 			+ "</tr>"
 			+ "<tr>"
 			+ "<td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td>"
-			+ "<td>零序过流保护</td>" + "<td id='ling_xu_guo_liu_'></td>" + "</tr>"
+			+ "<td>零序过流保护</td>"
+			+ "<td id='ling_xu_guo_liu_'></td>"
+			+ "</tr>"
 			+ "</tbody></table>"
 			+ "<table class='table table-bordered table-condensed'>"
-			+ "<tbody>" + "<tr>" + "<td>断路器位置</td>" + "<td id='status'></td>"
-			+ "<td>PT2过压告警</td>" + "<td id='pt2_guo_ya'></td>"
-			+ "<td>重合闸动作</td>" + "<td id='chong_he_zha'></td>" + "</tr>"
-			+ "<tr>" + "<td>PT1有压</td>" + "<td id='pt1_you_ya'></td>"
-			+ "<td>交流失电告警</td>" + "<td id='jiao_liu_shi_dian'></td>"
-			+ "<td>遥控复归</td>" + "<td id='yao_kong_fu_gui'></td>" + "</tr>"
-			+ "<tr>" + "<td>PT2有压</td>" + "<td id='pt2_you_ya'></td>"
-			+ "<td>手动合闸动作</td>" + "<td id='shou_dong_he_zha'></td>"
-			+ "<td>遥控器合闸</td>" + "<td id='yao_kong_he_zha'></td>" + "</tr>"
-			+ "<tr>" + "<td>PT1过压告警</td>" + "<td id='pt1_guo_ya'></td>"
-			+ "<td>手动分闸动作</td>" + "<td id='shou_dong_fen_zha'></td>"
-			+ "<td>遥控器分闸</td>" + "<td id='yao_kong_fen_zha'></td>" + "</tr>"
+			+ "<tbody>"
+			+ "<tr>"
+			+ "<td>断路器位置</td>"
+			+ "<td id='status'></td>"
+			+ "<td>PT2过压告警</td>"
+			+ "<td id='pt2_guo_ya'></td>"
+			+ "<td>重合闸动作</td>"
+			+ "<td id='chong_he_zha'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>PT1有压</td>"
+			+ "<td id='pt1_you_ya'></td>"
+			+ "<td>交流失电告警</td>"
+			+ "<td id='jiao_liu_shi_dian'></td>"
+			+ "<td>遥控复归</td>"
+			+ "<td id='yao_kong_fu_gui'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>PT2有压</td>"
+			+ "<td id='pt2_you_ya'></td>"
+			+ "<td>手动合闸动作</td>"
+			+ "<td id='shou_dong_he_zha'></td>"
+			+ "<td>遥控器合闸</td>"
+			+ "<td id='yao_kong_he_zha'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>PT1过压告警</td>"
+			+ "<td id='pt1_guo_ya'></td>"
+			+ "<td>手动分闸动作</td>"
+			+ "<td id='shou_dong_fen_zha'></td>"
+			+ "<td>遥控器分闸</td>"
+			+ "<td id='yao_kong_fen_zha'></td>"
+			+ "</tr>"
 			+ "</tbody></table>"
-			+ "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
-			+ "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+			+ "<a id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
+			+ "<a id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</a>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -485,22 +591,24 @@ function click_high_voltage_switch() {
 	type = this.type;
 
 	// 绑定控制监听
-	$("#open_switch_btn").click(function() {
-
-		openSwitch(id, type);
-	})
-
-	$("#close_switch_btn").click(function() {
-
-		closeSwitch(id, type);
-	})
+	// $("#open_switch_btn").on('click', function() {
+	//
+	// // openSwitch(id, type);
+	// $("#security_modal").modal('show');
+	// })
+	//
+	// $("#close_switch_btn").on('click',function() {
+	//
+	// // closeSwitch(id, type);
+	// $("#security_modal").modal('show');
+	// })
 
 	// ********************************************************************
-	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+	// readCurrentVoltage(this.id, this.type);// 读取实时数据。。
 	// ********************************************************************
 
 	// 高压开关状态
-	hvswitchStatusSpy(this.id);
+	// hvswitchStatusSpy(this.id);
 
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
@@ -509,6 +617,69 @@ function click_high_voltage_switch() {
 
 }
 
+/**
+ * 
+ * @Title: security_modal
+ * @Description: TODO
+ * @param
+ * @return void
+ * @throws
+ */
+function security_modal(t) {
+
+	$("#security_modal").modal('show');
+	var timer;
+	$("#secu_confirm_btn").click(function() {
+		var wait = 6;
+		timer = setInterval(function() {
+			if (wait === 0) {
+
+				// ajax
+				$.ajax({
+					type : "post",
+					url : "security_confirm",
+					async : false,
+					data : {
+						"controlCode" : $("#controlCode").val()
+					},
+					success : function(data) {
+
+						if (data) {
+
+							if (t == 1) {
+
+								openSwitch(id, type);
+							} else {
+
+								closeSwitch(id, type);
+							}
+						} else {
+
+							alert("安全密码错误！");
+						}
+					}
+				});
+				clearInterval(timer);
+			} else {
+				wait--
+				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
+			}
+		}, 1000);
+	});
+
+	$('#cancel_control').click(function() {
+		clearInterval(timer);
+	});
+}
+
+/**
+ * 
+ * @Title: click_low_voltage_switch
+ * @Description: TODO
+ * @param
+ * @return void
+ * @throws
+ */
 function click_low_voltage_switch() {
 
 	console.log('low');
@@ -518,7 +689,7 @@ function click_low_voltage_switch() {
 	// var p = this.getPosition();
 
 	var content = "<div class='BDM_custom_popup'>"
-			//+ "<h4>开关控制</h4>"
+			// + "<h4>开关控制</h4>"
 			+ "<table class='table table-bordered table-condensed'>"
 			+ "<thead><tr><th>开关控制</th><th>状态</th><th id='status'></th></tr></thead>"
 			+ "<tbody>"
@@ -527,8 +698,8 @@ function click_low_voltage_switch() {
 			+ "<tr><td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td></tr>"
 			+ "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
 			+ "</tbody></table>"
-			+ "<a id='close_switch_btn' class='btn btn-primary'>合闸</a>"
-			+ "<a id='open_switch_btn' class='btn btn-primary'>分闸</a>"
+			+ "<a id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
+			+ "<a id='open_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>分闸</a>"
 			+ "</div>"
 
 	// + "<div class='row'>"

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.ControlMearsureSwitch;
+import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.service.ControlMearsureSwitchService;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.util.MapUtil;
@@ -35,7 +36,7 @@ public class ControlMeasureSwitchController {
 	 * @param @param model
 	 * @param @return
 	 * @return String
-	 * @throws  high_voltage_
+	 * @throws high_voltage_
 	 */
 	@RequestMapping("/control_measure_switch_manager")
 	public String getLineSwitchList(String lineId, Model model) {
@@ -92,6 +93,27 @@ public class ControlMeasureSwitchController {
 		map.put("data", switchs);
 		map.put("recordsFiltered", size);
 		return map;
+	}
+
+	/**
+	 * 
+	 * @Title: selectCMByLineIdInAsc
+	 * @Description: TODO
+	 * @param @param lineId
+	 * @param @param model
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/selectCMByLineIdInAsc")
+	@ResponseBody
+	public Object selectCMByLineIdInAsc(
+			@RequestParam(required = true) String lineId, Model model) {
+
+		List<ControlMearsureSwitch> switchs = switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
+
+		return switchs;
 	}
 
 	/**

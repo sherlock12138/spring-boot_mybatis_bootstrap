@@ -98,6 +98,7 @@ public class UserController {
 		return LoginResult.LOGIN_PASS.value();
 	}
 
+	
 	/**
 	 * 
 	 * @Title: netServerTrigger
