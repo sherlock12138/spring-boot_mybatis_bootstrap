@@ -132,6 +132,7 @@ HighVoltageSwitchService {
 		headList.add("经度");
 		headList.add("纬度");
 		headList.add("SIM号");
+		headList.add("线路内序号");
 		return headList;
 	}
 
@@ -148,6 +149,7 @@ HighVoltageSwitchService {
 		map.put("经度", "longitude");
 		map.put("纬度", "latitude");
 		map.put("SIM号", "simNumber");
+		map.put("线路内序号", "inlineIndex");
 		return map;
 	}
 
