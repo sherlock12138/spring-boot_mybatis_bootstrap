@@ -171,6 +171,7 @@
 
 
 
+		<!-- Add_Switch_Modal -->
 		<div id="add_switch_modal" class="modal hide fade" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
@@ -179,8 +180,8 @@
 				<h3>添加开关</h3>
 			</div>
 			<div class="modal-body">
-				<form id="add_switch_form" class="form-horizontal"
-					action="edit_switch">
+				<div id="add_switch_form" class="form-horizontal">
+					<!-- action="edit_switch" -->
 					<div class="control-group">
 						<label class="control-label" for="inputDeviceNumber">设备号码</label>
 						<div class="controls">
@@ -233,20 +234,22 @@
 					<div class="control-group">
 						<label class="control-label" for="inlineIndex">线路内序号</label>
 						<div class="controls">
-							<input type="text" id="inlineIndex" name="inlineIndex" />
-							<span class="help-block text-center">请输入数字！</span>
+							<input type="text" id="inlineIndex" name="inlineIndex" /> <span
+								class="help-block text-center">请输入数字！</span>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
 						<button id="add_switch_confirm_btn" class="btn btn-primary"
-							type="submit">添加</button>
+							data-dismiss="modal" aria-hidden="true">添加</button>
+						<!--  btn-primary -->
 					</div>
-				</form>
+				</div>
 
 			</div>
 		</div>
 
+		<!-- Edit_Switch_Modal -->
 		<div id="edit_switch_modal" class="modal hide fade" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
@@ -255,8 +258,8 @@
 				<h3>编辑开关</h3>
 			</div>
 			<div class="modal-body">
-				<form id="edit_switch_form" class="form-horizontal"
-					action="edit_switch">
+				<div id="edit_switch_form" class="form-horizontal">
+					<!-- action="edit_switch" -->
 					<div class="control-group">
 						<label class="control-label" for="editDeviceNumber">设备号码</label>
 						<div class="controls">
@@ -307,21 +310,23 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="editinlineIndex">线路内序号</label>
+						<label class="control-label" for="inlineIndex">线路内序号</label>
 						<div class="controls">
-							<input type="text" id="editinlineIndex" name="inlineIndex" />
-							<span class="help-block text-center">请输入数字！</span>
+							<input type="text" id="editinlineIndex" name="inlineIndex" /> <span
+								class="help-block text-center">请输入数字！</span>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
 						<button id="edit_switch_confirm_btn" class="btn btn-primary"
-							type="submit">确定</button>
+							data-dismiss="modal" aria-hidden="true">确定</button>
+						<!--  btn-primary -->
 					</div>
-				</form>
+				</div>
 
 			</div>
 		</div>
+		<!-- Modal -->
 		<div id="del_switch_modal" class="modal hide fade" tabindex="-1"
 			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
@@ -334,7 +339,8 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-				<a id="del_confirm_btn" class="btn btn-danger">删除</a>
+				<a id="del_confirm_btn" class="btn btn-danger" data-dismiss="modal"
+					aria-hidden="true">删除</a>
 			</div>
 		</div>
 

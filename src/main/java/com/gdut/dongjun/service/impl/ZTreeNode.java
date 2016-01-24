@@ -25,6 +25,7 @@ public class ZTreeNode {
 	private String longitude;// 结合百度地图使用 ,经度
 	private String latitude;// 纬度
 	private int type;//类型标志
+	private String address;
 
 	public String getId() {
 		return id;
@@ -88,6 +89,14 @@ public class ZTreeNode {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

@@ -118,6 +118,19 @@ function zTreeSearch(value) {
 
 	nodeList = zTree.getNodesByParamFuzzy("name", value);
 	update(nodeList, 1);
+	
+	if(nodeList.length == 0){
+		
+		if (last_value != null) {
+
+			nodeList = zTree.getNodesByParamFuzzy("address", last_value);
+			update(nodeList, 0);// 重置状态
+		}
+		last_value = value;
+
+		nodeList = zTree.getNodesByParamFuzzy("address", value);
+		update(nodeList, 1);
+	}
 }
 
 /**
@@ -191,7 +204,7 @@ function getFontCss(treeId, treeNode) {
  * @return void
  * @throws
  */
-var polylines = new Array();//旧的线
+var polylines = new Array();// 旧的线
 function zTreeOnClick(event, treeId, treeNode) {
 
 	// 地图定位
@@ -273,7 +286,7 @@ function drawLine(point1, point2, i, map) {
 		strokeOpacity : 0.5
 	});
 	map.addOverlay(polyline); // 增加折线
-	polylines[i] = polyline;//记录旧的线
+	polylines[i] = polyline;// 记录旧的线
 }
 
 var map = new BMap.Map("baidu_map"); // 创建地图实例
@@ -331,6 +344,26 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 
 	forDrawPoint(getAllControlMeasureSwitch(), control_measure_switch_icon,// 描绘管测开关
 	click_low_voltage_switch);
+
+	// 添加地图类型和缩略图
+	var mapType1 = new BMap.MapTypeControl({
+		mapTypes : [ BMAP_NORMAL_MAP, BMAP_HYBRID_MAP ]
+	});
+	var mapType2 = new BMap.MapTypeControl({
+		anchor : BMAP_ANCHOR_TOP_LEFT
+	});
+
+	var overView = new BMap.OverviewMapControl();
+	var overViewOpen = new BMap.OverviewMapControl({
+		isOpen : true,
+		anchor : BMAP_ANCHOR_BOTTOM_RIGHT
+	});
+
+	map.addControl(mapType1); // 2D图，卫星图
+	map.addControl(mapType2); // 左上角，默认地图控件
+	// map.setCurrentCity("北京"); //由于有3D图，需要设置城市
+	map.addControl(overView); // 添加默认缩略地图控件
+	map.addControl(overViewOpen); // 右下角，打开
 
 }
 
@@ -464,6 +497,7 @@ function switchs_draw(node, switch_icon, click_switch) {
 	// ****************************************************************
 	marker2.id = node.id;// 设置id
 	marker2.type = node.type;
+	marker2.name = node.name;
 	// mraker2.isWorning = false;//设置报警标志
 	// ****************************************************************
 	map.addOverlay(marker2); // 将标注添加到地图中
@@ -495,7 +529,9 @@ var type;// 被点击的开关的type
 
 function click_high_voltage_switch() {
 
-	var content = "<div class='BDM_custom_popup'>"
+	var content = "<div class='BDM_custom_popup'>" + "<h4>"
+			+ this.name
+			+ "</h4>"
 			+ "<table class='table table-bordered table-condensed'>"
 			+ "<tbody>"
 			+ "<tr>"
@@ -570,7 +606,7 @@ function click_high_voltage_switch() {
 
 	var opts = {
 		width : 580, // 信息窗口宽度
-		height : 310, // 信息窗口高度
+		height : 340, // 信息窗口高度
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
@@ -674,7 +710,9 @@ function click_low_voltage_switch() {
 	// var p = this.getPosition();
 
 	var content = "<div class='BDM_custom_popup'>"
-			// + "<h4>开关控制</h4>"
+			+ "<h4>"
+			+ this.name
+			+ "</h4>"
 			+ "<table class='table table-bordered table-condensed'>"
 			+ "<thead><tr><th>开关控制</th><th>状态</th><th id='status'></th></tr></thead>"
 			+ "<tbody>"

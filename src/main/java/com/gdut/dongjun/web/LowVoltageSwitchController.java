@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,8 @@ public class LowVoltageSwitchController {
 	private LowVoltageSwitchService switchService;
 	@Autowired
 	private LineService LineService;
+	private static final Logger logger = Logger
+			.getLogger(LowVoltageHitchEventController.class);
 
 	/**
 	 * 
@@ -119,7 +122,7 @@ public class LowVoltageSwitchController {
 
 		List<LowVoltageSwitch> switchs = switchService
 				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
-		
+
 		return switchs;
 	}
 
@@ -135,13 +138,19 @@ public class LowVoltageSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/del_switch")
+	@ResponseBody
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
 		String lineId = switchService.selectByPrimaryKey(switchId).getLineId();
-		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
-		redirectAttributes.addAttribute("lineId", lineId);
-		return "redirect:low_voltage_switch_manager";
+		try {
+
+			switchService.deleteByPrimaryKey(switchId);// 删除这个开关
+		} catch (Exception e) {
+			logger.error("删除开关失败！");
+			return null;
+		}
+		return lineId;
 	}
 
 	/**
@@ -156,6 +165,7 @@ public class LowVoltageSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_switch")
+	@ResponseBody
 	public String editSwitch(LowVoltageSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
@@ -164,9 +174,15 @@ public class LowVoltageSwitchController {
 		if (switch1.getId() == "") {
 			switch1.setId(UUIDUtil.getUUID());
 		}
-		switchService.updateByPrimaryKey(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getLineId());
-		return "redirect:low_voltage_switch_manager";
+		try {
+
+			switchService.updateByPrimaryKey(switch1);
+		} catch (Exception e) {
+
+			logger.error("修改开关失败！");
+			return null;
+		}
+		return switch1.getLineId();
 	}
 
 	/**

@@ -1,7 +1,11 @@
 package com.gdut.dongjun.web;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,13 +16,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.Line;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.domain.po.Substation;
 import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.CompanyService;
-import com.gdut.dongjun.service.LineService;
-import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.SubstationService;
+import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.UUIDUtil;
 
@@ -31,6 +33,8 @@ public class SubstationController {
 	private SubstationService substationService;
 	@Autowired
 	private CompanyService companyService;
+	private static final Logger logger = Logger
+			.getLogger(SubstationController.class);
 
 	/**
 	 * 
@@ -70,8 +74,17 @@ public class SubstationController {
 
 			companyId = user.getCompanyId();
 		}
-		return substationService.selectByParameters(MyBatisMapUtil.warp(
-				"company_id", companyId));
+		List<Substation> lines = substationService
+				.selectByParameters(MyBatisMapUtil
+						.warp("company_id", companyId));
+
+		int size = lines.size();
+		HashMap<String, Object> map = (HashMap<String, Object>) MapUtil.warp(
+				"draw", 1);
+		map.put("recordsTotal", size);
+		map.put("data", lines);
+		map.put("recordsFiltered", size);
+		return map;
 	}
 
 	/**
@@ -86,11 +99,20 @@ public class SubstationController {
 	 * @throws
 	 */
 	@RequestMapping("/del_substation")
+	@ResponseBody
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
-		substationService.deleteByPrimaryKey(switchId);
-		return "redirect:substation_manager";
+		String lineId = substationService.selectByPrimaryKey(switchId)
+				.getCompanyId();
+		try {
+
+			substationService.deleteByPrimaryKey(switchId);// 删除这个开关
+		} catch (Exception e) {
+			logger.error("删除开关失败！");
+			return null;
+		}
+		return lineId;
 	}
 
 	/**
@@ -105,16 +127,22 @@ public class SubstationController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_substation")
+	@ResponseBody
 	public String editSwitch(Substation switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
 		if (switch1.getId() == "") {
 			switch1.setId(UUIDUtil.getUUID());
 		}
-		// @RequestParam(required = true)
-		// 进不来
-		substationService.updateByPrimaryKey(switch1);
-		return "redirect:substation_manager";
+		try {
+
+			substationService.updateByPrimaryKey(switch1);
+		} catch (Exception e) {
+
+			logger.error("修改开关失败！");
+			return null;
+		}
+		return switch1.getCompanyId();
 	}
 
 }

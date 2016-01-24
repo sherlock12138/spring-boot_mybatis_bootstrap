@@ -52,7 +52,6 @@ public class HighVoltageServer extends NetServer {
 
 		if (switchs != null) {
 			
-			logger.info(1);
 			for (HighVoltageSwitch s : switchs) {
 
 				if (s.getId() != null && CtxStore.isReady(s.getId())) {

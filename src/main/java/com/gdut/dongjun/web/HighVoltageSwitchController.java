@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.util.ClassLoaderUtil;
@@ -35,6 +35,7 @@ public class HighVoltageSwitchController {
 	private HighVoltageSwitchService switchService;
 	@Autowired
 	private LineService LineService;
+	private static final Logger logger = Logger.getLogger(HighVoltageHitchEventController.class);
 
 	/**
 	 * 
@@ -136,13 +137,20 @@ public class HighVoltageSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/del_high_voltage_switch")
+	@ResponseBody
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
 		String lineId = switchService.selectByPrimaryKey(switchId).getLineId();
-		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
-		redirectAttributes.addAttribute("lineId", lineId);
-		return "redirect:high_voltage_switch_manager";
+		
+		try {
+			
+			switchService.deleteByPrimaryKey(switchId);// 删除这个开关
+		} catch (Exception e) {
+			logger.error("删除开关失败！");
+			return null;
+		}
+		return lineId;
 	}
 
 	/**
@@ -157,7 +165,8 @@ public class HighVoltageSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_high_voltage_switch")
-	public String editSwitch(HighVoltageSwitch switch1, Model model,
+	@ResponseBody
+	public Object editSwitch(HighVoltageSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
 		// @RequestParam(required = true)
@@ -165,9 +174,16 @@ public class HighVoltageSwitchController {
 		if (switch1.getId() == "") {
 			switch1.setId(UUIDUtil.getUUID());
 		}
-		switchService.updateByPrimaryKey(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getLineId());
-		return "redirect:high_voltage_switch_manager";
+		
+		try {
+			
+			switchService.updateByPrimaryKey(switch1);
+		} catch (Exception e) {
+			
+			logger.error("修改开关失败！");
+			return null;
+		}
+		return switch1.getLineId();
 	}
 
 	/**

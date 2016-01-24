@@ -8,13 +8,17 @@ function loadSubstationSet() {
 		data : {},
 		success : function(data) {
 
-			var options = "";
-			for (var i = 0; i < data.length; i++) {
+			if(data!=null){
+				
+				data = data.data;
+				var options = "";
+				for (var i = 0; i < data.length; i++) {
 
-				options += "<option value='" + data[i].id + "'>" + data[i].name
-						+ "</option>";
+					options += "<option value='" + data[i].id + "'>" + data[i].name
+							+ "</option>";
+				}
+				$(".substations").append(options);
 			}
-			$(".substations").append(options);
 		}
 	})
 }

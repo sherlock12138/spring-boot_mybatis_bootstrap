@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ public class LineController {
 	private LineService lineService;
 	@Autowired
 	private SubstationService substationService;
+	private static final Logger logger = Logger.getLogger(LineController.class);
 
 	/**
 	 * 
@@ -42,15 +44,14 @@ public class LineController {
 	 * @throws
 	 */
 	@RequestMapping("/line_manager")
-	public String getLineSwitchList(String lineId,Model model) {
+	public String getLineSwitchList(String lineId, Model model) {
 
 		if (lineId != null) {
 
 			model.addAttribute("switches", lineService
 					.selectByParameters(MyBatisMapUtil.warp("line_id", lineId)));
 		} else {
-			model.addAttribute("switches",
-					lineService.selectByParameters(null));
+			model.addAttribute("switches", lineService.selectByParameters(null));
 		}
 		return "line_manager";
 	}
@@ -94,13 +95,19 @@ public class LineController {
 	 * @throws
 	 */
 	@RequestMapping("/del_line")
+	@ResponseBody
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
 		String id = lineService.selectByPrimaryKey(switchId).getSubstationId();
-		lineService.deleteByPrimaryKey(switchId);
-		redirectAttributes.addAttribute("lineId", id);
-		return "redirect:line_manager";
+		try {
+
+			lineService.deleteByPrimaryKey(switchId);// 删除这个开关
+		} catch (Exception e) {
+			logger.error("删除开关失败！");
+			return null;
+		}
+		return id;
 	}
 
 	/**
@@ -115,17 +122,24 @@ public class LineController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_line")
+	@ResponseBody
 	public String editSwitch(Line switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
 		// @RequestParam(required = true)
 		// 进不来
-		if (switch1.getId()=="") {
+		if (switch1.getId() == "") {
 			switch1.setId(UUIDUtil.getUUID());
 		}
-		lineService.updateByPrimaryKey(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getSubstationId());
-		return "redirect:line_manager";
+		try {
+
+			lineService.updateByPrimaryKey(switch1);
+		} catch (Exception e) {
+
+			logger.error("修改开关失败！");
+			return null;
+		}
+		return switch1.getSubstationId();
 	}
 
 }
