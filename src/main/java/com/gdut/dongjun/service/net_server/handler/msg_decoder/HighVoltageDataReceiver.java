@@ -90,6 +90,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			throws Exception {
 		String data = (String) msg;// 查询后回来的报文
 		data = data.replace(" ", "");
+		logger.info("接收到的报文： " + data);
 		// 截取控制码
 		String infoIdenCode = data.substring(14, 16);
 
@@ -141,7 +142,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			}
 		} else if (infoIdenCode.equals("01")) {
 
-			//System.out.println(data);
+			// System.out.println(data);
 			String address = data.substring(10, 14);
 			String id = CtxStore.getIdbyAddress(address);
 

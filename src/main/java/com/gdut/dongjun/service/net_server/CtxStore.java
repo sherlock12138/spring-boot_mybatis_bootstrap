@@ -311,6 +311,21 @@ public abstract class CtxStore {
 				&& gprs.getCtx() != null) {
 			return true;
 		} else {
+			
+//			if (gprs == null) {
+//				
+//				logger.info("gprs == null");
+//			}else if (gprs.getId() == null) {
+//				
+//				logger.info("gprs.getId() == null");
+//			}else if (gprs.getAddress() == null) {
+//				
+//				logger.info("gprs.getAddress() == null");
+//			}else if (gprs.getCtx() == null) {
+//				
+//				logger.info("gprs.getCtx() == null");
+//			} 
+//			logger.info("not ready");
 			return false;
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,34 +32,39 @@ public class HighVoltageServer extends NetServer {
 	private ServerInitializer initializer;
 	@Autowired
 	private HighVoltageSwitchService lowVoltageSwitchService;
-	private static final Logger logger = Logger.getLogger(HighVoltageServer.class);
+	private static final Logger logger = Logger
+			.getLogger(HighVoltageServer.class);
 
 	@Resource(name = "HighVoltageServerInitializer")
 	public void setInitializer(ServerInitializer initializer) {
 
 		super.initializer = initializer;
-//		super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
+		super.hitchEventBreak = 5*1000;
+		// super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
 	}
 
 	@Override
 	protected void hitchEventSpy() {
-		
+
 		String msg = null;
 		List<HighVoltageSwitch> switchs = lowVoltageSwitchService
 				.selectByParameters(null);
 
 		if (switchs != null) {
+			
+			logger.info(1);
 			for (HighVoltageSwitch s : switchs) {
 
 				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
-					//String address = new HighVoltageDeviceCommandUtil().reverseString(s.getAddress());
+					// String address = new
+					// HighVoltageDeviceCommandUtil().reverseString(s.getAddress());
 					msg = new HighVoltageDeviceCommandUtil()
-							.readVoltageAndCurrent(s.getAddress(),
+							.readVoltageAndCurrent(gprs.getAddress(),
 									HighCommandControlCode.READ_VOLTAGE_CURRENT
 											.toString());
-					
+					logger.info("读取电流电压，报警状态---" + msg);
 					gprs.getCtx().writeAndFlush(msg);// 读取电压
 				}
 			}
@@ -70,5 +76,17 @@ public class HighVoltageServer extends NetServer {
 	protected void timedCVReadTask() {
 
 	}
+	
+	@Test
+	public void t(){
+		
+		String msg = new HighVoltageDeviceCommandUtil()
+		.readVoltageAndCurrent("6800",
+				HighCommandControlCode.READ_VOLTAGE_CURRENT
+						.toString());
+		System.out.println(msg);
+	}
+	
+	
 
 }

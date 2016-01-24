@@ -590,28 +590,13 @@ function click_high_voltage_switch() {
 	id = this.id;
 	type = this.type;
 
-	// 绑定控制监听
-	// $("#open_switch_btn").on('click', function() {
-	//
-	// // openSwitch(id, type);
-	// $("#security_modal").modal('show');
-	// })
-	//
-	// $("#close_switch_btn").on('click',function() {
-	//
-	// // closeSwitch(id, type);
-	// $("#security_modal").modal('show');
-	// })
-
-	// ********************************************************************
-	// readCurrentVoltage(this.id, this.type);// 读取实时数据。。
-	// ********************************************************************
-
 	// 高压开关状态
-	// hvswitchStatusSpy(this.id);
+	hvswitchStatusSpy(this.id);
+	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
 
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
+		clearTimeout(h);
 		clearTimeout(t);
 	});
 
@@ -753,6 +738,7 @@ function click_low_voltage_switch() {
 
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
+		clearTimeout(h);
 		clearTimeout(t);
 	});
 

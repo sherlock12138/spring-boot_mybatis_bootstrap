@@ -10,7 +10,25 @@ $(document).ready(function() {
  * @return void
  * @throws
  */
+var volacc;
+var curacc;
 function readCurrentVoltage(id, type) {
+
+	switch (type) {
+	case 0:
+		volacc = 10;
+		curacc = 10;
+		break;
+	case 1:
+		volacc = 100;
+		curacc = 100;
+		break;
+	case 2:
+		volacc = 100;
+		curacc = 10;
+		break;
+
+	}
 
 	readAllPhaseVoltage(id, type);
 	readAllPhaseCurrent(id, type);
@@ -40,30 +58,10 @@ function readAllPhaseVoltage(id, type) {
 		},
 		success : function(data) {
 
-			anum = Math.floor(Math.random() * 10);
-			if (data[0] == 0) {
+			$("#a_phase_voltage").text(data[0] / volacc);
+			$("#b_phase_voltage").text(data[1] / volacc);
+			$("#c_phase_voltage").text(data[2] / volacc);
 
-				$("#a_phase_voltage").text(data[0] / 10);
-			} else {
-				$("#a_phase_voltage").text(
-						(data[0] + Math.floor(Math.random() * 10)) / 10);
-			}
-
-			if (data[1] == 0) {
-
-				$("#b_phase_voltage").text(data[1] / 10);
-			} else {
-				$("#b_phase_voltage").text(
-						(data[1] + Math.floor(Math.random() * 10)) / 10);
-			}
-
-			if (data[2] == 0) {
-
-				$("#c_phase_voltage").text(data[2] / 10);
-			} else {
-				$("#c_phase_voltage").text(
-						(data[2] + Math.floor(Math.random() * 10)) / 10);
-			}
 		}
 	})
 }
@@ -88,31 +86,9 @@ function readAllPhaseCurrent(id, type) {
 		},
 		success : function(data) {
 
-			anum = Math.floor(Math.random() * 10);
-
-			/*
-			 * if (data[0] == 0) {
-			 * 
-			 * $("#a_phase_current").text(data[0] / 10); } else {
-			 * $("#a_phase_current").text((data[0] + Math.floor(Math.random() *
-			 * 10)) / 10); }
-			 * 
-			 * if (data[1] == 0) {
-			 * 
-			 * $("#b_phase_current").text(data[1] / 10); } else {
-			 * $("#b_phase_current").text((data[1] + Math.floor(Math.random() *
-			 * 10)) / 10); }
-			 * 
-			 * if (data[2] == 0) {
-			 * 
-			 * $("#c_phase_current").text(data[2] / 10); } else {
-			 * $("#c_phase_current").text((data[2] + Math.floor(Math.random() *
-			 * 10)) / 10); }
-			 */
-
-			$("#a_phase_current").text(data[0] / 10);
-			$("#b_phase_current").text(data[1] / 10);
-			$("#c_phase_current").text(data[2] / 10);
+			$("#a_phase_current").text(data[0] / curacc);
+			$("#b_phase_current").text(data[1] / curacc);
+			$("#c_phase_current").text(data[2] / curacc);
 		}
 
 	})

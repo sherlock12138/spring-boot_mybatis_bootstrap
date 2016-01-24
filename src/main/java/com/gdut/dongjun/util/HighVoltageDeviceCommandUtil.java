@@ -1,6 +1,5 @@
 package com.gdut.dongjun.util;
 
-import org.junit.Test;
 import org.springframework.stereotype.Component;
 
 import com.gdut.dongjun.service.impl.enums.HighCommandControlCode;
@@ -134,36 +133,16 @@ public class HighVoltageDeviceCommandUtil {
 
 	// 读AB的电压
 	public String readABPhaseVoltage(String data) {
-		// TODO Auto-generated method stub\
 
-		// System.out.println("AB的电压"
-		// +
-		// Double.parseDouble(Integer.parseInt(reverseString(data.substring(30,
-		// 34)), 16) + "") / 100 + "V");
-		// System.out.println("BC的电压"
-		// +
-		// Double.parseDouble(Integer.parseInt(reverseString(data.substring(38,
-		// 42)), 16) + "") / 100 + "V");
-		// System.out.println("C的电压"
-		// +
-		// Double.parseDouble(Integer.parseInt(reverseString(baoWen.substring(38,
-		// 42)), 16) + "") / 100 + "V");
-		// System.out.println("A的电流"
-		// +
-		// Double.parseDouble(Integer.parseInt(reverseString(data.substring(50,
-		// 54)), 16) + "") / 100 + "A");
-		// System.out.println("B的电流"
-		// +
-		// Double.parseDouble(Integer.parseInt(reverseString(data.substring(54,
-		// 58)), 16) + "") / 100 + "A");
-		// System.out.println("B的电流"
-		// +
-		// Double.parseDouble(Integer.parseInt(reverseString(data.substring(58,
-		// 62)), 16) + "") / 100 + "A");
-		// return Integer.parseInt(reverseString(data.substring(66, 70)), 16) /
-		// 100 + "";
-		return changToRight(data.substring(30, 34));
+		return changToRight(data.substring(30, 36));
 	}
+	
+//	@Test
+//	public void t(){
+//		
+//		System.out.println("68474768d4690009941401690001405659000000000000000000000f00006e0000000000750000000000000000e803008313003b0000000000000000000000000000000000000000000000f616".substring(60, 66));
+//		System.out.println(readAPhaseCurrent("68474768d4690009941401690001405659000000000000000000000f00006e0000000000750000000000000000e803008313003b0000000000000000000000000000000000000000000000f616"));
+//	}
 
 	// @Test
 	// public void test() {
@@ -172,24 +151,15 @@ public class HighVoltageDeviceCommandUtil {
 	// }
 	// 将线电压装化为相电压
 	private String changToRight(String data) {
-		// 返回相电压
-		// int voltage = (int)
-		// (Double.parseDouble(Integer.parseInt(reverseString(data), 16) / 100 +
-		// "") / Math.sqrt(3));
-		// 返回线电压
-		// int voltage = (int) Double.parseDouble(Integer.parseInt(
-		// reverseString(data), 16) / 100 + "");
 
-		// *********************************************
-		// 存整数，节省存储空间
-		// *********************************************
-		return Integer.parseInt(reverseString(data), 16) + "";
+		//以两位为单位，翻转
+		return Integer.parseInt(LowVoltageDeviceCommandUtil.reverseStringBy2(data), 16) + "";
 	}
 
 	// 读BC电压
 	public String readBCPhaseVoltage(String data) {
 
-		return changToRight(data.substring(38, 42));
+		return changToRight(data.substring(42, 48));
 	}
 
 	public String readCPhaseVoltage(String address) {
@@ -201,17 +171,20 @@ public class HighVoltageDeviceCommandUtil {
 	// 读A电流
 	// ***************************************************************
 	public String readAPhaseCurrent(String data) {
-		return Integer.parseInt(reverseString(data.substring(50, 56)), 16) + "";
+
+		return changToRight(data.substring(60, 66));
 	}
 
 	// 读B电流
 	public String readBPhaseCurrent(String data) {
-		return Integer.parseInt(reverseString(data.substring(56, 62)), 16) + "";
+		
+		return changToRight(data.substring(66, 72));
 	}
 
 	// 读C的电流
 	public String readCPhaseCurrent(String data) {
-		return Integer.parseInt(reverseString(data.substring(62, 68)), 16) + "";
+		
+		return changToRight(data.substring(72, 78));
 	}
 
 	/**

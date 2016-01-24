@@ -106,9 +106,13 @@ public class ChartController {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
 			beginDate = df.format(new Date());
 		}
-		if (endDate == null || endDate == "") {// 使用当前日期
+		if (endDate == null || endDate == "") {// 使用当前日期下一天的日期
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
-			endDate = df.format(new Date());
+			
+			Date date = new Date();
+			long time = (date.getTime() / 1000) + 60 * 60 * 24;//秒  
+            date.setTime(time * 1000);//毫秒 
+			endDate = df.format(date);
 		}
 
 		if (type == null) {

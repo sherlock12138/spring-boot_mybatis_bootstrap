@@ -125,7 +125,6 @@ public abstract class NetServer {
 		
 		new HitchEventSpyThread().start();// 开启跳闸事件监听
 		new CVReadTaskThread().start();// 开启定时抄表任务
-		System.out.println(channel);
 	}
 
 	/**
@@ -204,16 +203,16 @@ public abstract class NetServer {
 		@Override
 		public void run() {
 
-			while (cvReadTaskSign) {
+			while (hitchEventSypSign) {
 
 				try {
 
-					Thread.sleep(cvReadBreak);
+					Thread.sleep(hitchEventBreak);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				timedCVReadTask();
+				hitchEventSpy();
 			}
 		}
 	}
