@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.dao.LowVoltageSwitchMapper;
+import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.LowVoltageSwitchService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 import com.gdut.dongjun.util.ExcelUtil;
+import com.gdut.dongjun.util.LatitudeLongitudeMathUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.UUIDUtil;
 
@@ -220,26 +222,37 @@ public class LowVoltageSwitchServiceImpl extends
 
 	@Override
 	public boolean uploadSwitch(String realPath, String lineId) {
-				
+
 		List<String> headList = createHeadList();// 生成表头
 		Map<String, String> map = createHeadListMap();// 生成映射关系
 		ExcelUtil poi = new ExcelUtil();
-		
-		List<LowVoltageSwitch> result = new LinkedList<>();
+
+		List<com.gdut.dongjun.dto.LowVoltageSwitch> result = new LinkedList<>();
 		// 2.解析Excel内容
 		try {
 			result = poi.importExcel("Sheet1", realPath, map, headList,
-					LowVoltageSwitch.class);
+					com.gdut.dongjun.dto.LowVoltageSwitch.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 
-		for (LowVoltageSwitch s : result) {
-			
-			s.setId(UUIDUtil.getUUID());
-			s.setLineId(lineId);
-			switchMapper.insert(s);
+		for (com.gdut.dongjun.dto.LowVoltageSwitch s : result) {
+
+			LowVoltageSwitch switch1 = new LowVoltageSwitch();
+			switch1.setAddress(s.getAddress());
+			switch1.setDeviceNumber(s.getDeviceNumber());
+			switch1.setId(UUIDUtil.getUUID());
+			switch1.setInlineIndex(Integer.parseInt(s.getInlineIndex()));
+			switch1.setLatitude(LatitudeLongitudeMathUtil.latlong2float(s
+					.getLatitude()));
+			switch1.setLongitude(LatitudeLongitudeMathUtil.latlong2float(s
+					.getLongitude()));
+			switch1.setLineId(lineId);
+			switch1.setName(s.getName());
+			switch1.setSimNumber(s.getSimNumber());
+
+			switchMapper.insert(switch1);
 		}
 		return true;
 	}

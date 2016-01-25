@@ -177,10 +177,14 @@ public class ExcelUtil {
 					case HSSFCell.CELL_TYPE_NUMERIC: // 数字
 						
 						//**************************************
-						//跟映射字段的类型不同 会报
+						//跟映射字段的类型不同经常报
 						//argument type mismatch
 						//**************************************
-						field.set(t, (float) cell.getNumericCellValue());
+						
+						//数字也当作字符串读进来，再做类型转换
+						String doubleVal = new DecimalFormat("#").format(cell
+								.getNumericCellValue());
+						field.set(t, doubleVal);
 						break;
 					case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean
 						field.set(t, cell.getBooleanCellValue());
