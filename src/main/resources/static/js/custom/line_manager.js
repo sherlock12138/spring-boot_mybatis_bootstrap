@@ -81,9 +81,9 @@ function loadSubstationSet() {
 		success : function(data) {
 
 			var options = "";
-			for (var i = 0; i < data.length; i++) {
+			for (var i = 0; i < data.data.length; i++) {
 
-				options += "<option value='" + data[i].id + "'>" + data[i].name
+				options += "<option value='" + data.data[i].id + "'>" + data.data[i].name
 						+ "</option>";
 			}
 			$(".substations").append(options);
