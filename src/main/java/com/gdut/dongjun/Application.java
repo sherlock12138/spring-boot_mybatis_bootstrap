@@ -54,7 +54,7 @@ public class Application extends SpringBootServletInitializer {
 		com.mchange.v2.c3p0.ComboPooledDataSource ds = new ComboPooledDataSource();
 		ds.setJdbcUrl("jdbc:mysql://localhost:3306/elecon?useUnicode=true&amp;charaterEncoding=utf-8");
 		ds.setUser("root");
-		ds.setPassword("root");//elecon
+		ds.setPassword("");//elecon
 		try {
 			ds.setDriverClass("com.mysql.jdbc.Driver");
 		} catch (PropertyVetoException e) {

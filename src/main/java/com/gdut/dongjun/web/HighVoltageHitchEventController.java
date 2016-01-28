@@ -1,5 +1,6 @@
 package com.gdut.dongjun.web;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
@@ -77,26 +79,26 @@ public class HighVoltageHitchEventController {
 		return map;
 	}
 
-	// /**
-	// *
-	// * @Title: delSwitch
-	// * @Description: TODO
-	// * @param @param switchId
-	// * @param @param model
-	// * @param @param redirectAttributes
-	// * @param @return
-	// * @return String
-	// * @throws
-	// */
-	// @RequestMapping("/del_low_voltage_hitch_event")
-	// public String delSwitch(@RequestParam(required = true) String eventId,
-	// Model model, RedirectAttributes redirectAttributes) {
-	//
-	// hitchEventService.deleteByPrimaryKey(eventId);// 删除这个事件
-	//
-	// // /为绝对路径，即为http://localhost:9080/switch_list?lineId=01
-	// // 没有/为相对路径 http://localhost:9080/dongjun/switch_list?lineId=01
-	// return "redirect:low_voltage_hitch_event_manager";
-	// }
+	@RequestMapping("/update_hitchEvent")
+	@ResponseBody
+	public Object updateHitchEvent(@RequestParam(required=false)String switchId,
+			String solveTime, String solvePeople) {
+		
+		List<HighVoltageHitchEvent> list = hitchEventService.
+				selectByParameters(MyBatisMapUtil.warp("switch_id", switchId));
+		System.out.println();
+		if(list != null && list.size() != 0) {
+			
+			HighVoltageHitchEvent hitchEvent = list.get(0);
+			hitchEvent.setSolveTime(new Date());
+			hitchEvent.setSolvePeople(solvePeople);
+			hitchEventService.updateByPrimaryKey(hitchEvent);
+			
+			return MapUtil.warp("success", "true");
+		} else {
+			
+			return MapUtil.warp("success", "false");
+		}
+	}
 
 }
