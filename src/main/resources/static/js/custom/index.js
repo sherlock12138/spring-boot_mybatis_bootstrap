@@ -1012,7 +1012,7 @@ function submitAlarmEvent () {
   var handleName = $('#handleName').val();
   var handleTime = $('#handleTime').val();
 
-   
+  // TODO
   //$.ajax({
   //  type: 'POST',
   //  url: '',
