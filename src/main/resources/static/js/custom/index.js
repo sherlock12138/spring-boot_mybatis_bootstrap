@@ -17,8 +17,13 @@ $(document).ready(function() {
 
 	})
 
-	// 添加跳闸事件监听
-	// hitchEventSpy();
+	// 轮询报警
+	 hitchEventSpy();
+
+  // 5秒后报警测试
+  //setTimeout(function () {
+  //  hitchEventSpy();
+  //}, 5000);
 
 });
 
@@ -632,7 +637,7 @@ function click_high_voltage_switch() {
 
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
-		clearTimeout(h);
+		clearTimeout(k);
 		clearTimeout(t);
 	});
 
@@ -703,8 +708,6 @@ function security_modal(t) {
  */
 function click_low_voltage_switch() {
 
-	console.log('low');
-
 	// zTree.reAsyncChildNodes(null, "refresh");
 
 	// var p = this.getPosition();
@@ -737,7 +740,7 @@ function click_low_voltage_switch() {
 
 	var opts = {
 		width : 380, // 信息窗口宽度
-		height : 200, // 信息窗口高度
+		height : 230, // 信息窗口高度
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
@@ -823,44 +826,6 @@ function readlvSwitchStatus(id) {
 
 /**
  * 
- * @Title: hitchEventSpy
- * @Description: TODO
- * @param
- * @return void
- * @throws
- */
-var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
-function hitchEventSpy() {
-
-	$.ajax({
-		type : "post",
-		url : "read_hitch_event",
-		async : false,
-		data : {},
-		success : function(data) {
-
-			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-			for (var i = 0; i < data.length; i++) {
-
-				if (data[i].open == true) {
-
-					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-
-					update(nodeList, 2);
-					worning_switchs_draw();
-				}
-			}
-		}
-
-	})
-	h = setTimeout(function() {
-		hitchEventSpy();
-	}, 5 * 60 * 1000);
-
-}
-
-/**
- * 
  * @Title: hvswitchStatusSpy
  * @Description: TODO
  * @param
@@ -926,10 +891,54 @@ function hvswitchStatusSpy(id) {
 			}
 		}
 	})
-	h = setTimeout(function() {
+	k = setTimeout(function() {
 		hvswitchStatusSpy(id);
 	}, 3 * 1000);
 }
+
+/**
+ * 
+ * @Title: hitchEventSpy
+ * @Description: TODO
+ * @param
+ * @return void
+ * @throws
+ */
+//var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
+var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
+function hitchEventSpy() {
+
+	$.ajax({
+		type : "GET",
+		//url : "../../js/custom/alarmjson.json", //测试json
+    url: 'read_hitch_event',
+		async : false,
+		data : {},
+    dataType: 'json',
+		success : function(data) {
+
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			for (var i = 0; i < data.length; i++) {
+
+				if (data[i].isOpen == true) {
+
+					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+
+					update(nodeList, 2);  // 树节点变红
+					worning_switchs_draw(nodeList[0]); //声音的 图标的
+				}
+			}
+		}
+
+	});
+
+	alarmTimer = setTimeout(function() {
+		hitchEventSpy();
+	}, 5 * 60 * 1000);
+
+}
+
+
 
 /**
  * 
@@ -965,22 +974,33 @@ function green_or_red(sign) {
  */
 function worning_switchs_draw(node) {
 
-	// old_icon = myIcon;// 保存原来的icon
-	// // 创建标注
-	// var pt = new BMap.Point(node.longitude, node.latitude);
-	// var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));
-	// var marker2 = new BMap.Marker(pt, {
-	// icon : myIcon
-	// }); // 创建标注
-	// map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
-	//
-	// // 不用添加文字提示
-	// // 需要重复添加点击事件
-	// marker2.addEventListener("click", click_switch);
+  console.log(node);
 
-	$("body").append(
-			"<audio src='../../audio/wornning.wav' autoplay='true'></audio>");
-	// loop='true'
+  old_icon = myIcon;// 保存原来的icon
+   // 创建标注
+  var pt = new BMap.Point(node.longitude, node.latitude);
+  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));
+  var marker2 = new BMap.Marker(pt, {
+   icon : myIcon
+  }); // 创建标注
+  map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
+
+  // 不用添加文字提示
+  // 需要重复添加点击事件
+  marker2.addEventListener("click", function (node) {
+    handleAlarm(node);
+  });
+
+	$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
+}
+
+/*
+ * 处理报警事件
+ *
+ */
+
+function handleAlarm (node) {
+  // TODO
 }
 
 // //**************************************************************************
