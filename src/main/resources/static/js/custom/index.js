@@ -18,12 +18,12 @@ $(document).ready(function() {
 	})
 
 	// 轮询报警
-	 hitchEventSpy();
+	//hitchEventSpy();
 
   // 5秒后报警测试
-  //setTimeout(function () {
-  //  hitchEventSpy();
-  //}, 5000);
+  setTimeout(function () {
+    hitchEventSpy();
+  }, 5000);
 
 });
 
@@ -910,8 +910,8 @@ function hitchEventSpy() {
 
 	$.ajax({
 		type : "GET",
-		//url : "../../js/custom/alarmjson.json", //测试json
-    url: 'read_hitch_event',
+		url : "../../js/custom/alarmjson.json", //测试json
+    //url: 'read_hitch_event',
 		async : false,
 		data : {},
     dataType: 'json',
@@ -932,9 +932,9 @@ function hitchEventSpy() {
 
 	});
 
-	alarmTimer = setTimeout(function() {
-		hitchEventSpy();
-	}, 5 * 60 * 1000);
+	//alarmTimer = setTimeout(function() {
+	//	hitchEventSpy();
+	//}, 5 * 60 * 1000);
 
 }
 
@@ -984,14 +984,18 @@ function worning_switchs_draw(node) {
    icon : myIcon
   }); // 创建标注
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
+  map.panTo(pt);  // 将报警地点移到地图中间
 
   // 不用添加文字提示
   // 需要重复添加点击事件
-  marker2.addEventListener("click", function (node) {
-    handleAlarm(node);
-  });
 
 	$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
+
+  marker2.addEventListener("click", function (node) {
+    map.removeOverlay(marker2); // remove the alarm icon
+    $('audio').remove(); // remove the audio
+    handleAlarm(); // pop up a handle window
+  });
 }
 
 /*
@@ -999,8 +1003,28 @@ function worning_switchs_draw(node) {
  *
  */
 
-function handleAlarm (node) {
-  // TODO
+function handleAlarm () {
+  $('#alarm_modal').modal('show');
+}
+
+function submitAlarmEvent () {
+  var handleName = $('#handleName').val();
+  var handleTime = $('#handleTime').val();
+
+   
+  //$.ajax({
+  //  type: 'POST',
+  //  url: '',
+  //  async: false,
+  //  dataType: 'json',
+  //  data: {
+  //    
+  //  },
+  //  success: function (data) {
+  //
+  //  }
+  //});
+
 }
 
 // //**************************************************************************
