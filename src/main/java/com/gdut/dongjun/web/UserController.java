@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdut.dongjun.domain.dao.impl.ProtocolPortDAOImpl;
 import com.gdut.dongjun.domain.po.User;
+import com.gdut.dongjun.domain.po.port.ProtocolPort;
+import com.gdut.dongjun.service.ProtocolPortService;
 import com.gdut.dongjun.service.UserService;
 import com.gdut.dongjun.service.impl.enums.LoginResult;
 import com.gdut.dongjun.service.net_server.server.NetServer;
@@ -46,6 +49,8 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private org.apache.shiro.mgt.SecurityManager manager;
+	@Autowired
+	public ProtocolPortService protocol;
 	private static final Logger logger = Logger.getLogger(UserController.class);
 
 	@RequestMapping(value = "/login")
@@ -112,12 +117,19 @@ public class UserController {
 	public Object netServerTrigger(@RequestParam(required = true) String name,
 			@RequestParam(required = true) String password) {
 
-		lowVoltageNetServer.setPort(8463);
-		HighVoltageNetServer.setPort(8464);
-		ControlMeasureNetServer.setPort(8465);
+		
+		ProtocolPort port = protocol.selectByPrimaryKey("1");
+		if(null != port) {
+			lowVoltageNetServer.setPort(port.getLvPort());
+			HighVoltageNetServer.setPort(port.getHvPort());
+			ControlMeasureNetServer.setPort(port.getConPort());
+			System.out.println(port.getLvPort());
+			System.out.println(port.getHvPort());
+			System.out.println(port.getConPort());
+		}
 
 		if (name.equals("sherlock") && password.equals("33132212")) {
-
+			
 			lowVoltageNetServer.start();
 			HighVoltageNetServer.start();
 			ControlMeasureNetServer.start();
