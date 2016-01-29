@@ -96,6 +96,34 @@
 			</div>
 		</div>
 
+		<div id="alarm_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3 id="myModalLabel">报警登记处理</h3>
+			</div>
+			<div class="modal-body">
+				<div id="upload_form" class="form-horizontal">
+					<div class="control-group">
+            <input type="hidden" id="hiddenSwitchId" />
+						<label class="control-label" for="handleName">处理人:</label>
+						<div class="controls">
+							<input type="text" id="handleName" name="handleName" />
+						</div>
+            <br />
+						<label class="control-label" for="handleTime">处理时间:</label>
+						<div class="controls">
+							<input type="text" id="handleTime" name="handleTime" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button id="alarm_confirm_btn" class="btn btn-primary" onClick="submitAlarmEvent()">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<footer>
 			<p>&copy; Company 2013</p>
 		</footer>

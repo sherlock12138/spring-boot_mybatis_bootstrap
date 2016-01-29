@@ -185,6 +185,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					gprs.setOpen(true);
 
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
+					logger.info("-----------跳闸");
 
 					event.setHitchTime(new Date());
 					event.setHitchReason(0);
@@ -201,6 +202,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
 
+					logger.info("-----------合闸");
 					event.setHitchTime(new Date());
 					event.setHitchReason(1);
 					event.setHitchPhase("A");

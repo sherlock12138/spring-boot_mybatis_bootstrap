@@ -18,7 +18,7 @@ $(document).ready(function() {
 	})
 
 	// 轮询报警
-	 hitchEventSpy();
+	hitchEventSpy();
 
   // 5秒后报警测试
   //setTimeout(function () {
@@ -821,7 +821,7 @@ function readlvSwitchStatus(id) {
 
 	h = setTimeout(function() {
 		readlvSwitchStatus(id);
-	}, 5 * 1000);
+	}, 6 * 1000);
 }
 
 /**
@@ -893,7 +893,7 @@ function hvswitchStatusSpy(id) {
 	})
 	k = setTimeout(function() {
 		hvswitchStatusSpy(id);
-	}, 3 * 1000);
+	}, 6 * 1000);
 }
 
 /**
@@ -906,6 +906,7 @@ function hvswitchStatusSpy(id) {
  */
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
+
 function hitchEventSpy() {
 
 	$.ajax({
@@ -920,8 +921,8 @@ function hitchEventSpy() {
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
 
-				if (data[i].isOpen == true) {
-
+				if (data[i].open == true) {
+					alert("警告，已经跳闸！");
 					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
 
 					update(nodeList, 2);  // 树节点变红
@@ -934,7 +935,7 @@ function hitchEventSpy() {
 
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
-	}, 5 * 60 * 1000);
+	}, 8 * 1000);
 
 }
 
@@ -984,14 +985,18 @@ function worning_switchs_draw(node) {
    icon : myIcon
   }); // 创建标注
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
+  map.panTo(pt);  // 将报警地点移到地图中间
 
   // 不用添加文字提示
   // 需要重复添加点击事件
-  marker2.addEventListener("click", function (node) {
-    handleAlarm(node);
-  });
 
 	$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
+
+  marker2.addEventListener("click", function (e) {
+    map.removeOverlay(marker2); // remove the alarm icon
+    $('audio').remove(); // remove the audio
+    handleAlarm(node); // pop up a handle window
+  });
 }
 
 /*
@@ -1000,7 +1005,51 @@ function worning_switchs_draw(node) {
  */
 
 function handleAlarm (node) {
-  // TODO
+  $('#alarm_modal').modal('show');
+  var now = new Date();
+  var month = (now.getMonth() + 1);               
+  var day = now.getDate();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  if(month < 10) 
+    month = "0" + month;
+  if(day < 10) 
+    day = "0" + day;
+  if(hour < 10)
+    hour = "0" + hour;
+  if(minute < 10)
+    minute = "0" + minute;
+  if(second < 10)
+    second = "0" + second;
+  var today = now.getFullYear() + '-' + month + '-' + day + ' ' 
+            + hour + ':' + minute + ':' + second;
+  $('#handleTime').val(today);
+  $('#hiddenSwitchId').val(node.id);
+}
+
+function submitAlarmEvent () {
+  var solvePeople = $('#handleName').val(),
+      solveTime = $('#handleTime').val(),
+      switchId = $('#hiddenSwitchId').val();
+
+  $.ajax({
+    type: 'POST',
+    url: 'update_hitchEvent',
+    async: false,
+    dataType: 'json',
+    data: {
+      switchId: switchId,
+      solveTime: solveTime,
+      solvePeople: solvePeople
+    },
+    success: function (data) {
+      if (data.success) {
+        $('#alarm_modal').modal('hide');
+      }
+    }
+  });
+
 }
 
 // //**************************************************************************
