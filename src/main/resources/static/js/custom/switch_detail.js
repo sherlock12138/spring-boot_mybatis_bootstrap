@@ -35,7 +35,7 @@ function readCurrentVoltage(id, type) {
 
 	t = setTimeout(function() {
 		readCurrentVoltage(id, type);
-	}, 3 * 1000);
+	}, 6 * 1000);
 }
 
 /**

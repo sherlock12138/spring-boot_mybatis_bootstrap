@@ -17,7 +17,7 @@ $(document).ready(function() {
 
 	})
 
-	// 轮询报警
+	//推送报警
 	hitchEventSpy();
 
   // 5秒后报警测试
@@ -794,7 +794,7 @@ function click_low_voltage_switch() {
  * @return void
  * @throws
  */
-function readlvSwitchStatus(id) {
+/*function readlvSwitchStatus(id) {
 
 	$.ajax({
 		type : "post",
@@ -822,7 +822,7 @@ function readlvSwitchStatus(id) {
 	h = setTimeout(function() {
 		readlvSwitchStatus(id);
 	}, 6 * 1000);
-}
+}*/
 
 /**
  * 
@@ -834,8 +834,9 @@ function readlvSwitchStatus(id) {
  * @throws
  */
 function hvswitchStatusSpy(id) {
-
-	$.ajax({
+	
+	messagePush.readHvStatus(id);
+	/*$.ajax({
 		type : "post",
 		url : "read_hvswitch_status",
 		async : false,
@@ -893,7 +894,7 @@ function hvswitchStatusSpy(id) {
 	})
 	k = setTimeout(function() {
 		hvswitchStatusSpy(id);
-	}, 6 * 1000);
+	}, 6 * 1000);*/
 }
 
 /**
@@ -908,8 +909,9 @@ function hvswitchStatusSpy(id) {
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
 
 function hitchEventSpy() {
-
-	$.ajax({
+	
+	messagePush.hitchEventSpy();
+	/*$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
     url: 'read_hitch_event',
@@ -935,7 +937,7 @@ function hitchEventSpy() {
 
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
-	}, 8 * 1000);
+	}, 8 * 1000);*/
 
 }
 

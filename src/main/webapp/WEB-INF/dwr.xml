@@ -4,8 +4,8 @@
     "http://getahead.org/dwr/dwr30.dtd">
 <dwr>
 	<allow>
-		<create creator="new" javascript="alarmPush">
-			<param name="class" value="com.gdut.dongjun.service.push.AlarmPush" />
+		<create creator="new" javascript="messagePush">
+			<param name="class" value="com.gdut.dongjun.service.push.MessagePush" />
 		</create>
 <!-- 		<convert converter="bean" match="[your.package].Message" /> -->
 	</allow>

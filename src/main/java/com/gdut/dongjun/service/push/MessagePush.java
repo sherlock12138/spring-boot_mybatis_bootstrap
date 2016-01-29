@@ -6,15 +6,59 @@ import org.directwebremoting.Browser;
 import org.directwebremoting.ScriptBuffer;
 import org.directwebremoting.ScriptSession;
 
-public class AlarmPush {
+import com.gdut.dongjun.service.net_server.CtxStore;
+import com.gdut.dongjun.web.CommandController;
 
-	public void send() {
+public class MessagePush {
+	
+	public void readHvStatus(final String id) throws InterruptedException {
+		System.out.println(id);
+		while(true) {
+			Thread.sleep(8000);
+			Browser.withAllSessions(new Runnable() {
+				private ScriptBuffer script = new ScriptBuffer();
+				@Override
+				public void run() {
+					
+					script.appendCall("hvStatusShow", CtxStore.getStatusbyId(id));
+					Collection<ScriptSession> sessions = Browser
+							.getTargetSessions();
+					for (ScriptSession scriptSession : sessions) {
+						scriptSession.addScript(script);
+					}
+				}
+			});
+		}
+	}
+	
+	public void hitchEventSpy() throws InterruptedException {
+		
+		while(true) {
+			Thread.sleep(6000);
+			Browser.withAllSessions(new Runnable() {
+				private ScriptBuffer script = new ScriptBuffer();
+				@Override
+				public void run() {
+					
+					script.appendCall("showHitchEvent", CtxStore.getInstance());
+					System.out.println(CtxStore.getInstance());
+					Collection<ScriptSession> sessions = Browser
+							.getTargetSessions();
+					for (ScriptSession scriptSession : sessions) {
+						scriptSession.addScript(script);
+					}
+				}
+			});
+		}
+	}
+	
+	public void send() throws InterruptedException {
 
 		while (true) {
-
+			Thread.sleep(10000);
 			Runnable run = new Runnable() {
 				private ScriptBuffer script = new ScriptBuffer();
-
+				
 				public void run() {
 					// 设置要调用的 js及参数
 					script.appendCall("alarm", 12);
