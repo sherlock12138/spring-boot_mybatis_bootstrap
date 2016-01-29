@@ -992,10 +992,10 @@ function worning_switchs_draw(node) {
 
 	$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
 
-  marker2.addEventListener("click", function (node) {
+  marker2.addEventListener("click", function (e) {
     map.removeOverlay(marker2); // remove the alarm icon
     $('audio').remove(); // remove the audio
-    handleAlarm(); // pop up a handle window
+    handleAlarm(node); // pop up a handle window
   });
 }
 
@@ -1004,27 +1004,51 @@ function worning_switchs_draw(node) {
  *
  */
 
-function handleAlarm () {
+function handleAlarm (node) {
   $('#alarm_modal').modal('show');
+  var now = new Date();
+  var month = (now.getMonth() + 1);               
+  var day = now.getDate();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  if(month < 10) 
+    month = "0" + month;
+  if(day < 10) 
+    day = "0" + day;
+  if(hour < 10)
+    hour = "0" + hour;
+  if(minute < 10)
+    minute = "0" + minute;
+  if(second < 10)
+    second = "0" + second;
+  var today = now.getFullYear() + '-' + month + '-' + day + ' ' 
+            + hour + ':' + minute + ':' + second;
+  $('#handleTime').val(today);
+  $('#hiddenSwitchId').val(node.id);
 }
 
 function submitAlarmEvent () {
-  var handleName = $('#handleName').val();
-  var handleTime = $('#handleTime').val();
+  var solvePeople = $('#handleName').val(),
+      solveTime = $('#handleTime').val(),
+      switchId = $('#hiddenSwitchId').val();
 
-  // TODO
-  //$.ajax({
-  //  type: 'POST',
-  //  url: '',
-  //  async: false,
-  //  dataType: 'json',
-  //  data: {
-  //    
-  //  },
-  //  success: function (data) {
-  //
-  //  }
-  //});
+  $.ajax({
+    type: 'POST',
+    url: 'update_hitchEvent',
+    async: false,
+    dataType: 'json',
+    data: {
+      switchId: switchId,
+      solveTime: solveTime,
+      solvePeople: solvePeople
+    },
+    success: function (data) {
+      if (data.success) {
+        $('#alarm_modal').modal('hide');
+      }
+    }
+  });
 
 }
 
