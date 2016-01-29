@@ -16,7 +16,7 @@ public class DwrConfig {
 		servletRegistrationBean.addUrlMappings("/dwr/*");
 		servletRegistrationBean.addInitParameter("activeReverseAjaxEnabled", "true");
 		servletRegistrationBean.addInitParameter("debug", "true");
-		//servletRegistrationBean.addInitParameter("config-push", "/WEB_INF/dwr.xml");
+		//servletRegistrationBean.addInitParameter("config-push", "/dwr.xml");
 		return servletRegistrationBean;
 	}
 }

@@ -32,4 +32,25 @@ public class AlarmPush {
 		}
 	}
 
+	
+	/*<script type="text/javascript" src="/dwr/engine.js"></script>
+	<script type="text/javascript" src="/dwr/util.js"></script>
+	<script type="text/javascript" src="/dwr/interface/alarmPush.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			alert('e');
+			alarmPush.send();
+		});
+		
+	</script>
+	<script type="text/javascript" >
+           //这个方法用来启动该页面的ReverseAjax功能
+           dwr.engine.setActiveReverseAjax( true);
+           //设置在页面关闭时，通知服务端销毁会话
+           dwr.engine.setNotifyServerOnPageUnload( true);
+           //这个函数是提供给后台推送的时候 调用的
+           function alarm(content){
+              
+           }
+        </script>*/
 }
