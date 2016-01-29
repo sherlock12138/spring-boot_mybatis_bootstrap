@@ -821,7 +821,7 @@ function readlvSwitchStatus(id) {
 
 	h = setTimeout(function() {
 		readlvSwitchStatus(id);
-	}, 5 * 1000);
+	}, 6 * 1000);
 }
 
 /**
@@ -893,7 +893,7 @@ function hvswitchStatusSpy(id) {
 	})
 	k = setTimeout(function() {
 		hvswitchStatusSpy(id);
-	}, 3 * 1000);
+	}, 6 * 1000);
 }
 
 /**
@@ -922,7 +922,7 @@ function hitchEventSpy() {
 			for (var i = 0; i < data.length; i++) {
 
 				if (data[i].open == true) {
-
+					alert("警告，已经跳闸！");
 					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
 
 					update(nodeList, 2);  // 树节点变红
@@ -935,7 +935,7 @@ function hitchEventSpy() {
 
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
-	}, 5 * 1000);
+	}, 8 * 1000);
 
 }
 
