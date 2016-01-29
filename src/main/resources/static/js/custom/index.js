@@ -921,7 +921,7 @@ function hitchEventSpy() {
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
 
-				if (data[i].isOpen == true) {
+				if (data[i].open == true) {
 
 					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
 
@@ -935,7 +935,7 @@ function hitchEventSpy() {
 
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
-	}, 5 * 60 * 1000);
+	}, 5 * 1000);
 
 }
 
