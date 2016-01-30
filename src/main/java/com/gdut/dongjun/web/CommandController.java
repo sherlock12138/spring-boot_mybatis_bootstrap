@@ -418,12 +418,6 @@ public class CommandController {
 		//
 		// res.put("switchs", CtxStore.getInstance());
 		// res.put("high_voltage_status", CtxStore.getHighVoltageStatus());
-		SwitchGPRS g = new SwitchGPRS();
-		g.setId("");
-		g.setAddress("");
-		g.setCtx(null);
-		g.setOpen(true);
-		CtxStore.add(g);
 		return CtxStore.getInstance();
 	}
 
