@@ -933,7 +933,7 @@ function hitchEventSpy() {
 					update(nodeList, 2);  // 树节点变红
 					worning_switchs_draw(nodeList[0]); //声音的 图标的
 				} else {
-
+					close_switchs_draw(nodeList[0]);
 				}
 			}
 		}
