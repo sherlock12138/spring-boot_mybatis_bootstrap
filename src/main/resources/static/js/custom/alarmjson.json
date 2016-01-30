@@ -1,6 +1,10 @@
-[{
-  "id": "a21545a282194d83b6834995e35b2e25",
-  "address": 128,
-  "ctx": "....",
-  "open": true
-}]
+[
+	{
+		"id": "83d0ab932a934a2f9ac7af833c5be64c",
+		"address": "7500",
+		"ctx": {
+			"removed": false
+		},
+		"open": false
+	}
+]

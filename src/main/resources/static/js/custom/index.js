@@ -337,14 +337,20 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	// 遍历描绘定点
 	// *************************************************************
 
-	var low_voltage_switch_icon = "../../ico/low_voltage_switch.jpg";// 低压开关的图标
-	var high_voltage_switch_icon = "../../ico/high_voltage_switch.jpg";// 低压开关的图标
+	var voltage_switch_icon = "../../ico/voltage-outLine.jpg";// 低压开关的图标
+	//var high_voltage_switch_icon = "../../ico/high_voltage_switch.jpg";// 高压开关的图标
 	var control_measure_switch_icon = "../../ico/control_measure_switch.jpg";// 低压开关的图标
 
-	forDrawPoint(low_voltage_nodes, low_voltage_switch_icon,// 描绘低压开关
+	//var outLine = "../../ico/high_voltage_switch.jpg";
+	//var
+	/* 改变描绘模式，不需要根据协议而描绘，只要是离线就灰图标，合闸就红图标，
+	开闸就绿图标
+	 */
+
+	forDrawPoint(low_voltage_nodes, voltage_switch_icon,// 描绘低压开关
 	click_low_voltage_switch);
 
-	forDrawPoint(getAllHighVoltageSwitch(), high_voltage_switch_icon,// 描绘高压开关
+	forDrawPoint(getAllHighVoltageSwitch(), voltage_switch_icon,// 描绘高压开关
 	click_high_voltage_switch);
 
 	forDrawPoint(getAllControlMeasureSwitch(), control_measure_switch_icon,// 描绘管测开关
@@ -472,9 +478,9 @@ function getAllControlMeasureSwitch() {
 function forDrawPoint(nodes, switch_icon, click_function) {
 
 	for (var i = 0; i < nodes.length; i++) {
-
 		switchs_draw(nodes[i], switch_icon, click_function);
 	}
+
 }
 
 /**
@@ -906,27 +912,28 @@ function hvswitchStatusSpy(id) {
  */
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
-
+var close_switch = '../../ico/voltage-close.jpg';
 function hitchEventSpy() {
 
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
-    url: 'read_hitch_event',
+		url: 'read_hitch_event',
 		async : false,
 		data : {},
-    dataType: 'json',
+		dataType: 'json',
 		success : function(data) {
 
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
-
+				console.log(i);
 				if (data[i].open == true) {
 					alert("警告，已经跳闸！");
 					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-
 					update(nodeList, 2);  // 树节点变红
 					worning_switchs_draw(nodeList[0]); //声音的 图标的
+				} else {
+
 				}
 			}
 		}
@@ -997,6 +1004,16 @@ function worning_switchs_draw(node) {
     $('audio').remove(); // remove the audio
     handleAlarm(node); // pop up a handle window
   });
+}
+
+function close_switchs_draw(node) {  // 把在线的，合闸的点改为特定的图标
+
+	var pt = new BMap.Point(node.longitude, node.latitude);
+	var myIcon = new BMap.Icon(close_switch, new BMap.Size(20, 20));
+	var marker2 = new BMap.Marker(pt, {
+		icon : myIcon
+	}); // 创建标注
+	map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
 }
 
 /*
