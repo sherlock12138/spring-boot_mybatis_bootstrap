@@ -916,12 +916,15 @@ function hvswitchStatusSpy(id) {
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
 var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
+var outLine_switch = '../../ico/voltage-outLine.jpg';
 var statusReset = 0;         // 一个参数，用于判断是否重新描绘各个点
 var lastNodeList;           // 存储上一次在线的设备数组
 function hitchEventSpy() {
 
 	if(statusReset) {
-		zTreeOnAsyncSuccess();
+		for(var i = 0; i < lastNodeList.length; i++) {
+			switchs_draw(lastNodeList[i], outLine_switch, click_high_voltage_switch);
+		};
 		update(lastNodeList, 0);
 	};
 	$.ajax({
