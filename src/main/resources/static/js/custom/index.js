@@ -941,14 +941,13 @@ function hitchEventSpy() {
 				
 				if(data[i].id != null) {
 					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+					close_switchs_draw(nodeList[0]);
 					lastNodeList = nodeList;
 					if(nodeList.length != 0) {
 						if (data[i].open == true) {
 							alert("警告，已经跳闸！");					
 							update(nodeList, 2);  // 树节点变红
 							worning_switchs_draw(nodeList[0]); //声音的 图标的
-						} else {
-							close_switchs_draw(nodeList[0]);
 						}
 					}
 				}
@@ -1004,7 +1003,7 @@ function worning_switchs_draw(node) {
   old_icon = myIcon;// 保存原来的icon
    // 创建标注
   var pt = new BMap.Point(node.longitude, node.latitude);
-  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(40, 40));
+  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(80, 80));
   var marker2 = new BMap.Marker(pt, {
    icon : myIcon
   }); // 创建标注
