@@ -912,9 +912,11 @@ function hvswitchStatusSpy(id) {
  */
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
-var close_switch = '../../ico/voltage-close.jpg';
+var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
+var statusReset = 0; // 一个参数，用于判断是否重新描绘各个点
 function hitchEventSpy() {
 
+	if(statusReset) { zTreeOnAsyncSuccess() };
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
@@ -923,7 +925,7 @@ function hitchEventSpy() {
 		data : {},
 		dataType: 'json',
 		success : function(data) {
-
+			statusReset = 1;
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
 				console.log(i);
@@ -987,7 +989,7 @@ function worning_switchs_draw(node) {
   old_icon = myIcon;// 保存原来的icon
    // 创建标注
   var pt = new BMap.Point(node.longitude, node.latitude);
-  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));
+  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(40, 40));
   var marker2 = new BMap.Marker(pt, {
    icon : myIcon
   }); // 创建标注
