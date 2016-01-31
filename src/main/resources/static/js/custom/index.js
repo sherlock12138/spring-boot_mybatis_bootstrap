@@ -296,6 +296,9 @@ function drawLine(point1, point2, i, map) {
 
 var map = new BMap.Map("baidu_map"); // 创建地图实例
 var nodes;// 所有的节点
+//var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
+var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
+var close_switch = '../../ico/voltage-close.jpg';
 /**
  * 
  * @Title: zTreeOnAsyncSuccess
@@ -910,6 +913,7 @@ function hvswitchStatusSpy(id) {
  * @return void
  * @throws
  */
+<<<<<<< HEAD
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
 var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
@@ -917,6 +921,11 @@ var statusReset = 0; // 一个参数，用于判断是否重新描绘各个点
 function hitchEventSpy() {
 
 	if(statusReset) { zTreeOnAsyncSuccess() };
+=======
+
+function hitchEventSpy() {
+	
+>>>>>>> a4e3b7a445bea9a4ed14b1075d53f05b28ad2687
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
@@ -929,13 +938,19 @@ function hitchEventSpy() {
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
 				console.log(i);
-				if (data[i].open == true) {
-					alert("警告，已经跳闸！");
-					nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-					update(nodeList, 2);  // 树节点变红
-					worning_switchs_draw(nodeList[0]); //声音的 图标的
-				} else {
-					close_switchs_draw(nodeList[0]);
+				
+				if(data[i].id != null) {
+					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+					console.log(nodeList);
+					if(nodeList.length != 0) {
+						if (data[i].open == true) {
+							alert("警告，已经跳闸！");					
+							update(nodeList, 2);  // 树节点变红
+							worning_switchs_draw(nodeList[0]); //声音的 图标的
+						} else {
+							close_switchs_draw(nodeList[0]);
+						}
+					}
 				}
 			}
 		}
@@ -995,6 +1010,7 @@ function worning_switchs_draw(node) {
   }); // 创建标注
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
   map.panTo(pt);  // 将报警地点移到地图中间
+  map.zoomTo(map.getZoom() + 5);
 
   // 不用添加文字提示
   // 需要重复添加点击事件
@@ -1009,13 +1025,15 @@ function worning_switchs_draw(node) {
 }
 
 function close_switchs_draw(node) {  // 把在线的，合闸的点改为特定的图标
-
-	var pt = new BMap.Point(node.longitude, node.latitude);
+	
+	/*var pt = new BMap.Point(node.longitude, node.latitude);
 	var myIcon = new BMap.Icon(close_switch, new BMap.Size(20, 20));
 	var marker2 = new BMap.Marker(pt, {
 		icon : myIcon
 	}); // 创建标注
 	map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
+*/	
+	switchs_draw(node, close_switch, click_high_voltage_switch);
 }
 
 /*
