@@ -913,19 +913,17 @@ function hvswitchStatusSpy(id) {
  * @return void
  * @throws
  */
-<<<<<<< HEAD
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
 var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
-var statusReset = 0; // 一个参数，用于判断是否重新描绘各个点
+var statusReset = 0;         // 一个参数，用于判断是否重新描绘各个点
+var lastNodeList;           // 存储上一次在线的设备数组
 function hitchEventSpy() {
 
-	if(statusReset) { zTreeOnAsyncSuccess() };
-=======
-
-function hitchEventSpy() {
-	
->>>>>>> a4e3b7a445bea9a4ed14b1075d53f05b28ad2687
+	if(statusReset) {
+		zTreeOnAsyncSuccess();
+		update(lastNodeList, 0);
+	};
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
@@ -937,11 +935,10 @@ function hitchEventSpy() {
 			statusReset = 1;
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
-				console.log(i);
 				
 				if(data[i].id != null) {
 					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-					console.log(nodeList);
+					lastNodeList = nodeList;
 					if(nodeList.length != 0) {
 						if (data[i].open == true) {
 							alert("警告，已经跳闸！");					
