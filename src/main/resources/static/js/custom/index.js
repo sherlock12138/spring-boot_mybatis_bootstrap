@@ -1000,6 +1000,7 @@ function worning_switchs_draw(node) {
   }); // 创建标注
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
   map.panTo(pt);  // 将报警地点移到地图中间
+  map.zoomTo(map.getZoom() + 5);
 
   // 不用添加文字提示
   // 需要重复添加点击事件
