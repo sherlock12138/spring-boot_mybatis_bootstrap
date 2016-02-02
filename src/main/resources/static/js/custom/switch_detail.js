@@ -157,12 +157,14 @@ function openSwitch(id, type) {
 
 function TheBtnStatus() {
 	setTimeout(function () { // 回调函数
-		$('#close_switch_btn').attr('disabled', 'true');
-		$('#open_switch_btn').attr('disabled', 'true');
-	}, 5*1000);
-	$('#open_switch_btn').attr('disabled', 'false');
-	$('#close_switch_btn').attr('disabled', 'false');
+		$('#close_switch_btn').attr('disabled', 'false');
+		$('#close_switch_btn').attr('click');
+		$('#open_switch_btn').attr('disabled', 'false');
+	}, 15*1000);
+	$('#close_switch_btn').attr('disabled', 'true');
+	$('#open_switch_btn').attr('disabled', 'true');
 }
+
 /**
  * 
  * @Title: cancelControlSwitch
