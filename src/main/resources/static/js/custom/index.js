@@ -604,8 +604,8 @@ function click_high_voltage_switch() {
 			+ "<td id='yao_kong_fen_zha'></td>"
 			+ "</tr>"
 			+ "</tbody></table>"
-			+ "<a id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
-			+ "<a id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</a>"
+			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</a>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -660,14 +660,15 @@ function click_high_voltage_switch() {
  * @return void
  * @throws
  */
-
+var timer;
 function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
                                   //  所以打算换个写法
 	$("#security_modal").modal('show');
-	/*$("#security_modal").on('hide.bs.modal', function(e) {
+	$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
-	});*/
-	var timer;
+		$('#notice_msg').text("将在" + ' ' + "秒内执行！");
+	});
+	
 	$("#secu_confirm_btn").click(function() {
 		var wait = 6;
 		timer = setInterval(function() {
@@ -695,6 +696,7 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 						} else {
 
 							alert("安全密码错误！");
+							$('#notice_msg').text('请输入正确的密码');
 						}
 					}
 				});
@@ -922,12 +924,13 @@ var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
 var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
 var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
 var outLine_switch = '../../ico/voltage-outLine.jpg';
-var statusReset = 0;         // 一个参数，用于判断是否重新描绘各个点
-var lastNodeList = [];           // 存储上一次在线的设备数组
+
 var oldList = [];
 var newList = [];
+var newSorList = [];
+var alarmList = [];
 function hitchEventSpy() {
-
+	
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
@@ -936,44 +939,47 @@ function hitchEventSpy() {
 		data : {},
 		dataType: 'json',
 		success : function(data) {
-			//var newNodeList = []; // 新一轮请求中需要处理的设备数组
+
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = 0; i < data.length; i++) {
 
 				if(data[i].id != null) {
-					newList.push(data[i].id);
 					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-					//newNodeList.push(nodeList);
-					console.log(data[i].status);
+
 					if(nodeList.length != 0) {
 						if(data[i].status == "00") {
 							switchs_draw(nodeList[0], open_switch, click_high_voltage_switch);
 							/*if(data[i].open == true) {*/
+								alarmList.push(nodeList[0].id);
 								alert("警告，已经跳闸！");
 								update(nodeList, 2);  // 树节点变红
 								worning_switchs_draw(nodeList[0]); //声音的 图标的
 							/*}*/
 						} else {
-							close_switchs_draw(nodeList[0]);
+							newList.push(data[i].id);
 						}
 					}
 				}
 			}
-			/**
-			 * 找到上次在线本次离线的开关，并熄灭
-			 */
-			for(var j = 0; j < newList.length; j++) {
-				for(var k = 0; k < oldList.length; k++) {
-					if(oldList[k] == newList[j]) {
-						break;
-					}
-					if(k >= oldList.length) {
-						//执行熄灭
-						switchs_draw(node, outLine_switch, click_high_voltage_switch);
-					}
+
+			newSortList = newList.sort();
+			newList = [];
+			for(var j = 0, length = newSortList.length; j < length; j++) {
+				if(newSortList[j] != oldList[j]) {
+					break;
 				}
 			}
-			oldList = newList;
+			//点亮在线
+			for(var k = j, length = newSortList.length; k < length; k++) {
+				if(zTree.getNodesByParamFuzzy("id", newSortList[k]).length != 0) {
+					switchs_draw(zTree.getNodesByParamFuzzy("id", newSortList[k])[0], close_switch, click_high_voltage_switch);
+				}
+			}
+			//熄灭离线
+			for(var x = j, length = oldList.length; x < length; x++) {
+				switchs_draw(zTree.getNodesByParamFuzzy("id", oldList[x])[0], close_switch, click_high_voltage_switch);
+			}
+			oldList = newSorList;
 		}
 
 	});
@@ -983,11 +989,6 @@ function hitchEventSpy() {
 	}, 8 * 1000);
 
 }
-
-function readActiveSwitchStatus(node) {
-	
-}
-
 
 /**
  * 
