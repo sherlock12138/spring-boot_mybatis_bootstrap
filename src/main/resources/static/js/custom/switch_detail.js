@@ -116,9 +116,11 @@ function controlSwitch(id, type, sign) {
 		success : function(data) {
 
 			if (data == "success") {
-				alert("操作成功！")
+				alert("操作成功！");
+				$("#security_modal").modal('hide');
+				TheBtnStatus();
 			} else {
-				alert("操作失败")
+				alert("操作失败");
 			}
 		}
 
@@ -152,6 +154,12 @@ function openSwitch(id, type) {
 	controlSwitch(id, type, 0);
 }
 
+function TheBtnStatus() {
+	setTimeout(function () { // 回调函数
+		$('#close_switch_btn').attr('disabled', 'true');
+	}, 5*1000);
+	$('#open_switch_btn').attr('disabled', 'false');
+}
 /**
  * 
  * @Title: cancelControlSwitch
