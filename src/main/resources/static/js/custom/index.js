@@ -604,8 +604,8 @@ function click_high_voltage_switch() {
 			+ "<td id='yao_kong_fen_zha'></td>"
 			+ "</tr>"
 			+ "</tbody></table>"
-			+ "<a id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
-			+ "<a id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</a>"
+			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</button>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</button>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -660,16 +660,18 @@ function click_high_voltage_switch() {
  * @return void
  * @throws
  */
-
+var timer;
 function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
                                   //  所以打算换个写法
 	$("#security_modal").modal('show');
 	$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
+		$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
 	});
-	var timer;
+
 	$("#secu_confirm_btn").click(function() {
 		var wait = 6;
+		console.log(wait);
 		timer = setInterval(function() {
 			if (wait === 0) {
 
@@ -682,19 +684,15 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 						"controlCode" : $("#controlCode").val()
 					},
 					success : function(data) {
-
 						if (data) {
-
 							if (t == 1) {
-
 								openSwitch(id, type);
 							} else {
-
 								closeSwitch(id, type);
 							}
 						} else {
-
 							alert("安全密码错误！");
+							$('#notice_msg').text('请输入正确的密码！');
 						}
 					}
 				});
@@ -959,7 +957,7 @@ function hitchEventSpy() {
 					var Lnode = lastNodeList[j];
 					for(var k = 0; k < newNodeList.length; k++) {
 						var Nnode = newNodeList[k];
-						if(Lnode[0].id == Nnode[0].id) {
+						if(Lnode.id == Nnode.id) {
 							reset = 1;
 							break;
 						} else {
@@ -1046,14 +1044,7 @@ function worning_switchs_draw(node) {
 }
 
 function close_switchs_draw(node) {  // 把在线的，合闸的点改为特定的图标
-	
-	/*var pt = new BMap.Point(node.longitude, node.latitude);
-	var myIcon = new BMap.Icon(close_switch, new BMap.Size(20, 20));
-	var marker2 = new BMap.Marker(pt, {
-		icon : myIcon
-	}); // 创建标注
-	map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
-*/	
+
 	switchs_draw(node, close_switch, click_high_voltage_switch);
 }
 
