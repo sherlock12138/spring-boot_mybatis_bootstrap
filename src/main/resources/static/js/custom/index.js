@@ -664,9 +664,9 @@ function click_high_voltage_switch() {
 function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
                                   //  所以打算换个写法
 	$("#security_modal").modal('show');
-	$("#security_modal").on('hide.bs.modal', function(e) {
+	/*$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
-	});
+	});*/
 	var timer;
 	$("#secu_confirm_btn").click(function() {
 		var wait = 6;
@@ -924,56 +924,56 @@ var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
 var outLine_switch = '../../ico/voltage-outLine.jpg';
 var statusReset = 0;         // 一个参数，用于判断是否重新描绘各个点
 var lastNodeList = [];           // 存储上一次在线的设备数组
+var oldList = [];
+var newList = [];
 function hitchEventSpy() {
 
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
-		url: 'read_hitch_event',
+		url: 'get_active_switch_status',
 		async : false,
 		data : {},
 		dataType: 'json',
 		success : function(data) {
-			var newNodeList = []; // 新一轮请求中需要处理的设备数组
+			//var newNodeList = []; // 新一轮请求中需要处理的设备数组
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-			var reset = 0;
 			for (var i = 0; i < data.length; i++) {
 
 				if(data[i].id != null) {
+					newList.push(data[i].id);
 					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-					newNodeList.push(nodeList);
+					//newNodeList.push(nodeList);
+					console.log(data[i].status);
 					if(nodeList.length != 0) {
-						if (data[i].open == true) {
-							alert("警告，已经跳闸！");
+						if(data[i].status == "00") {
 							switchs_draw(nodeList[0], open_switch, click_high_voltage_switch);
-							update(nodeList, 2);  // 树节点变红
-							worning_switchs_draw(nodeList[0]); //声音的 图标的
+							/*if(data[i].open == true) {*/
+								alert("警告，已经跳闸！");
+								update(nodeList, 2);  // 树节点变红
+								worning_switchs_draw(nodeList[0]); //声音的 图标的
+							/*}*/
 						} else {
 							close_switchs_draw(nodeList[0]);
 						}
 					}
 				}
 			}
-			if(statusReset) {
-				for(var j = 0 ; j < lastNodeList.length; j++) {  // 对比上一组的设备和当前组的设备，不同的怎么回归离线状态
-					var Lnode = lastNodeList[j];
-					for(var k = 0; k < newNodeList.length; k++) {
-						var Nnode = newNodeList[k];
-						if(Lnode[0].id == Nnode[0].id) {
-							reset = 1;
-							break;
-						} else {
-							reset = 0;
-						}
+			/**
+			 * 找到上次在线本次离线的开关，并熄灭
+			 */
+			for(var j = 0; j < newList.length; j++) {
+				for(var k = 0; k < oldList.length; k++) {
+					if(oldList[k] == newList[j]) {
+						break;
 					}
-					if(!reset) {
-						update(Lnode, 0); // 树节点变黑
-						switchs_draw(Lnode[0], outLine_switch, click_high_voltage_switch);
+					if(k >= oldList.length) {
+						//执行熄灭
+						switchs_draw(node, outLine_switch, click_high_voltage_switch);
 					}
 				}
 			}
-			lastNodeList = newNodeList;
-			statusReset = 1;
+			oldList = newList;
 		}
 
 	});
@@ -984,6 +984,9 @@ function hitchEventSpy() {
 
 }
 
+function readActiveSwitchStatus(node) {
+	
+}
 
 
 /**
