@@ -660,14 +660,15 @@ function click_high_voltage_switch() {
  * @return void
  * @throws
  */
-var timer;
+
 function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
                                   //  所以打算换个写法
-	$("#security_modal").modal('show');
+	/*$("#security_modal").modal('show');
 	$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
 		$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
 	});
+	var timer;
 	$("#secu_confirm_btn").click(function() {
 		var wait = 6;
 		console.log(wait);
@@ -692,6 +693,48 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 						} else {
 							alert("安全密码错误！");
 							$('#notice_msg').text('请输入正确的密码');
+						}
+					}
+				});
+				clearInterval(timer);
+			} else {
+				wait--;
+				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
+			}
+		}, 1000);
+	});
+
+	$('#cancel_control').click(function() {
+		clearInterval(timer);
+	});*/
+	$("#security_modal").modal('show');
+	var timer;
+	$("#secu_confirm_btn").click(function() {
+		var wait = 6;
+		timer = setInterval(function() {
+			if (wait === 0) {
+
+				$.ajax({
+					type : "post",
+					url : "security_confirm",
+					async : false,
+					data : {
+						"controlCode" : $("#controlCode").val()
+					},
+					success : function(data) {
+
+						if (data) {
+
+							if (t == 1) {
+
+								openSwitch(id, type);
+							} else {
+
+								closeSwitch(id, type);
+							}
+						} else {
+
+							alert("安全密码错误！");
 						}
 					}
 				});
