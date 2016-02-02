@@ -159,7 +159,11 @@ function update(nodes, highlight) {
 		zTree.updateNode(nodes[i]);
 	}
 }
-
+function updateSwitch(node, highlight) {
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	nodes[i].highlight = highlight;
+	zTree.updateNode(nodes);
+}
 /**
  * 
  * @Title: getFontCss
@@ -710,10 +714,10 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 	$("#security_modal").modal('show');
 	var timer;
 	$("#secu_confirm_btn").click(function() {
+
 		var wait = 6;
 		timer = setInterval(function() {
 			if (wait === 0) {
-
 				$.ajax({
 					type : "post",
 					url : "security_confirm",
@@ -991,12 +995,12 @@ function hitchEventSpy() {
 								switchs_draw(nodeList[0], open_switch, click_high_voltage_switch);	//开闸描绘
 								if(data[i].open == true) {
 									alarmList.push(nodeList[0].id);	//status与open同时符合才报警
-									alert("警告，已经跳闸！");
+									//alert("警告，已经跳闸！");
 									update(nodeList, 2);  // 树节点变红
 									worning_switchs_draw(nodeList[0]); //声音的 图标的
 								}
 							} else {
-								deleteAlarmSwitch(nodeList);
+								deleteAlarmSwitch(nodeList[0]);
 								newList.push(data[i].id);
 							}
 						}
@@ -1030,18 +1034,26 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
-
-}
+	console.log('alarm' + alarmList);
+}	
 
 function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
 		if(node.id == alarmList[i]) {
-			update(node, 0);
-			for(var j = i; j < length - 1; j++) {
-				alarmList[j] = alarmList[j + 1];
+			if(i == 0 || i == length - 1) {
+				alarmList[i] = [];
+			} else {
+				for(var j = i; j < length - 1; j++) {
+					alarmList[j] = alarmList[j + 1];
+				}
+				alarmList[j] = [];
 			}
+			
 			alert("设备已响应：现为合闸状态");
+			updateSwitch(node, 0);
+			$('audio').remove();
+			new BMap.clearOverlays();
 		}
 	}
 }
