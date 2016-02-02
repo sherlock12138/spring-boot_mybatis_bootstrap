@@ -169,16 +169,6 @@ public class CommandController {
 		if (msg != null && gprs != null && gprs.getCtx() != null) {
 
 			gprs.getCtx().writeAndFlush(msg);
-			
-			/**
-			 * 更改报警信息
-			 */
-			gprs.setOpen(sign == 0);
-			
-			/**
-			 *  00分闸 01合闸
-			 */
-			CtxStore.getStatusbyId(switchId).setStatus(gprs.isOpen() ?  "00" : "01");
 		} else {
 			return "error";
 		}
