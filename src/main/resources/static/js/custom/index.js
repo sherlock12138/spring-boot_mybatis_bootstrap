@@ -604,8 +604,8 @@ function click_high_voltage_switch() {
 			+ "<td id='yao_kong_fen_zha'></td>"
 			+ "</tr>"
 			+ "</tbody></table>"
-			+ "<a id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
-			+ "<a id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</a>"
+			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</button>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</button>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -660,12 +660,17 @@ function click_high_voltage_switch() {
  * @return void
  * @throws
  */
-function security_modal(t) {
-
+var timer;
+function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
+                                  //  所以打算换个写法
 	$("#security_modal").modal('show');
-	var timer;
+	$("#security_modal").on('hide.bs.modal', function(e) {
+		$("#controlCode").val('');
+		$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
+	});
 	$("#secu_confirm_btn").click(function() {
 		var wait = 6;
+		console.log(wait);
 		timer = setInterval(function() {
 			if (wait === 0) {
 
@@ -678,19 +683,15 @@ function security_modal(t) {
 						"controlCode" : $("#controlCode").val()
 					},
 					success : function(data) {
-
 						if (data) {
-
 							if (t == 1) {
-
 								openSwitch(id, type);
 							} else {
-
 								closeSwitch(id, type);
 							}
 						} else {
-
 							alert("安全密码错误！");
+							$('#notice_msg').text('请输入正确的密码');
 						}
 					}
 				});
@@ -913,38 +914,74 @@ function hvswitchStatusSpy(id) {
  * @return void
  * @throws
  */
+//var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
+var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
+var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
+var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
+var outLine_switch = '../../ico/voltage-outLine.jpg';
 
+var oldList = [];
+var newList = [];
+var alarmList = [];
+var distinctList = [];	//
 function hitchEventSpy() {
 	
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
-		url: 'read_hitch_event',
+		url: 'get_active_switch_status',
 		async : false,
 		data : {},
 		dataType: 'json',
 		success : function(data) {
-
+			console.log(data);
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-			for (var i = 0; i < data.length; i++) {
-				console.log(i);
-				
-				if(data[i].id != null) {
-					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-					console.log(nodeList);
-					if(nodeList.length != 0) {
-						if (data[i].open == true) {
-							alert("警告，已经跳闸！");					
-							update(nodeList, 2);  // 树节点变红
-							worning_switchs_draw(nodeList[0]); //声音的 图标的
-						} else {
-							close_switchs_draw(nodeList[0]);
+			for (var i = data.length - 1; i >= 0; --i) {
+				if(isDistinct(data[i].id)) {	//防止重复数据
+					distinctList.push(data[i].id);	
+					
+					if(data[i].id != null) {
+						var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+						
+						if(nodeList.length != 0) {
+							if(data[i].status == "00") {
+								switchs_draw(nodeList[0], open_switch, click_high_voltage_switch);	//开闸描绘
+								if(data[i].open == true) {
+									alarmList.push(nodeList[0].id);	//status与open同时符合才报警
+									alert("警告，已经跳闸！");
+									update(nodeList, 2);  // 树节点变红
+									worning_switchs_draw(nodeList[0]); //声音的 图标的
+								}
+							} else {
+								deleteAlarmSwitch(nodeList);
+								newList.push(data[i].id);
+							}
 						}
 					}
 				}
 			}
+	
+			for(var i = newList.length - 1; i >= 0; --i) {
+				for(var j = oldList.length - 1; j >= 0; --j) {
+					if(newList[i] == oldList[j]) {
+						oldList[j] = "";
+						break;
+					}
+				}
+				if(j < 0 && zTree.getNodesByParamFuzzy("id", newList[i]).length != 0) {
+					switchs_draw(zTree.getNodesByParamFuzzy("id", newList[i])[0], close_switch, click_high_voltage_switch);
+				}
+			}
+			for(var i = oldList.length - 1; i >= 0; --i) {
+				if(oldList[i] != "") {
+					switchs_draw(zTree.getNodesByParamFuzzy("id", oldList[i])[0], outLine_switch, click_high_voltage_switch);
+				}
+			}
+			oldList = newList;
+			//清空数据
+			newList = [];
+			distinctList = [];
 		}
-
 	});
 
 	alarmTimer = setTimeout(function() {
@@ -953,8 +990,27 @@ function hitchEventSpy() {
 
 }
 
+function deleteAlarmSwitch(node) {
+	
+	for(var i = 0, length = alarmList.length; i < length; ++i) {
+		if(node.id == alarmList[i]) {
+			update(node, 0);
+			for(var j = i; j < length - 1; j++) {
+				alarmList[j] = alarmList[j + 1];
+			}
+			alert("设备已响应：现为合闸状态");
+		}
+	}
+}
 
-
+function isDistinct(id) {
+	for(var i = distinctList.length; i >= 0; --i) {
+		if(distinctList[i] == id) {
+			return false;
+		}
+	}
+	return true;
+}
 /**
  * 
  * @Title: green_or_red
@@ -989,12 +1045,10 @@ function green_or_red(sign) {
  */
 function worning_switchs_draw(node) {
 
-  console.log(node);
-
   old_icon = myIcon;// 保存原来的icon
    // 创建标注
   var pt = new BMap.Point(node.longitude, node.latitude);
-  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(20, 20));
+  var myIcon = new BMap.Icon(worning_switch, new BMap.Size(80, 80));
   var marker2 = new BMap.Marker(pt, {
    icon : myIcon
   }); // 创建标注
@@ -1015,14 +1069,7 @@ function worning_switchs_draw(node) {
 }
 
 function close_switchs_draw(node) {  // 把在线的，合闸的点改为特定的图标
-	
-	/*var pt = new BMap.Point(node.longitude, node.latitude);
-	var myIcon = new BMap.Icon(close_switch, new BMap.Size(20, 20));
-	var marker2 = new BMap.Marker(pt, {
-		icon : myIcon
-	}); // 创建标注
-	map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
-*/	
+
 	switchs_draw(node, close_switch, click_high_voltage_switch);
 }
 

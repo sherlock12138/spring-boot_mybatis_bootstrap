@@ -1,5 +1,6 @@
 package com.gdut.dongjun.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import com.gdut.dongjun.domain.po.HighVoltageVoltage;
 import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.domain.po.LowVoltageVoltage;
 import com.gdut.dongjun.domain.po.User;
+import com.gdut.dongjun.domain.vo.ActiveHighSwitch;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
@@ -90,7 +92,7 @@ public class CommandController {
 
 		if (controlCode != null && u != null && u.getControlCode() != null
 				&& controlCode.equals(u.getControlCode())) {
-
+			
 			return true;
 		} else {
 
@@ -443,5 +445,26 @@ public class CommandController {
 
 		return CtxStore.getStatusbyId(id);
 	}
+	
+	@RequestMapping("/get_active_switch_status")
+	@ResponseBody
+	public Object getActiveSwitchStatus() {
+		List<SwitchGPRS> switchs = CtxStore.getInstance();
+		List<ActiveHighSwitch> list = new ArrayList<>();
+		for(SwitchGPRS s : switchs) {
+			ActiveHighSwitch as = new ActiveHighSwitch();
+			as.setId(s.getId());
+			as.setOpen(s.isOpen());
+			as.setStatus(CtxStore.getStatusbyId(s.getId()) == null ? null : 
+				CtxStore.getStatusbyId(s.getId()).getStatus());
+			list.add(as);
+		}
+		return list;
+	}
 
 }
+
+
+
+
+
