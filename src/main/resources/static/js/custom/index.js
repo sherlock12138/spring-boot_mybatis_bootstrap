@@ -660,27 +660,29 @@ function click_high_voltage_switch() {
  * @return void
  * @throws
  */
-var timer;
+var req1,req2;
 function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
                                   //  所以打算换个写法
 	$("#security_modal").modal('show');
 	$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
 		$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
+		clearTimeout(req1);
 	});
 	$("#secu_confirm_btn").click(function() {
-		var wait = 6;
-		console.log(wait);
-		timer = setInterval(function() {
-			if (wait === 0) {
+		var password = $("#controlCode").val();
+		if(!password) {
+			alert('密码不能为空');
+			return -1;
+		} else {
 
-				// ajax
+			req1 = setTimeout(function() {
 				$.ajax({
 					type : "post",
 					url : "security_confirm",
 					async : false,
 					data : {
-						"controlCode" : $("#controlCode").val()
+						"controlCode" : password
 					},
 					success : function(data) {
 						if (data) {
@@ -695,16 +697,51 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 						}
 					}
 				});
-				clearInterval(timer);
-			} else {
-				wait--
-				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
-			}
-		}, 1000);
+			}, 5000);
+			var time = 5;
+			$('#notice_msg').val('将在 ' + time + ' 秒内执行！');
+			req2 = setInterval(function () {
+				time--;
+				$('#notice_msg').val('将在 ' + time + ' 秒内执行！');
+				if(time == 0) clearInterval(req2);
+			}, 999)
+		}
+//		var wait = 6;
+//		console.log(wait);
+//		timer = setInterval(function() {
+//			if (wait === 0) {
+//
+//				// ajax
+//				$.ajax({
+//					type : "post",
+//					url : "security_confirm",
+//					async : false,
+//					data : {
+//						"controlCode" : $("#controlCode").val()
+//					},
+//					success : function(data) {
+//						if (data) {
+//							if (t == 1) {
+//								openSwitch(id, type);
+//							} else {
+//								closeSwitch(id, type);
+//							}
+//						} else {
+//							alert("安全密码错误！");
+//							$('#notice_msg').text('请输入正确的密码');
+//						}
+//					}
+//				});
+//				clearInterval(timer);
+//			} else {
+//				wait--
+//				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
+//			}
+//		}, 1000);
 	});
 
 	$('#cancel_control').click(function() {
-		clearInterval(timer);
+		$("#security_modal").modal('hide');
 	});
 }
 
