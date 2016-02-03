@@ -714,10 +714,10 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 	$("#security_modal").modal('show');
 	var timer;
 	$("#secu_confirm_btn").click(function() {
+
 		var wait = 6;
 		timer = setInterval(function() {
 			if (wait === 0) {
-
 				$.ajax({
 					type : "post",
 					url : "security_confirm",
@@ -1002,7 +1002,7 @@ function hitchEventSpy() {
 									}
 								}
 							} else {
-								deleteAlarmSwitch(nodeList);
+								deleteAlarmSwitch(nodeList[0]);
 								newList.push(data[i].id);
 							}
 						}

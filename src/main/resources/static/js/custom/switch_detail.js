@@ -156,6 +156,7 @@ function openSwitch(id, type) {
 }
 
 function TheBtnStatus(type) {
+
 	/*if(type == 0) {
 		setTimeout(function() {
 			$('#close_switch_btn').attr('disabled', 'true');
