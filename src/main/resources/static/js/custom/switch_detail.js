@@ -35,7 +35,7 @@ function readCurrentVoltage(id, type) {
 
 	t = setTimeout(function() {
 		readCurrentVoltage(id, type);
-	}, 3 * 1000);
+	}, 5 * 1000);
 }
 
 /**
@@ -116,11 +116,11 @@ function controlSwitch(id, type, sign) {
 		success : function(data) {
 
 			if (data == "success") {
-				alert("操作成功！");
+				//alert("操作成功！");
 				$("#security_modal").modal('hide');
-				TheBtnStatus();
+				TheBtnStatus(type);
 			} else {
-				alert("操作失败");
+				//alert("操作失败");
 				$('#notice_msg').text("将在 " + '  ' + " 秒内执行！");
 			}
 		}
@@ -155,16 +155,39 @@ function openSwitch(id, type) {
 	controlSwitch(id, type, 0);
 }
 
-function TheBtnStatus() {
-	setTimeout(function () { // 回调函数
+function TheBtnStatus(type) {
+	/*if(type == 0) {
+		setTimeout(function() {
+			$('#close_switch_btn').attr('disabled', 'true');
+		}, 8 * 1000);
 		$('#close_switch_btn').attr('disabled', 'false');
-		$('#close_switch_btn').attr('click');
-		$('#open_switch_btn').attr('disabled', 'false');
-	}, 15*1000);
-	$('#close_switch_btn').attr('disabled', 'true');
-	$('#open_switch_btn').attr('disabled', 'true');
+	}*/
+	if(type == 0) {
+		for (i = 1; i <= 20; i++) {
+	        window.setTimeout("updateOpen( " + i + ") ", i * 1000);
+	    }
+	} else {
+		for (i = 1; i <= 20; i++) {
+	        window.setTimeout("updateOpen( " + i + ") ", i * 1000);
+	    }
+	}
 }
 
+function updateOpen(num) {
+    var second = 20;
+    if (num == second) {
+       // $("#btnResendFax").val("发送传真");
+        $("#open_switch_btn").attr("disabled", false);
+        $("#close_switch_btn").attr("disabled", false);
+    }
+    else {
+
+       // $("#open_switch_btn").val("开闸(" + printnr + ")");
+        $("#open_switch_btn").attr("disabled", true);
+        //$("#close_switch_btn").val("合闸(" + printnr + ")");
+        $("#close_switch_btn").attr("disabled", true);
+    }
+} 
 /**
  * 
  * @Title: cancelControlSwitch

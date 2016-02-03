@@ -159,7 +159,11 @@ function update(nodes, highlight) {
 		zTree.updateNode(nodes[i]);
 	}
 }
-
+function updateSwitch(node, highlight) {
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	nodes[i].highlight = highlight;
+	zTree.updateNode(nodes);
+}
 /**
  * 
  * @Title: getFontCss
@@ -604,8 +608,8 @@ function click_high_voltage_switch() {
 			+ "<td id='yao_kong_fen_zha'></td>"
 			+ "</tr>"
 			+ "</tbody></table>"
-			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</button>"
-			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</button>"
+			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)' data-loading-text='分闸中...'>分闸</button>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -980,7 +984,7 @@ function hitchEventSpy() {
 			console.log(data);
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = data.length - 1; i >= 0; --i) {
-				if(isDistinct(data[i].id)) {	//防止重复数据
+				if(isDistinct(data[i].id, distinctList)) {	//防止重复数据
 					distinctList.push(data[i].id);	
 					
 					if(data[i].id != null) {
@@ -990,10 +994,12 @@ function hitchEventSpy() {
 							if(data[i].status == "00") {
 								switchs_draw(nodeList[0], open_switch, click_high_voltage_switch);	//开闸描绘
 								if(data[i].open == true) {
-									alarmList.push(nodeList[0].id);	//status与open同时符合才报警
-									alert("警告，已经跳闸！");
-									update(nodeList, 2);  // 树节点变红
-									worning_switchs_draw(nodeList[0]); //声音的 图标的
+									if(isDistinct(nodeList[0].id, alarmList)) {
+										alarmList.push(nodeList[0].id);	//status与open同时符合才报警
+										//alert("警告，已经跳闸！");
+										update(nodeList, 2);  // 树节点变红
+										worning_switchs_draw(nodeList[0]); //声音的 图标的
+									}
 								}
 							} else {
 								deleteAlarmSwitch(nodeList);
@@ -1030,24 +1036,34 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
-
-}
+	console.log('alarm' + alarmList);
+}	
 
 function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
-		if(node.id == alarmList[i]) {
-			update(node, 0);
-			for(var j = i; j < length - 1; j++) {
-				alarmList[j] = alarmList[j + 1];
+		if(node[0].id == alarmList[i]) {
+			if(i == 0 || i == length - 1) {
+				alarmList[i] = [];
+			} else {
+				for(var j = i; j < length - 1; j++) {
+					alarmList[j] = alarmList[j + 1];
+				}
+				alarmList[j] = [];
 			}
+			
 			alert("设备已响应：现为合闸状态");
+			update(node, 0);
+			$('audio').remove();
+/*
+		  map.removeOverlay(new BMap.Marker(new BMap.Point(node[0].longitude, node[0].latitude), {
+			   icon : new BMap.Icon(worning_switch, new BMap.Size(80, 80))}));*/
 		}
 	}
 }
 
-function isDistinct(id) {
-	for(var i = distinctList.length; i >= 0; --i) {
+function isDistinct(id, list) {
+	for(var i = list.length - 1; i >= 0; --i) {
 		if(distinctList[i] == id) {
 			return false;
 		}
