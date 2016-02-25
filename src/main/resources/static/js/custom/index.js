@@ -1002,7 +1002,7 @@ function hitchEventSpy() {
 									}
 								}
 							} else {
-								deleteAlarmSwitch(nodeList[0]);
+								deleteAlarmSwitch(nodeList);
 								newList.push(data[i].id);
 							}
 						}
