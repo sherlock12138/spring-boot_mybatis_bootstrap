@@ -84,13 +84,6 @@ public class HexString_BytesUtil {
 		return sb.toString();
 	}
 	
-	@Test
-	public void t(){
-		
-		hexStringToByteString("0f");
-	}
-	
-
 	/**
 	 * 
 	 * @Title: charToByte

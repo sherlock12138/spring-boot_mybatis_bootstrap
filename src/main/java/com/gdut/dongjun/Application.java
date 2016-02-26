@@ -263,6 +263,18 @@ public class Application extends SpringBootServletInitializer {
 		return realm;
 	}
 
+/*	@Bean
+	public ServletListenerRegistrationBean<HistoryDataListener> listenerRegistration() {
+		
+		ServletListenerRegistrationBean<HistoryDataListener> listenerRegistration = 
+				new ServletListenerRegistrationBean<>();
+		
+		listenerRegistration.setListener(new HistoryDataListener());
+		listenerRegistration.setOrder(9);
+		
+		return listenerRegistration;
+	}*/
+
 	public static void main(String[] args) throws Exception {
 
 		SpringApplication.run(Application.class, args);

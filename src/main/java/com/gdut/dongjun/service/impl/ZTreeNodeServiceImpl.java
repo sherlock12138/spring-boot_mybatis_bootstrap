@@ -3,7 +3,6 @@ package com.gdut.dongjun.service.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -181,7 +180,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 		return nodes;
 	}
 
-	@Test
+	/*@Test
 	public void t() {
 
 		List<ZTreeNode> nodes = new LinkedList<ZTreeNode>();
@@ -197,5 +196,5 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 			nodes.add(n1);
 		}
 	}
-
+*/
 }

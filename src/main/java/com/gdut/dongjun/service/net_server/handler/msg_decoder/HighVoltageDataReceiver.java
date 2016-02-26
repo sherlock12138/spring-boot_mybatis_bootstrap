@@ -16,6 +16,7 @@
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
 import io.netty.channel.ChannelHandler.Sharable;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -23,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -310,7 +310,6 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	 * @Title: saveVoltage @Description: TODO @param @param dStrings @return
 	 *         void @throws
 	 */
-	@Test
 	private void saveVoltage(String switchId, String[] dStrings) {
 
 		logger.info("saving voltage...");
