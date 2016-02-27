@@ -168,13 +168,21 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 							default:
 								break;
 							}
-							n2.setChildren(switchNodes);
+							if(switchNodes != null && switchNodes.size() != 0) {
+								n2.setChildren(switchNodes);
+							}
 						}
-						lineNodes.add(n2);
+						if(n2 != null && n2.getChildren() != null && !n2.getChildren().isEmpty()) {
+							lineNodes.add(n2);
+						}
 					}
-					n1.setChildren(lineNodes);
+					if(lineNodes != null && !lineNodes.isEmpty()) {
+						n1.setChildren(lineNodes);
+					}
 				}
-				nodes.add(n1);
+				if(n1 != null && n1.getChildren() != null && !n1.getChildren().isEmpty()) {
+					nodes.add(n1);
+				}
 			}
 		}
 		return nodes;

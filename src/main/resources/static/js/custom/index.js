@@ -14,7 +14,6 @@ $(document).ready(function() {
 
 		$.fn.zTree.getZTreeObj("treeDemo").destroy();
 		$.fn.zTree.init($("#treeDemo"), set_tree(this.value));
-
 	})
 
 	// 轮询报警
