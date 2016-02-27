@@ -2,27 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.gdut.dongjun.domain.dao.HistoryDataTransfer" >
   
-  <insert id="TransferHighVoltageVoltage" parameterType="java.lang.Integer">
+  <insert id="TransferHighVoltageVoltageByDay" parameterType="java.lang.Integer">
   	insert into history_high_voltage_voltage
 	select id, time, phase, value, switch_id
 	from high_voltage_voltage where
 	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} DAY)
   </insert>
   
-  <delete id="deleteOlderHighVoltageVoltage" parameterType="java.lang.Integer">
+  <delete id="deleteOlderHighVoltageVoltageByDay" parameterType="java.lang.Integer">
   	delete from high_voltage_voltage where 
   	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} DAY)
   </delete>
   
-  <insert id="TransferHighVoltageCurrent" parameterType="java.lang.Integer">
+  <insert id="TransferHighVoltageVoltageByHour" parameterType="java.lang.Integer">
+  	insert into history_high_voltage_voltage
+	select id, time, phase, value, switch_id
+	from high_voltage_voltage where
+	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} HOUR)
+  </insert>
+  
+  <delete id="deleteOlderHighVoltageVoltageByHour" parameterType="java.lang.Integer">
+  	delete from high_voltage_voltage where 
+  	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} HOUR)
+  </delete>
+  
+  <insert id="TransferHighVoltageCurrentByDay" parameterType="java.lang.Integer">
   	insert into history_high_voltage_current
 	select id, time, phase, value, switch_id
 	from high_voltage_current where
 	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} DAY)
   </insert>
   
-  <delete id="deleteOlderHighVoltageCurrent" parameterType="java.lang.Integer">
+  <delete id="deleteOlderHighVoltageCurrentByDay" parameterType="java.lang.Integer">
   	delete from high_voltage_current where 
   	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} DAY)
+  </delete>
+  
+  <insert id="TransferHighVoltageCurrentByHour" parameterType="java.lang.Integer">
+  	insert into history_high_voltage_current
+	select id, time, phase, value, switch_id
+	from high_voltage_current where
+	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} HOUR)
+  </insert>
+  
+  <delete id="deleteOlderHighVoltageCurrentByHour" parameterType="java.lang.Integer">
+  	delete from high_voltage_current where 
+  	time &lt;= DATE_SUB(CURDATE(), INTERVAL #{interval} HOUR)
   </delete>
 </mapper>

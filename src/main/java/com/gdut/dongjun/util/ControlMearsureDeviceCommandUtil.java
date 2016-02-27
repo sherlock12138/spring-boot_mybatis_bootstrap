@@ -1,11 +1,5 @@
 package com.gdut.dongjun.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import org.junit.Test;
-
-import com.gdut.dongjun.service.impl.enums.ControlMearsureFunctionCode;
 
 /**
  * @author Xiaomian_Link <972192420@qq.com>

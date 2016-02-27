@@ -1,6 +1,5 @@
 package com.gdut.dongjun.util;
 
-import org.junit.Test;
 
 /**
  * @Title: HexString_BytesUtil.java

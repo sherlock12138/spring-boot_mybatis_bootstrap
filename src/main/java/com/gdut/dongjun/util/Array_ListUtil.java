@@ -1,11 +1,6 @@
 package com.gdut.dongjun.util;
 
-import java.util.LinkedList;
 import java.util.List;
-
-import org.junit.Test;
-
-import com.gdut.dongjun.domain.po.Line;
 
 /**
  * @Title: Array_ListUtil.java

@@ -152,7 +152,7 @@ public class UserController {
 					logger.info("开始进行历史数据的转移");
 					transfer.transferData();
 					try {
-						sleep(1000 * 60 * 60 * 12);	//半天
+						sleep(1000 * 60 * 60 * 6);	//6小时
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

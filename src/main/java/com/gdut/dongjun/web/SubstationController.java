@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.domain.po.Substation;
 import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.CompanyService;

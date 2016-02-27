@@ -1,14 +1,33 @@
 $(document).ready(function() {
-
-	// 初始化ZTree
-	$.fn.zTree.init($("#treeDemo"), set_tree(0));// 0表示默认显示低压的数据
-
+	
+	$.ajax({
+	    type: 'POST',
+	    url: 'get_location_switch',
+	    async: false,
+	    dataType: 'json',
+	    
+	    success: function (data) {
+	    	
+		      if (data != "") {
+		    	  $.fn.zTree.init($("#treeDemo"), set_tree(data.type));
+		    	  document.getElementById("zTree_node_type").
+		    	  	options[data.type].selected = true;
+		    	  location_switch_id = data.switchId;
+		      } else {
+		    	  $.fn.zTree.init($("#treeDemo"), set_tree(1));
+		    	  document.getElementById("zTree_node_type").
+		    	  	options[1].selected = true;
+		      }
+	    }
+	    
+	});
+	
 	// 添加搜索栏监听
 	$("#searchNode").click(function() {
 
 		zTreeSearch($("#search_node_key").val());
 	});
-
+	
 	// 切换ZTree显示的开关种类
 	$("#zTree_node_type").change(function() {
 
@@ -26,6 +45,7 @@ $(document).ready(function() {
 
 });
 
+var location_switch_id;
 /**
  * 
  * @Title: 设置ZTree属性
@@ -319,24 +339,21 @@ var close_switch = '../../ico/voltage-close.jpg';
  */
 function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 
-	// var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-	// nodes = treeObj.getNodesByFilter(switch_filter); // 用选择过滤器查找节点集合
-	var low_voltage_nodes = getAllLowVoltageSwitch();
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	var nodeList = zTree.getNodesByParamFuzzy("id", location_switch_id);
 
-	var point;
-	var longitude = localStorage.getItem('longitude');
-	var latitude = localStorage.getItem('latitude');
+	if (nodeList != null && nodeList.length != 0 && nodeList[0].longitude != null
+			&& nodeList[0].latitude != null) {
 
-	if (longitude != null && latitude != null) {
-		// 从localStorage中取值定位
-		point = new BMap.Point(longitude, latitude);
+		point = new BMap.Point(nodeList[0].longitude, nodeList[0].latitude);
+		console.log(nodeList[0].longitude);
+		console.log(nodeList[0].latitude);
 	} else {
-		// 否则用原始数据第一个定位
-		point = new BMap.Point(low_voltage_nodes[0].longitude,
-				low_voltage_nodes[0].latitude); // 创建点坐标
+		//没有定位开关则定位到上思县
+		point = new BMap.Point(108, 22); // 创建点坐标
 	}
 
-	map.centerAndZoom(point, 13); // 初始化地图，设置中心点坐标和地图级别
+	map.centerAndZoom(point, 16); // 初始化地图，设置中心点坐标和地图级别
 	map.enableScrollWheelZoom();// 启滑轮缩放
 
 	// *************************************************************
@@ -353,7 +370,7 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	开闸就绿图标
 	 */
 
-	forDrawPoint(low_voltage_nodes, voltage_switch_icon,// 描绘低压开关
+	forDrawPoint(getAllLowVoltageSwitch(), voltage_switch_icon,// 描绘低压开关
 	click_low_voltage_switch);
 
 	forDrawPoint(getAllHighVoltageSwitch(), voltage_switch_icon,// 描绘高压开关

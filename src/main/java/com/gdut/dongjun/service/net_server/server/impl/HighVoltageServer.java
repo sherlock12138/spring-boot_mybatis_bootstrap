@@ -2,11 +2,9 @@ package com.gdut.dongjun.service.net_server.server.impl;
 
 import java.util.List;
 
-
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +16,7 @@ import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.service.net_server.initializer.ServerInitializer;
 import com.gdut.dongjun.service.net_server.server.NetServer;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
+import com.sun.xml.internal.bind.v2.TODO;
 
 
 /**
