@@ -13,6 +13,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.directwebremoting.servlet.DwrServlet;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -20,6 +21,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
@@ -263,6 +265,17 @@ public class Application extends SpringBootServletInitializer {
 		return realm;
 	}
 
+	@Bean
+	public ServletRegistrationBean servletRegistrationBean() {
+		ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
+		servletRegistrationBean.setServlet(new DwrServlet());
+		servletRegistrationBean.setName("dwr-invoker");
+		servletRegistrationBean.addUrlMappings("/dwr/*");
+		servletRegistrationBean.addInitParameter("activeReverseAjaxEnabled", "true");
+		servletRegistrationBean.addInitParameter("debug", "true");
+		//servletRegistrationBean.addInitParameter("config-push", "/dwr.xml");
+		return servletRegistrationBean;
+	}
 /*	@Bean
 	public ServletListenerRegistrationBean<HistoryDataListener> listenerRegistration() {
 		

@@ -216,8 +216,11 @@
 			<version>1.2.1</version>
 		</dependency>
 
-
-
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>3.0.1-RELEASE</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.rxtx</groupId>

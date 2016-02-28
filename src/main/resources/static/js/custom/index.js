@@ -983,13 +983,18 @@ var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
 var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
 var outLine_switch = '../../ico/voltage-outLine.jpg';
 
-var oldList = [];
+/*var oldList = [];
 var newList = [];
 var alarmList = [];
-var distinctList = [];	//
+var distinctList = [];*/	//
 function hitchEventSpy() {
 	
-	$.ajax({
+	messagePush.hitchEventSpy();
+	
+	/**
+	 * 以下部分采用推送，可删去。。。
+	 */
+	/*$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
 		url: 'get_active_switch_status',
@@ -1052,9 +1057,9 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
-	console.log('alarm' + alarmList);
+	console.log('alarm' + alarmList);*/
 }	
-
+/*
 function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
@@ -1071,9 +1076,9 @@ function deleteAlarmSwitch(node) {
 			alert("设备已响应：现为合闸状态");
 			update(node, 0);
 			$('audio').remove();
-/*
+
 		  map.removeOverlay(new BMap.Marker(new BMap.Point(node[0].longitude, node[0].latitude), {
-			   icon : new BMap.Icon(worning_switch, new BMap.Size(80, 80))}));*/
+			   icon : new BMap.Icon(worning_switch, new BMap.Size(80, 80))}));
 		}
 	}
 }
@@ -1085,7 +1090,7 @@ function isDistinct(id, list) {
 		}
 	}
 	return true;
-}
+}*/
 /**
  * 
  * @Title: green_or_red

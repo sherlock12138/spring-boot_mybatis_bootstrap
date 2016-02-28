@@ -15,13 +15,8 @@
 
 		<javaClientGenerator targetPackage="com.gdut.dongjun.domain.dao"
 			targetProject="E:\generator" type="XMLMAPPER" />
-			   
-		<table schema="root" tableName="location_switch"
-			domainObjectName="LocationSwitch" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false" />
 
-		<!-- <table schema="root" tableName="low_voltage_switch"
+		<table schema="root" tableName="low_voltage_switch"
 			domainObjectName="LowVoltageSwitch" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false" />
@@ -34,7 +29,7 @@
 		<table schema="root" tableName="control_mearsure_switch"
 			domainObjectName="ControlMearsureSwitch" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false" /> -->
+			enableSelectByExample="false" selectByExampleQueryId="false" />
 
 		<!-- <table schema="root" tableName="control_mearsure_current" domainObjectName="ControlMearsureCurrent" 
 			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 

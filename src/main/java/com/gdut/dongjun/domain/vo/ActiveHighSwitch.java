@@ -1,5 +1,12 @@
 package com.gdut.dongjun.domain.vo;
 
+/**
+ *@Author link xiaoMian <972192420@qq.com>
+ *@ClassName ActiveHighSwitch.java
+ *@Time 2016年2月28日下午8:16:34
+ *@Description TODO
+ *@Version 1.0 Topview
+ */
 public class ActiveHighSwitch {
 	
 	private String id;
