@@ -119,6 +119,7 @@ th, td {
 						<td>进入地图</td>
 						<td>修改</td>
 						<td>删除</td>
+						<td>设为定位中心</td>
 					</thead>
 					<tr th:each="switch:${switches}" th:if="*{switch!=null}">
 						<td th:text="${switch.deviceNumber}"></td>
@@ -136,6 +137,9 @@ th, td {
 						<td><a href="#del_switch_modal"
 							class="del_switch_btn btn btn-danger" data-toggle="modal"
 							data-backdrop="static">删除&raquo; </a></td>
+						<td><a href="#location_switch_modal" role="button"
+							class="location_switch_btn btn btn-primary" data-toggle="modal">
+							设为定位中心</a></td>
 					</tr>
 				</table>
 			</div>

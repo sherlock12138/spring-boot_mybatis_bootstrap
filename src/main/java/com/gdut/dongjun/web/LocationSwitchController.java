@@ -36,14 +36,13 @@ public class LocationSwitchController {
 	@ResponseBody
 	public Object editLocation(HttpSession session, String switchId, int type) {
 		
-		LocationSwitch locationSwitch = getLocationSwitch(session);
-		
+		LocationSwitch locationSwitch = (LocationSwitch) getLocationSwitch(session);
 		
 		if(locationSwitch == null) {
 			
 			locationSwitch = new LocationSwitch();
 			locationSwitch.setId(UUIDUtil.getUUID());
-			locationSwitch.setUserId(((User) session.getAttribute("currentUser")).getId());
+			locationSwitch.setUserId(getUserId(session));
 			locationSwitch.setSwitchId(switchId);
 			locationSwitch.setType(type);
 			locateService.insert(locationSwitch);
@@ -60,7 +59,7 @@ public class LocationSwitchController {
 	@ResponseBody
 	public Object deleteLocation(HttpSession session) {
 		
-		LocationSwitch locationSwitch = getLocationSwitch(session);
+		LocationSwitch locationSwitch = (LocationSwitch) getLocationSwitch(session);
 
 		if(locationSwitch != null) {
 			locateService.deleteByPrimaryKey(locationSwitch.getId());
@@ -76,16 +75,10 @@ public class LocationSwitchController {
 		return getLocationSwitch(session);	
 	}
 	
-	private LocationSwitch getLocationSwitch(HttpSession session) {
+	private Object getLocationSwitch(HttpSession session) {
 		
-		User user = (User) session.getAttribute("currentUser");
-		String id = null;
-		if(user != null) {
-			id = user.getId();
-		}
-		
-		List<LocationSwitch> list = 
-				locateService.selectByParameters(MyBatisMapUtil.warp("user_id", id));
+		List<LocationSwitch> list = locateService.
+				selectByParameters(MyBatisMapUtil.warp("user_id", getUserId(session)));
 		
 		if(list != null && list.size() != 0) {
 
@@ -94,5 +87,23 @@ public class LocationSwitchController {
 			
 			return null;
 		}
+	}
+	
+	private LocationSwitch defaultLocation() {
+		
+		LocationSwitch locationSwitch = new LocationSwitch();
+		locationSwitch.setId(null);
+		
+		return locationSwitch;
+	}
+	
+	private String getUserId(HttpSession session) {
+		
+		User user = (User) session.getAttribute("currentUser");
+		//String id = null;
+		if(user != null) {
+			return user.getId();
+		}
+		return null;
 	}
 }

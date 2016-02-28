@@ -26,6 +26,7 @@ public class ZTreeNode {
 	private String latitude;// 纬度
 	private int type;//类型标志
 	private String address;
+	private String showName;
 
 	public String getId() {
 		return id;
@@ -99,4 +100,11 @@ public class ZTreeNode {
 		this.address = address;
 	}
 
+	public void setShowName(String showName) {
+		this.showName = showName;
+	}
+	
+	public String getShowName() {
+		return showName;
+	}
 }

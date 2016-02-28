@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$(".edit_switch_btn").click(editSwitch);
 	$(".del_switch_btn").click(delSwitch);
 	$(".enter_map").click(enterMap);
-	
+	$(".location_switch_btn").click(locateSwitch);
 
 	/**
 	 * 编辑提交
@@ -106,29 +106,37 @@ function reloadDataTable(lineId){
 	        { "data": "inlineIndex" },
 	        { "data": null},
             { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
-            { "data": null }// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+            { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+            { "data": null}
         ],
         
         // 为下面的列设置默认值
         "columnDefs": [ {
-            "targets": -3,
+            "targets": -4,
             "data": null,
             "defaultContent": '<button class="btn btn enter_map">进入地图 &raquo;</button>'
         },{
-            "targets": -2,
+            "targets": -3,
             "data": null,
             "defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
         },
         {
-            "targets": -1,
+            "targets": -2,
             "data": null,
             "defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
-        }],
+        },
+        {
+        	"targets": -1,
+            "data": null,
+            "defaultContent": '<a href="#location_switch_modal" role="button" class="location_switch_btn btn btn-primary" data-toggle="modal">设为定位中心</a>'
+        }
+        ],
         "fnInitComplete": function(oSettings, json) { 
 
         	$(".edit_switch_btn").click(editSwitch);
         	$(".del_switch_btn").click(delSwitch);
         	$(".enter_map").click(enterMap);
+        	$(".location_switch_btn").click(locateSwitch);
           }
     } );
 }
@@ -232,4 +240,25 @@ function enterMap() {
 	localStorage.setItem('longitude', longitude);
 	localStorage.setItem('latitude', latitude);
 	location.href = "index";
+}
+
+function locateSwitch() {
+	
+	var column = $(this).parent("td").prevAll();
+	$.ajax({
+		type : "get",
+		url : "edit_location",
+		async : false,
+		data : {
+			"switchId" : column[9].innerHTML,
+			"type" : 1
+		},
+		success : function(data) {
+
+			if(data != null){
+				
+				alert("设置成功");
+			}
+		}
+	})
 }

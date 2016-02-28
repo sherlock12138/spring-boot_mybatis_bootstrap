@@ -7,19 +7,26 @@ $(document).ready(function() {
 	    dataType: 'json',
 	    
 	    success: function (data) {
-	    	
-		      if (data != "") {
+	    
+		      if (data != null) {
+		    	  
 		    	  $.fn.zTree.init($("#treeDemo"), set_tree(data.type));
 		    	  document.getElementById("zTree_node_type").
 		    	  	options[data.type].selected = true;
 		    	  location_switch_id = data.switchId;
 		      } else {
+		    	 
 		    	  $.fn.zTree.init($("#treeDemo"), set_tree(1));
 		    	  document.getElementById("zTree_node_type").
 		    	  	options[1].selected = true;
 		      }
+	    },
+	    error: function() {
+
+	    	$.fn.zTree.init($("#treeDemo"), set_tree(1));
+	    	  document.getElementById("zTree_node_type").
+	    	  	options[1].selected = true;
 	    }
-	    
 	});
 	
 	// 添加搜索栏监听
@@ -340,17 +347,19 @@ var close_switch = '../../ico/voltage-close.jpg';
 function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-	var nodeList = zTree.getNodesByParamFuzzy("id", location_switch_id);
-
+	var nodeList = null;
+	
+	if(location_switch_id != null) {
+		nodeList = zTree.getNodesByParamFuzzy("id", location_switch_id);
+	}
+	
 	if (nodeList != null && nodeList.length != 0 && nodeList[0].longitude != null
 			&& nodeList[0].latitude != null) {
-
+		
 		point = new BMap.Point(nodeList[0].longitude, nodeList[0].latitude);
-		console.log(nodeList[0].longitude);
-		console.log(nodeList[0].latitude);
 	} else {
 		//没有定位开关则定位到上思县
-		point = new BMap.Point(108, 22); // 创建点坐标
+		point = new BMap.Point(107.979, 22.156); // 创建点坐标
 	}
 
 	map.centerAndZoom(point, 16); // 初始化地图，设置中心点坐标和地图级别

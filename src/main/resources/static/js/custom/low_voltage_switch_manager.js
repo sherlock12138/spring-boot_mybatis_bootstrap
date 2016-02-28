@@ -233,3 +233,5 @@ function enterMap() {
 	localStorage.setItem('latitude', latitude);
 	location.href = "index";
 }
+
+
