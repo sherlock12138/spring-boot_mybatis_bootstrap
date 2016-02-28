@@ -11,6 +11,7 @@ import org.directwebremoting.ScriptSession;
 import com.gdut.dongjun.domain.vo.ActiveHighSwitch;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
+import com.gdut.dongjun.util.JsonUtil;
 
 public class MessagePush {
 	
@@ -33,9 +34,9 @@ public class MessagePush {
 			});
 		}
 	}*/
-	private static List<ActiveHighSwitch> oldList = null;
-	private static List<ActiveHighSwitch> newList = null;
-	private static List<ActiveHighSwitch> diff = null;
+	private static List<ActiveHighSwitch> oldList = new ArrayList<>();
+	private static List<ActiveHighSwitch> newList = new ArrayList<>();
+	private static List<ActiveHighSwitch> diff = new ArrayList<>();
 	
 	private List<ActiveHighSwitch> getFirstActiveHighSwitch() {
 		
@@ -53,11 +54,15 @@ public class MessagePush {
 		ActiveHighSwitch as = new ActiveHighSwitch();
 		as.setId(s.getId());
 		as.setOpen(s.isOpen());
-		as.setStatus(CtxStore.getStatusbyId(s.getId()) == null ? "null" : 
-			CtxStore.getStatusbyId(s.getId()).getStatus());
+		as.setStatus(getStatus(s.getId()));
 		return as;
 	}
 	
+	private String getStatus(String id) {
+		
+		return CtxStore.getStatusbyId(id) == null ? "null" : 
+			CtxStore.getStatusbyId(id).getStatus();
+	}
 	/**
 	 * @description TODO
 	 * 
@@ -69,7 +74,7 @@ public class MessagePush {
 		 * 3 == status从00到01
 		 * 4 == status从01到00
 		 */
-		diff = null;
+		diff.clear();
 		//List<ActiveHighSwitch> result = new ArrayList<>();
 		List<SwitchGPRS> switchs = CtxStore.getInstance();
 		ActiveHighSwitch as = null;
@@ -77,11 +82,11 @@ public class MessagePush {
 		
 		for(SwitchGPRS s : switchs) {
 			int i;
-			for(i = length; i >= 0; --i) {
+			for(i = length - 1; i >= 0; --i) {
 				as = oldList.get(i);
-				if(as.getId() == s.getId()) {
+				if(s.getId() != null && as.getId() == s.getId()) {
 
-					if(!as.getStatus().equals(CtxStore.getStatusbyId(s.getId()).getStatus()) 
+					if(!as.getStatus().equals(getStatus(s.getId())) 
 							|| as.isOpen() != s.isOpen()) {
 						
 						as = getActiveHighSwitch(s);
@@ -91,44 +96,38 @@ public class MessagePush {
 					break;
 				}
 			}
-			if(i < 0) {
+			if(i < 0 && s.getId() != null) {
+				as = getActiveHighSwitch(s);
+				diff.add(as);
 				newList.add(getActiveHighSwitch(s));
 			}
 		}
 		oldList = newList;
 	}
 	
-	private boolean isPush() throws InterruptedException {
-		Thread.sleep(6000);
-		if(oldList == null) {
-			oldList = getFirstActiveHighSwitch();
+	/*private boolean isPush() throws InterruptedException {
+		
+		diffMessage();
+		if(diff != null) {
 			return true;
 		} else {
-			diffMessage();
-			if(diff != null) {
-				return true;
-			} else {
-				return false;
-			}
+			return false;
 		}
-	}
+	}*/
 	
 	public void hitchEventSpy() throws InterruptedException {
 		
 		while(true) {
 			
-			if(isPush()) {
+			Thread.sleep(6000);
+			/*if(isPush()) {*/
 				Browser.withAllSessions(new Runnable() {
 					private ScriptBuffer script = new ScriptBuffer();
 					@Override
 					public void run() {
-						
-						if(oldList == null) {
-							script.appendCall("showHitchEvent", oldList);
-						} else {
-							script.appendCall("showHitchEvent", diff);
-						}
-						
+						diffMessage();
+						script.appendCall("showHitchEvent", JsonUtil.toJsonString(getFirstActiveHighSwitch()));
+	
 						Collection<ScriptSession> sessions = Browser
 								.getTargetSessions();
 						for (ScriptSession scriptSession : sessions) {
@@ -136,7 +135,7 @@ public class MessagePush {
 						}
 					}
 				});
-			}
+			/*}*/
 		}
 	}
 	
