@@ -545,10 +545,18 @@ function switchs_draw(node, switch_icon, click_switch) {
 	// ****************************************************************
 	map.addOverlay(marker2); // 将标注添加到地图中
 
+	var label;
+	if(node.showName == null || node.showName == "") {
+		label = new BMap.Label(node.name, {
+			offset : new BMap.Size(20, -18)
+		});
+	} else {
+		label = new BMap.Label(node.showName, {
+			offset : new BMap.Size(20, -18)
+		});
+	}
 	// 添加文字提示
-	var label = new BMap.Label(node.name, {
-		offset : new BMap.Size(20, -18)
-	});
+	 
 	marker2.setLabel(label);
 
 	// **************************************************************************

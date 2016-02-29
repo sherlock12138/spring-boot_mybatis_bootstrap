@@ -23,6 +23,7 @@ $(document).ready(function() {
 			data : {
 				"id" : $("#editId").val(),
 				"name" : $("#editName").val(),
+				"showName" : $("#editShowName").val(),
 				"lineId" : $("#editLineId").val(),
 				"address" : $("#editAddress").val(),
 				"longitude" : $("#editLongitude").val(),
@@ -50,6 +51,7 @@ $(document).ready(function() {
 			data : {
 				"id" : $("#inputId").val(),
 				"name" : $("#inputName").val(),
+				"showName" : $("#inputShowName").val(),
 				"lineId" : $("#inputLineId").val(),
 				"address" : $("#inputAddress").val(),
 				"longitude" : $("#inputLongitude").val(),
@@ -93,6 +95,7 @@ function reloadDataTable(lineId){
         "columns": [
             { "data": "deviceNumber" },        
             { "data": "name" },
+            { "data": "showName"},
             { 	"data": "id",
             	"sClass": "dpass"
             },
@@ -157,7 +160,7 @@ function addSwitch() {
 	if($(".lines").val() == null){
 		
 		$("#inputLineId").val(
-				$(".edit_switch_btn").parent("td").prevAll()[6].innerHTML);
+				$(".edit_switch_btn").parent("td").prevAll()[7].innerHTML);
 	}else{
 		$("#inputLineId").val($(".lines").val());
 	}
@@ -166,6 +169,7 @@ function addSwitch() {
 	$("#inputLatitude").val("");
 	$("#inputDeviceNumber").val("");
 	$("#inputName").val("");
+	$("#inputShowName").val("");
 	$("#inputSim").val("");
 	$("#inlineIndex").val("");
 }
@@ -181,8 +185,9 @@ function addSwitch() {
 function editSwitch() {
 
 	var column = $(this).parent("td").prevAll();
-	$("#editDeviceNumber").val(column[9].innerHTML);
-	$("#editName").val(column[8].innerHTML);
+	$("#editDeviceNumber").val(column[10].innerHTML);
+	$("#editName").val(column[9].innerHTML);
+	$("#editShowName").val(column[8].innerHTML);
 	$("#editId").val(column[7].innerHTML);
 	$("#editLineId").val(column[6].innerHTML);
 	$("#editAddress").val(column[5].innerHTML);

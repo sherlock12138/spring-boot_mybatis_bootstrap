@@ -108,7 +108,8 @@ th, td {
 					class="table table-bordered table-striped table-hover table-condensed success">
 					<thead>
 						<td>设备号码</td>
-						<td>名称</td>
+						<td>开关名称</td>
+						<td>显示名称</td>
 						<td class="hidden">Id</td>
 						<td class="hidden">线路ID</td>
 						<td>地址</td>
@@ -124,6 +125,7 @@ th, td {
 					<tr th:each="switch:${switches}" th:if="*{switch!=null}">
 						<td th:text="${switch.deviceNumber}"></td>
 						<td th:text="${switch.name}"></td>
+						<td th:text="${switch.showName}"></td>
 						<td class="hide" th:text="${switch.id}"></td>
 						<td class="hide" th:text="${switch.lineId}"></td>
 						<td th:text="${switch.address}"></td>
@@ -204,9 +206,15 @@ th, td {
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputName">名称</label>
+						<label class="control-label" for="inputName">开关名称</label>
 						<div class="controls">
 							<input type="text" id="inputName" name="name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputShowName">显示名称</label>
+						<div class="controls">
+							<input type="text" id="inputShowName" name="name" />
 						</div>
 					</div>
 					<div class="hide control-group">
@@ -282,9 +290,15 @@ th, td {
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="editName">名称</label>
+						<label class="control-label" for="editName">开关名称</label>
 						<div class="controls">
 							<input type="text" id="editName" name="name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="editShowName">显示名称</label>
+						<div class="controls">
+							<input type="text" id="editShowName" name="name" />
 						</div>
 					</div>
 					<div class="hide control-group">
