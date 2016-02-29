@@ -1000,18 +1000,16 @@ var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
 var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
 var outLine_switch = '../../ico/voltage-outLine.jpg';
 
-/*var oldList = [];
+var oldList = [];
 var newList = [];
 var alarmList = [];
-var distinctList = [];*/	//
+var distinctList = [];
 function hitchEventSpy() {
 	
-	messagePush.hitchEventSpy();
+/*	messagePush.hitchEventSpy();
 	
-	/**
-	 * 以下部分采用推送，可删去。。。
-	 */
-	/*$.ajax({
+	*/
+	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
 		url: 'get_active_switch_status',
@@ -1074,9 +1072,9 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
-	console.log('alarm' + alarmList);*/
+	console.log('alarm' + alarmList);
 }	
-/*
+
 function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
@@ -1107,7 +1105,7 @@ function isDistinct(id, list) {
 		}
 	}
 	return true;
-}*/
+}
 /**
  * 
  * @Title: green_or_red
