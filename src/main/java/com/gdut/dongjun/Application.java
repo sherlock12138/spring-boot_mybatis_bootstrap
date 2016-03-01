@@ -265,17 +265,17 @@ public class Application extends SpringBootServletInitializer {
 		return realm;
 	}
 
-	@Bean
+	/*@Bean
 	public ServletRegistrationBean servletRegistrationBean() {
 		ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
-		servletRegistrationBean.setServlet(new DwrServlet());
 		servletRegistrationBean.setName("dwr-invoker");
-		servletRegistrationBean.addUrlMappings("/dwr/*");
 		servletRegistrationBean.addInitParameter("activeReverseAjaxEnabled", "true");
 		servletRegistrationBean.addInitParameter("debug", "true");
-		//servletRegistrationBean.addInitParameter("config-push", "/dwr.xml");
+		servletRegistrationBean.setServlet(new DwrServlet());
+		servletRegistrationBean.addUrlMappings("/dwr/*");
+
 		return servletRegistrationBean;
-	}
+	}*/
 /*	@Bean
 	public ServletListenerRegistrationBean<HistoryDataListener> listenerRegistration() {
 		
