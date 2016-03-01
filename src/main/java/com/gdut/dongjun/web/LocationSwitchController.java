@@ -34,13 +34,14 @@ public class LocationSwitchController {
 	
 	@RequestMapping("/edit_location")
 	@ResponseBody
-	public Object editLocation(HttpSession session, String switchId, int type) {
+	public Object editLocation(HttpSession session, String switchId, int type, int scale) {
 		
 		LocationSwitch locationSwitch = (LocationSwitch) getLocationSwitch(session);
 		
 		if(locationSwitch == null) {
 			
 			locationSwitch = new LocationSwitch();
+			locationSwitch.setScale(scale);
 			locationSwitch.setId(UUIDUtil.getUUID());
 			locationSwitch.setUserId(getUserId(session));
 			locationSwitch.setSwitchId(switchId);
@@ -87,14 +88,6 @@ public class LocationSwitchController {
 			
 			return null;
 		}
-	}
-	
-	private LocationSwitch defaultLocation() {
-		
-		LocationSwitch locationSwitch = new LocationSwitch();
-		locationSwitch.setId(null);
-		
-		return locationSwitch;
 	}
 	
 	private String getUserId(HttpSession session) {
