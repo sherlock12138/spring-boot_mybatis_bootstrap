@@ -577,11 +577,23 @@ function switchs_draw(node, switch_icon, click_switch) {
 var old_icon = "";
 var id;// 被点击的开关的id
 var type;// 被点击的开关的type
+var obj_high; // 用于存储当前信息窗口所对应的对象，然后再调用closeInfoWindow()进行销毁
+var obj_low;
+
+function CloseinfoWin_high() {
+	obj_high.closeInfoWindow();
+}
+function CloseinfoWin_low() {
+	obj_low.closeInfoWindow();
+}
 
 function click_high_voltage_switch() {
-
+	obj_high = this;
 	var content = "<div class='BDM_custom_popup'>" + "<h4>"
 			+ this.name
+			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
+			+ '<span aria-hidden="true">' + '&times;'
+			+ '</span>' + '</button>'
 			+ "</h4>"
 			+ "<table class='table table-bordered table-condensed'>"
 			+ "<tbody>"
@@ -644,7 +656,6 @@ function click_high_voltage_switch() {
 			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
 			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)' data-loading-text='分闸中...'>分闸</button>"
 			+ "</div>"
-
 	// + "<div class='row'>"
 	// + "<div class='span4 text-center'>"
 	// + "<select id='cancel_control_type'>"
@@ -654,17 +665,18 @@ function click_high_voltage_switch() {
 	// + "</select> <a id='cancel_control_switch_btn' class='btn btn-primary'
 	// onclick='cancelControlSwitch()'>确定</a>"
 	// + "</div>" + "</div>" + "</div>";
-
 	var opts = {
 		width : 580, // 信息窗口宽度
 		height : 340, // 信息窗口高度
+		enableCloseOnClick: false,
+		enableMessage: false
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
 
 	var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
 	this.openInfoWindow(infoWindow);
-
+	
 	// 窗口打开读取实时数据,switch_detail.js 中定义
 	// ********************************************************************
 	if (old_icon != "") {
@@ -801,10 +813,13 @@ function click_low_voltage_switch() {
 	// zTree.reAsyncChildNodes(null, "refresh");
 
 	// var p = this.getPosition();
-
+	obj_low = this;
 	var content = "<div class='BDM_custom_popup'>"
 			+ "<h4>"
 			+ this.name
+			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_low()()">'
+			+ '<span aria-hidden="true">' + '&times;'
+			+ '</span>' + '</button>'
 			+ "</h4>"
 			+ "<table class='table table-bordered table-condensed'>"
 			+ "<thead><tr><th>开关控制</th><th>状态</th><th id='status'></th></tr></thead>"
@@ -814,8 +829,8 @@ function click_low_voltage_switch() {
 			+ "<tr><td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td></tr>"
 			+ "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
 			+ "</tbody></table>"
-			+ "<a id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
-			+ "<a id='open_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>分闸</a>"
+			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>分闸</a>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -831,6 +846,8 @@ function click_low_voltage_switch() {
 	var opts = {
 		width : 380, // 信息窗口宽度
 		height : 230, // 信息窗口高度
+		enableCloseOnClick: false,
+		enableMessage: false
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
