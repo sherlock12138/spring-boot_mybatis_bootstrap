@@ -582,15 +582,35 @@ var obj_low;
 
 function CloseinfoWin_high() {
 	obj_high.closeInfoWindow();
+	console.log(obj_high);
 }
 function CloseinfoWin_low() {
 	obj_low.closeInfoWindow();
+}
+function SetCenterPoint_high() {
+	var zoom = map.getZoom();
+	var id = obj_high.id;
+	var type = obj_high.type;
+	$.ajax({
+		method: 'POST',
+		url: '/dongjun/edit_location',
+		data: {
+			id: id,
+			type: type,
+			scale: zoom
+		}
+	}).success(function (data) {
+		if(data) {
+			alert('设置中心点成功!')
+		}
+	})
 }
 
 function click_high_voltage_switch() {
 	obj_high = this;
 	var content = "<div class='BDM_custom_popup'>" + "<h4>"
-			+ this.name
+			+ this.name + '&nbsp;&nbsp;'
+			+ '<button class="btn btn-small btn-info" onclick="SetCenterPoint_high()">设为中心点</button>'
 			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
 			+ '<span aria-hidden="true">' + '&times;'
 			+ '</span>' + '</button>'
