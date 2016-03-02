@@ -50,3 +50,12 @@ function getFormatDate(date, pattern) {
 	}
 	return date.format(pattern);
 }
+
+var myChart = echarts.init(document.getElementById('VoltageChart'));
+var option = $.ajax({
+	url: '/dongjun/test',
+	method: 'get'
+}).success(function (data) {
+	option = data;
+	myChart.setOption(option);
+})
