@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	
+
 	$.ajax({
 	    type: 'POST',
 	    url: 'get_location_switch',
@@ -14,6 +14,7 @@ $(document).ready(function() {
 		    	  document.getElementById("zTree_node_type").
 		    	  	options[data.type].selected = true;
 		    	  location_switch_id = data.switchId;
+			      location_scale = data.scale;
 		      } else {
 		    	 
 		    	  $.fn.zTree.init($("#treeDemo"), set_tree(1));
@@ -53,6 +54,7 @@ $(document).ready(function() {
 });
 
 var location_switch_id;
+var location_scale;
 /**
  * 
  * @Title: 设置ZTree属性
@@ -353,24 +355,28 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 		nodeList = zTree.getNodesByParamFuzzy("id", location_switch_id);
 	}
 	
-	if (nodeList != null && nodeList.length != 0 && nodeList[0].longitude != null
-			&& nodeList[0].latitude != null) {
-		
-		point = new BMap.Point(nodeList[0].longitude, nodeList[0].latitude);
+	if(sessionStorage.longtitude && sessionStorage.latitude) {
+		point = new BMap.Point(sessionStorage.longtitude, sessionStorage.latitude);
 	} else {
-		//没有定位开关则定位到上思县
-		point = new BMap.Point(107.979, 22.156); // 创建点坐标
+		if (nodeList != null && nodeList.length != 0 && nodeList[0].longitude != null
+			&& nodeList[0].latitude != null) {
+
+			point = new BMap.Point(nodeList[0].longitude, nodeList[0].latitude);
+		} else {
+			//没有定位开关则定位到上思县
+			point = new BMap.Point(107.979, 22.156); // 创建点坐标
+		}
 	}
 
-	map.centerAndZoom(point, 16); // 初始化地图，设置中心点坐标和地图级别
+	map.centerAndZoom(point, location_scale == 0 ? 16 : location_scale); // 初始化地图，设置中心点坐标和地图级别
 	map.enableScrollWheelZoom();// 启滑轮缩放
 
 	// *************************************************************
 	// 遍历描绘定点
 	// *************************************************************
 
-	var voltage_switch_icon = "../../ico/voltage-outLine.jpg";// 低压开关的图标
-	//var high_voltage_switch_icon = "../../ico/high_voltage_switch.jpg";// 高压开关的图标
+	var voltage_switch_icon_low = "../../ico/voltage-outLine_low.jpg";// 低压开关的图标
+	var voltage_switch_icon_high = "../../ico/voltage-outLine_high.jpg";// 高压开关的图标
 	var control_measure_switch_icon = "../../ico/control_measure_switch.jpg";// 低压开关的图标
 
 	//var outLine = "../../ico/high_voltage_switch.jpg";
@@ -379,10 +385,10 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	开闸就绿图标
 	 */
 
-	forDrawPoint(getAllLowVoltageSwitch(), voltage_switch_icon,// 描绘低压开关
+	forDrawPoint(getAllLowVoltageSwitch(), voltage_switch_icon_low,// 描绘低压开关(离线)
 	click_low_voltage_switch);
 
-	forDrawPoint(getAllHighVoltageSwitch(), voltage_switch_icon,// 描绘高压开关
+	forDrawPoint(getAllHighVoltageSwitch(), voltage_switch_icon_high,// 描绘高压开关(离线)
 	click_high_voltage_switch);
 
 	forDrawPoint(getAllControlMeasureSwitch(), control_measure_switch_icon,// 描绘管测开关
@@ -595,7 +601,7 @@ function SetCenterPoint_high() {
 		method: 'POST',
 		url: '/dongjun/edit_location',
 		data: {
-			id: id,
+			switchId: id,
 			type: type,
 			scale: zoom
 		}
@@ -608,6 +614,8 @@ function SetCenterPoint_high() {
 
 function click_high_voltage_switch() {
 	obj_high = this;
+	sessionStorage.longtitude = this.point.lng;
+	sessionStorage.latitude = this.point.lat;
 	var content = "<div class='BDM_custom_popup'>" + "<h4>"
 			+ this.name + '&nbsp;&nbsp;'
 			+ '<button class="btn btn-small btn-info" onclick="SetCenterPoint_high()">设为中心点</button>'
