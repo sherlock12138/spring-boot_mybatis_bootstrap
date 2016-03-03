@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+
 /**
  *@Author link xiaoMian <972192420@qq.com>
  *@ClassName ChartDataFormat.java
@@ -28,7 +30,7 @@ public class ChartData {
 	
 	private List<YAxis> yAxis = new ArrayList<>();
 	
-	private List<Object> series = new ArrayList<>();
+	private List<ChaseData> series = new ArrayList<>();
 	
 	public ChartData() {
 		
@@ -52,6 +54,26 @@ public class ChartData {
 		series.add(new ChaseData("B相"));
 		series.add(new ChaseData("C相"));
 	}
+	
+	public ChartData getJsonChart(List<Object> data) {
+		
+		ChartData chartData = new ChartData();
+		List<ChaseData> list = chartData.getSeries();
+		List<Integer> chaseA = list.get(0).getData();
+		List<Integer> chaseB = list.get(1).getData();
+		List<Integer> chaseC = list.get(2).getData();
+		for(Object o : data) {
+			switch(((HighVoltageCurrent) o).getPhase().charAt(0)) {
+			case 'A' : chaseA.add(((HighVoltageCurrent) o).getValue());break;
+			case 'B' : chaseB.add(((HighVoltageCurrent) o).getValue());break;
+			case 'C' : chaseC.add(((HighVoltageCurrent) o).getValue());break;
+			}
+		}
+		for(int i = 0; i < data.size() / 2; i ++) {
+			chartData.getxAxis().get(i).getData().add("");
+		}
+		return chartData;
+	}
 
 	public List<XAxis> getxAxis() {
 		return xAxis;
@@ -69,11 +91,11 @@ public class ChartData {
 		this.yAxis = yAxis;
 	}
 
-	public List<Object> getSeries() {
+	public List<ChaseData> getSeries() {
 		return series;
 	}
 
-	public void setSeries(List<Object> series) {
+	public void setSeries(List<ChaseData> series) {
 		this.series = series;
 	}
 
@@ -117,7 +139,7 @@ public class ChartData {
 		this.legend = legend;
 	}
 	
-	public class XAxis {
+	class XAxis {
 		
 		private String type = "category";
 		
@@ -180,8 +202,8 @@ public class ChartData {
 		}
 		
 		public ChaseData(String name) {
-			this.name = name;
 			areaStyle.put("normal", new HashMap<>());
+			this.name = name;
 		}
 
 		public String getName() {

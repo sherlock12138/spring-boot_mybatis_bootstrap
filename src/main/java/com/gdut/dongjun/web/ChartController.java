@@ -97,11 +97,18 @@ public class ChartController {
 		return map;
 	}
 
+	/**
+	 * @param switchId
+	 * @param type	开关的类型
+	 * @param cov	0为查询电流， 1为查询电压
+	 * @return
+	 */
 	@RequestMapping("/select_chart_by_switch_id")
 	@ResponseBody
 	public Object selectChartBySwitchId(
 			@RequestParam(required = true) String switchId,
-			@RequestParam(required = true) String type, String beginDate,
+			@RequestParam(required = true) String type,
+			@RequestParam(required = true) int cov, String beginDate,
 			String endDate) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -122,75 +129,40 @@ public class ChartController {
 		if (type == null) {
 			type = "0";
 		}
+		ChartData data = new ChartData();
 		switch (type) {
 		case "0":
-			map.put("current",
-					currentService.selectByTime(switchId, beginDate, endDate));
-			map.put("voltage",
-					voltageService.selectByTime(switchId, beginDate, endDate));
-			break;
+			if(cov == 0) {
+				/*map.put("current",
+						currentService.selectByTime(switchId, beginDate, endDate));*/
+			} else {
+				/*map.put("voltage",
+						voltageService.selectByTime(switchId, beginDate, endDate));*/
+			}
 		case "1":
-			map.put("current",
-					currentService2.selectByTime(switchId, beginDate, endDate));
-			map.put("voltage",
-					voltageService2.selectByTime(switchId, beginDate, endDate));
+			if(cov == 0) {
+				/*map.put("current",
+						currentService2.selectByTime(switchId, beginDate, endDate));*/
+				return data.getJsonChart(currentService2.selectByTime(switchId, beginDate, endDate));
+			} else {
+				map.put("voltage",
+						voltageService2.selectByTime(switchId, beginDate, endDate));
+			}
 			break;
 		case "2":
-			map.put("current",
-					currentService3.selectByTime(switchId, beginDate, endDate));
-			map.put("voltage",
-					voltageService3.selectByTime(switchId, beginDate, endDate));
+			/*if(cov == 0) {
+				map.put("current",
+						currentService3.selectByTime(switchId, beginDate, endDate));
+			} else {
+				map.put("voltage",
+						voltageService3.selectByTime(switchId, beginDate, endDate));
+			}*/
 			break;
-
 		default:
 			break;
 		}
-		return map;
-	}
-
-	@RequestMapping(value="/test")
-	@ResponseBody
-	public Object test() {
 		
-		ChartData data = new ChartData();
-		List<String> list = new ArrayList<>();
-		list.add("10:00");
-		list.add("11:00");
-		list.add("12:00");
-		list.add("13:00");
-		list.add("14:00");
-		data.getxAxis().get(0).setData(list);
-		List<Object> l =  data.getSeries();
-		ChaseData d1 = (ChaseData) l.get(0);
-		ChaseData d2 = (ChaseData) l.get(1);
-		ChaseData d3 = (ChaseData) l.get(2);
-		d1.setName("A相");
-		d2.setName("B相");
-		d3.setName("C相");
-		List<Integer> l1 = new ArrayList<>();
-		List<Integer> l2 = new ArrayList<>();
-		List<Integer> l3 = new ArrayList<>();
-		l1.add(123);
-		l1.add(432);
-		l1.add(242);
-		l1.add(212);
-		l1.add(342);
-		l2.add(223);
-		l2.add(232);
-		l2.add(342);
-		l2.add(233);
-		l2.add(432);
-		l3.add(143);
-		l3.add(232);
-		l3.add(314);
-		l3.add(231);
-		l3.add(142);
-		d1.setData(l1);
-		d2.setData(l2);
-		d3.setData(l3);
-		//l.add(d1);
-		//l.add(d2);
-		//l.add(d3);
-		return data;
+		//data.getJsonChart(map);
+		return map;
 	}
 }

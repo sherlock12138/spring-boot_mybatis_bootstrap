@@ -60,10 +60,10 @@ HighVoltageCurrentService {
 	 * @see com.gdut.dongjun.service.HighVoltageCurrentService#selectByTime(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String beginDate,
+	public List<Object> selectByTime(String switchId, String beginDate,
 			String endDate) {
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		/*Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> xx = MapUtil.warp("switchId", switchId);
 		xx.put("phase", "A");
 		xx.put("beginDate", beginDate);
@@ -75,7 +75,11 @@ HighVoltageCurrentService {
 		xx.remove("phase");
 		xx.put("phase", "C");
 		result.put("C", currentMapper.selectByTime(xx));
-		return result;
+		return result;*/
+		Map<String, Object> xx = MapUtil.warp("switchId", switchId);
+		xx.put("beginDate", beginDate);
+		xx.put("endDate", endDate);
+		return currentMapper.selectByTime(xx);
 	}
 
 	/* (non-Javadoc)

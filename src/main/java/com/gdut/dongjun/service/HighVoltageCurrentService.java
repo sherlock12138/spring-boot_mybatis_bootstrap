@@ -39,7 +39,7 @@ public interface HighVoltageCurrentService extends
 	 * @return Map<String,Object>
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date,
+	public List<Object> selectByTime(String switchId, String date,
 			String string);
 
 	/**
