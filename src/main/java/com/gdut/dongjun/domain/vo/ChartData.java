@@ -143,7 +143,7 @@ public class ChartData {
 		
 		private String type = "category";
 		
-		private boolean boundaryGap = true;
+		private boolean boundaryGap = false;
 		
 		private List<String> data = new ArrayList<>();
 

@@ -34,21 +34,24 @@
 						<img src="../../img/logo.png" style="height: 60px" />电网智能监控系统
 					</h2>
 				</div>
-				<div class="span7 MENU">
-					<a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
-          <a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
-					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
-          <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>事件</a>
+				<div class="span8">
+					<a href="index" class="btn banner-btn btn-primary"><i
+						class="fa fa-map-marker"></i>监控</a> <a
+						href="low_voltage_switch_manager"
+						class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
+					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i
+						class="fa fa-area-chart"></i>报表</a> <a href="#system"
+						class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
+					<a href="#about" class="btn banner-btn btn-primary"><i
+						class="fa fa-info-circle"></i>关于</a> <a href="#contact"
+						class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
 				</div>
-        <div class="span1 log_out">
-            <button class="btn btn-danger" id="log_out">退出</button>
-        </div>
 			</div>
 		</div>
 
 
 		<div class="row-fluid">
-			<div class="span3 treeDemo">
+			<div class="span3">
 				<div class="input-append">
 					<select id='zTree_node_type' class='span5'>
 						<option value='0'>低压设备</option>
@@ -58,7 +61,7 @@
 						placeholder="请输入..." />
 					<button id="searchNode" class="btn" type="button">搜索</button>
 				</div>
-				<div class="well sidebar-nav" style="height: 100%">
+				<div class="well sidebar-nav">
 					<ul id="treeDemo" class="ztree"></ul>
 				</div>
 			</div>
@@ -146,7 +149,10 @@
 	<script src="../../js/custom/index.js"></script>
 	<script src="../../js/custom/switch_detail.js"></script>
 
-  <!-- 引入全局函数 -->
-  <script src="../../js/custom/gobal.js"></script>
+	<!-- dwr -->
+	<script type="text/javascript" src="/dwr/engine.js"></script>
+	<script type="text/javascript" src="/dwr/util.js"></script>
+	<script type="text/javascript" src="/dwr/interface/messagePush.js"></script>
+	<script type="text/javascript" src="../../js/custom/push.js"></script>
 </body>
 </html>

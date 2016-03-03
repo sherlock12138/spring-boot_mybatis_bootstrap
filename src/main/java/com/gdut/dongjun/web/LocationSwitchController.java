@@ -51,6 +51,7 @@ public class LocationSwitchController {
 			
 			locationSwitch.setSwitchId(switchId);
 			locationSwitch.setType(type);
+			locationSwitch.setScale(scale);
 			locateService.updateByPrimaryKeySelective(locationSwitch);
 		}
 		return MapUtil.warp("success", true);

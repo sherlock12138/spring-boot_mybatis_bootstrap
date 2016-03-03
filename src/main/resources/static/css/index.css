@@ -8,6 +8,10 @@
   height: 100%;
 }
 
+.treeDemo {
+    height: 88%;
+}
+
 .BDM_custom_popup {
   text-align: center;
 }
@@ -38,3 +42,4 @@
 	background-color: #F03726;
 	display: block;
 }
+

@@ -36,18 +36,15 @@
 						<img src="../../img/logo.png" style="height: 60px" />电网智能监控系统
 					</h2>
 				</div>
-				<div class="span8">
-					<a href="index" class="btn banner-btn btn-primary"><i
-						class="fa fa-map-marker"></i>监控</a> <a
-						href="low_voltage_switch_manager"
-						class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
-					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i
-						class="fa fa-area-chart"></i>报表</a> <a href="#system"
-						class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
-					<a href="#about" class="btn banner-btn btn-primary"><i
-						class="fa fa-info-circle"></i>关于</a> <a href="#contact"
-						class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
-				</div>
+          <div class="span7 MENU">
+              <a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
+              <a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
+              <a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
+              <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>事件</a>
+          </div>
+          <div class="span1 log_out">
+              <button class="btn btn-danger" id="log_out">退出</button>
+          </div>
 			</div>
 		</div>
 
@@ -91,78 +88,29 @@
 						</div>
 					</div>
 				</div>
-				<ul class="nav nav-pills">
-					<li class="active"><a data-toggle="pill" href="#tab1">电压曲线图</a></li>
-					<li><a data-toggle="pill" href="#tab2">电流曲线图</a></li>
-					<li><a data-toggle="pill" href="#tab3">功率曲线图</a></li>
-				</ul>
-				<div class="clean"></div>
-				<div class="tab-content">
-					<div id="tab1" class="tab-pane fade in active">
-						<div class="thumbnail span11">
-							<div id="parent_voltage_chart" style="height: 100%">
-								<canvas id="voltage_chart" height="300" width="300" ></canvas>
-							</div>
-						</div>
-						<div class="span1" th:fragment="tooltip">
-							<ul class="inline">
-								<li class="a_phase"></li>
-								<li>A相</li>
-							</ul>
-							<ul class="inline">
-								<li class="b_phase"></li>
-								<li>B相</li>
-							</ul>
-							<ul class="inline">
-								<li class="c_phase"></li>
-								<li>C相</li>
-							</ul>
-						</div>
-					</div>
-					<div id="tab2" class="tab-pane fade">
-						<div class="thumbnail span11">
-							<div id="parent_current_chart" style="height: 100%">
-								<canvas id="current_chart"  height="300" width="300" ></canvas>
-							</div>
-						</div>
-						<div class="span1" th:fragment="tooltip">
-							<ul class="inline">
-								<li class="a_phase"></li>
-								<li>A相</li>
-							</ul>
-							<ul class="inline">
-								<li class="b_phase"></li>
-								<li>B相</li>
-							</ul>
-							<ul class="inline">
-								<li class="c_phase"></li>
-								<li>C相</li>
-							</ul>
-						</div>
-			    </div>
-			    <div id="tab3" class="tab-pane fade">
-			      <div class="thumbnail span11">
-							<div id="parent_power_chart" style=" height: 100%">
-								<canvas id="power_chart"  height="300" width="300" ></canvas>
-							</div>
-						</div>
-						<div class="span1" th:fragment="tooltip">
-							<ul class="inline">
-								<li class="a_phase"></li>
-								<li>A相</li>
-							</ul>
-							<ul class="inline">
-								<li class="b_phase"></li>
-								<li>B相</li>
-							</ul>
-							<ul class="inline">
-								<li class="c_phase"></li>
-								<li>C相</li>
-							</ul>
-						</div>
-					</div>
-
-				</div>
+				<!--<ul class="nav nav-tabs">-->
+					<!--<li class="active"><a data-toggle="tab" href="#VoltageChart">电压曲线图</a></li>-->
+					<!--<li><a data-toggle="tab" href="#current">电流曲线图</a></li>-->
+					<!--<li><a data-toggle="pill" href="#tab3">功率曲线图</a></li>-->
+				<!--</ul>-->
+				<!--<div class="clean"></div>-->
+        <!--<div class="tab-content" style="height: 80%">-->
+            <!--<div class="tab-panel active" id="VoltageChart" style="width: 100%;height:100%;"></div>-->
+            <!--<div class="tab-panel" id="current" style="width: 100%;height:100%;">dhgd hdgfhdhg</div>-->
+        <!--</div>-->
+          <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#VoltageChart">电压曲线图</a></li>
+              <li><a data-toggle="tab" href="#current">电流曲线图</a></li>
+              <li><a data-toggle="tab" href="#power">功率曲线图</a></li>
+              <li><a href="#excalChart" data-toggle="tab">数据表格</a></li>
+          </ul>
+          <div class="clean"></div>
+          <div class="tab-content">
+              <div class="tab-pane active" id="VoltageChart">1.</div>
+              <div class="tab-pane" id="current">/* 加入电流的折线图 */</div>
+              <div class="tab-pane" id="power">/* 加入功率的折线图 */</div>
+              <div class="tab-pane" id="excalChart">/* 加入数据表格 */</div>
+          </div>
 
 			</div>
 		</div>
@@ -189,7 +137,7 @@
 	<script src="../../js/bootstrap-collapse.js"></script>
 	<script src="../../js/bootstrap-carousel.js"></script>
 	<script src="../../js/bootstrap-typeahead.js"></script>
-
+  <script src="../../js/echarts.common.min.js"></script>
 	<!-- chart -->
 	<script src="../../js/chart/Chart.js"></script>
 
@@ -204,7 +152,7 @@
 	<script src="../../js/custom/line_switch_set.js"></script>
 	<script src="../../js/custom/left_side_switch_ZTree.js"></script>
 	<script src="../../js/custom/current_voltage_chart.js"></script>
-
+  <script src="../../js/custom/gobal.js"></script>
 	<script src="../../js/ZTree/jquery.ztree.core-3.5.js"></script>
 
 </body>

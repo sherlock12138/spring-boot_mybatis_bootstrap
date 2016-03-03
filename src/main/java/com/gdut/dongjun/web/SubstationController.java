@@ -144,4 +144,9 @@ public class SubstationController {
 		return switch1.getCompanyId();
 	}
 
+	@RequestMapping("/EventManage")
+	public String eventManage(Model model) {
+
+		return "EventManage";
+	}
 }
