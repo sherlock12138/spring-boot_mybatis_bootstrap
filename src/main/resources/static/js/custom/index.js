@@ -1045,18 +1045,13 @@ var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
 var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
 var outLine_switch = '../../ico/voltage-outLine.jpg';
 
-/*var oldList = [];
+var oldList = [];
 var newList = [];
 var alarmList = [];
-var distinctList = [];*/	//
+var distinctList = [];
 function hitchEventSpy() {
 	
-	messagePush.hitchEventSpy();
-	
-	/**
-	 * 以下部分采用推送，可删去。。。
-	 */
-	/*$.ajax({
+	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
 		url: 'get_active_switch_status',
@@ -1064,7 +1059,7 @@ function hitchEventSpy() {
 		data : {},
 		dataType: 'json',
 		success : function(data) {
-			console.log(data);
+
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			for (var i = data.length - 1; i >= 0; --i) {
 				if(isDistinct(data[i].id, distinctList)) {	//防止重复数据
@@ -1079,9 +1074,12 @@ function hitchEventSpy() {
 								if(data[i].open == true) {
 									if(isDistinct(nodeList[0].id, alarmList)) {
 										alarmList.push(nodeList[0].id);	//status与open同时符合才报警
-										//alert("警告，已经跳闸！");
+										
+										//var data = getVoiceData(nodeList[0].name);
+										//console.log(data);
+										playVoice(getVoiceData(nodeList[0].name));
 										update(nodeList, 2);  // 树节点变红
-										worning_switchs_draw(nodeList[0]); //声音的 图标的
+										//worning_switchs_draw(nodeList[0]); //声音的 图标的
 									}
 								}
 							} else {
@@ -1119,9 +1117,9 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
-	console.log('alarm' + alarmList);*/
+	console.log('alarm' + alarmList);
 }	
-/*
+
 function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
@@ -1152,7 +1150,36 @@ function isDistinct(id, list) {
 		}
 	}
 	return true;
-}*/
+}
+
+function getVoiceData(name) {
+	var result;
+	$.ajax({
+		type : "GET",
+		url: 'get_voice_of_event',
+		async : false,
+		data : {
+			"name" : name
+		},
+		dataType: 'json',
+		success : function(data) {
+			if(data.errNum != 0) {
+				return getVoiceData(name);
+			} else {
+				result = data.retData;
+			}
+		}
+	});
+	return result;
+}
+
+function playVoice(data) {
+	console.log(data);
+	var audioUrl ="data:audio/mp3;base64,"+ data;
+	for(var i = 0; i < 3; i++) {
+		new Audio( audioUrl ).play();
+	}
+}
 /**
  * 
  * @Title: green_or_red
