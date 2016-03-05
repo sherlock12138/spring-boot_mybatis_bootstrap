@@ -1079,7 +1079,7 @@ function hitchEventSpy() {
 										//console.log(data);
 										playVoice(getVoiceData(nodeList[0].name));
 										update(nodeList, 2);  // 树节点变红
-										//worning_switchs_draw(nodeList[0]); //声音的 图标的
+										worning_switchs_draw(nodeList[0]); //声音的 图标的
 									}
 								}
 							} else {
@@ -1223,16 +1223,16 @@ function worning_switchs_draw(node) {
   }); // 创建标注
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
   map.panTo(pt);  // 将报警地点移到地图中间
-  map.zoomTo(map.getZoom() + 5);
+  map.zoomTo(map.getZoom() + 3);
 
   // 不用添加文字提示
   // 需要重复添加点击事件
 
-	$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
+	//$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
 
   marker2.addEventListener("click", function (e) {
     map.removeOverlay(marker2); // remove the alarm icon
-    $('audio').remove(); // remove the audio
+   // $('audio').remove(); // remove the audio
     handleAlarm(node); // pop up a handle window
   });
 }
