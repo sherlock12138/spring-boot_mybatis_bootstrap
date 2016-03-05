@@ -84,6 +84,7 @@
 					<thead>
 						<td>故障时间</td>
 						<td>故障相位</td>
+            <td>故障表现</td>
 						<td>故障原因</td>
 					</thead>
 					<tr th:each="event:${hitch_events}" th:if="*{event!=null}">
@@ -92,6 +93,7 @@
 						<!-- 故障原因 -->
 						<td th:if="*{event.hitchReason==0}">分闸</td>
 						<td th:if="*{event.hitchReason==1}">合闸</td>
+            <td th:text="${event.hitchPhase}"></td>
 					</tr>
 				</table>
 

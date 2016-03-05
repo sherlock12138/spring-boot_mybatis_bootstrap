@@ -1,5 +1,8 @@
 $(document).ready(function() {
-
+//	$('#Center').click(function () {
+//		point = new BMap.Point(center_lng, center_lag);
+//		map.centerAndZoom(point, location_scale == 0 ? 16 : location_scale);
+//	});
 	$.ajax({
 	    type: 'POST',
 	    url: 'get_location_switch',
@@ -12,7 +15,7 @@ $(document).ready(function() {
 		    	  
 		    	  $.fn.zTree.init($("#treeDemo"), set_tree(data.type));
 		    	  document.getElementById("zTree_node_type").
-		    	  	options[data.type].selected = true;
+		    	  options[data.type].selected = true;
 		    	  location_switch_id = data.switchId;
 			      location_scale = data.scale;
 		      } else {
@@ -353,6 +356,12 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	
 	if(location_switch_id != null) {
 		nodeList = zTree.getNodesByParamFuzzy("id", location_switch_id);
+		var center_lng = nodeList[0].longitude;
+		var center_lag = nodeList[0].latitude;
+		$('#Center').click(function () {
+			point = new BMap.Point(center_lng, center_lag);
+			map.centerAndZoom(point, location_scale == 0 ? 16 : location_scale);
+		});
 	}
 	
 	if(sessionStorage.longtitude && sessionStorage.latitude) {
@@ -360,7 +369,8 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	} else {
 		if (nodeList != null && nodeList.length != 0 && nodeList[0].longitude != null
 			&& nodeList[0].latitude != null) {
-
+			console.log(nodeList[0].longitude);
+			console.log(nodeList[0].latitude);
 			point = new BMap.Point(nodeList[0].longitude, nodeList[0].latitude);
 		} else {
 			//没有定位开关则定位到上思县
@@ -563,7 +573,7 @@ function switchs_draw(node, switch_icon, click_switch) {
 	}
 	// 添加文字提示
 	 
-	marker2.setLabel(label);
+	//marker2.setLabel(label);
 
 	// **************************************************************************
 	// 添加图标点击事件,弹出窗口
