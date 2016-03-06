@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+import com.gdut.dongjun.domain.po.LowVoltageCurrent;
+import com.gdut.dongjun.domain.po.LowVoltageVoltage;
 
 /**
  *@Author link xiaoMian <972192420@qq.com>
@@ -55,25 +57,34 @@ public class ChartData {
 		series.add(new ChaseData("C相"));
 	}
 	
-	public ChartData getJsonChart(List<Object> data) {
+	public <T> ChartData getJsonChart(List<T> data) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		
 		ChartData chartData = new ChartData();
 		List<ChaseData> list = chartData.getSeries();
 		List<Integer> chaseA = list.get(0).getData();
 		List<Integer> chaseB = list.get(1).getData();
 		List<Integer> chaseC = list.get(2).getData();
-		for(Object o : data) {
-			switch(((HighVoltageCurrent) o).getPhase().charAt(0)) {
+		
+		for(T o : data) {
+			o.getClass().getDeclaredField("phase").get(o);
+			System.out.println(o);
+			switch(o.toString().charAt(0)) {
 			case 'A' : chaseA.add(((HighVoltageCurrent) o).getValue());break;
 			case 'B' : chaseB.add(((HighVoltageCurrent) o).getValue());break;
 			case 'C' : chaseC.add(((HighVoltageCurrent) o).getValue());break;
 			}
 		}
+		
+		List<String> xData = new ArrayList<>();
 		for(int i = 0; i < data.size() / 2; i ++) {
-			chartData.getxAxis().get(i).getData().add("");
+			
+			xData.add(""); 	
 		}
+		chartData.getxAxis().get(0).setData(xData);
 		return chartData;
 	}
+	
+	//private 
 
 	public List<XAxis> getxAxis() {
 		return xAxis;

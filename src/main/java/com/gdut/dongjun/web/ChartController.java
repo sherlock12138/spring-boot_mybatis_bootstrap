@@ -50,7 +50,6 @@ public class ChartController {
 	public Object currentChart(@RequestParam(required = true) String switchId) {
 
 		return currentService.selectBySwitchId(switchId);
-
 	}
 
 	/**
@@ -99,6 +98,10 @@ public class ChartController {
 	 * @param type	开关的类型
 	 * @param cov	0为查询电流， 1为查询电压
 	 * @return
+	 * @throws SecurityException 
+	 * @throws NoSuchFieldException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
 	 */
 	@RequestMapping("/select_chart_by_switch_id")
 	@ResponseBody
@@ -106,9 +109,7 @@ public class ChartController {
 			@RequestParam(required = true) String switchId,
 			@RequestParam(required = true) int type,
 			@RequestParam(required = true) int cov, String beginDate,
-			String endDate) {
-
-		Map<String, Object> map = new HashMap<String, Object>();
+			String endDate) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 
 		if (beginDate == null || beginDate == "") {// 使用当前日期
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
@@ -159,10 +160,8 @@ public class ChartController {
 				return data.getJsonChart(voltageService3.selectByTime(switchId, beginDate, endDate));
 			}
 		default:
-			break;
+			return null;
 		}
-		
-		//data.getJsonChart(map);
-		return map;
+
 	}
 }

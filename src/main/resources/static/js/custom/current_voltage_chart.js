@@ -26,11 +26,11 @@ function zTreeOnClick(event, treeId, treeNode) {
 			type: type,
 			beginDate: begin_time,
 			endDate: end_time,
-			cov: 1
+			cov: '0'
 		}
 	}).success(function (data) {
 		option = data;
-		myChart.setOption(option);
+		myChart.setOption(JSON.parse(option));
 	})
 	//点击事件
 	//search_chart_switch_id = treeNode.id;
