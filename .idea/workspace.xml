@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="73c6084d-5ff9-4528-9834-05f7b6587610" name="!changes.default.changelist.name!" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/static/js/custom/index.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/custom/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="spring-boot_mybatis_bootstrap.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,11 +35,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.2885662" vertical-offset="15446" max-vertical-offset="39088">
-              <caret line="577" column="24" selection-start-line="577" selection-start-column="24" selection-end-line="577" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="30285" max-vertical-offset="39088">
+              <caret line="568" column="20" selection-start-line="568" selection-start-column="20" selection-end-line="568" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="current_voltage_chart.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.69509983" vertical-offset="1353" max-vertical-offset="10304">
+              <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -69,8 +77,8 @@
         <option value="$PROJECT_DIR$/src/main/resources/templates/control_measure_switch_manager.html" />
         <option value="$PROJECT_DIR$/src/main/resources/static/css/chart.css" />
         <option value="$PROJECT_DIR$/src/main/resources/templates/current_voltage_chart.html" />
-        <option value="$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js" />
         <option value="$PROJECT_DIR$/src/main/resources/static/js/custom/index.js" />
+        <option value="$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js" />
       </list>
     </option>
   </component>
@@ -459,9 +467,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="756" max-vertical-offset="10556">
           <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -508,9 +514,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="8773" max-vertical-offset="9324">
           <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -630,16 +634,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14893617" vertical-offset="168" max-vertical-offset="10556">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/left_side_switch_ZTree.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.2836878" vertical-offset="0" max-vertical-offset="7756">
@@ -658,8 +652,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2885662" vertical-offset="15446" max-vertical-offset="39088">
-          <caret line="577" column="24" selection-start-line="577" selection-start-column="24" selection-end-line="577" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="30285" max-vertical-offset="39088">
+          <caret line="568" column="20" selection-start-line="568" selection-start-column="20" selection-end-line="568" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69509983" vertical-offset="1353" max-vertical-offset="10304">
+          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
           <folding />
         </state>
       </provider>
