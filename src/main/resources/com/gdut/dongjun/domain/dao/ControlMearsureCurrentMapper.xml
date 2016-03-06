@@ -41,10 +41,16 @@
 	</select>
 
 	<select id="selectByTime" resultMap="BaseResultMap">
-		select * from
+		<!-- select * from
 		control_mearsure_current where
 		switch_id = #{switchId} and phase =
 		#{phase}
+		and
+		time between #{beginDate} and #{endDate}
+		order By time Asc -->
+		select * from
+		control_mearsure_current where
+		switch_id = #{switchId}
 		and
 		time between #{beginDate} and #{endDate}
 		order By time Asc

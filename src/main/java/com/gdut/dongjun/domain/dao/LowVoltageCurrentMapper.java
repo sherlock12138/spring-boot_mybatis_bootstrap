@@ -28,7 +28,7 @@ public interface LowVoltageCurrentMapper extends SinglePrimaryKeyBaseMapper<LowV
 	 * @return Object
 	 * @throws
 	 */
-	public List<LowVoltageCurrent> selectByTime(Map<String, Object> xx);
+	public List<Object> selectByTime(Map<String, Object> xx);
 
 	/**
 	 * 

@@ -36,5 +36,5 @@ public interface ControlMearsureVoltageMapper extends
 	 * @return Object
 	 * @throws
 	 */
-	public List<LowVoltageVoltage> selectByTime(Map<String, Object> xx);
+	public List<Object> selectByTime(Map<String, Object> xx);
 }

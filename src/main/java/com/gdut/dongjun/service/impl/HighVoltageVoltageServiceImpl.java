@@ -3,6 +3,7 @@
  */
 package com.gdut.dongjun.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,23 +50,24 @@ HighVoltageVoltageService {
 	}
 
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String beginDate,
+	public List<Object> selectByTime(String switchId, String beginDate,
 			String endDate) {
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		//List<HighVoltageVoltage> result = new ArrayList<HighVoltageVoltage>();
 		Map<String, Object> xx = new HashMap<String, Object>();
 		xx.put("switchId", switchId);
-		xx.put("phase", "A");
+		//xx.put("phase", "A");
 		xx.put("beginDate", beginDate);
 		xx.put("endDate", endDate);
-		result.put("A", voltageMapper.selectByTime(xx));
+		/*result.put("A", voltageMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "B");
 		result.put("B", voltageMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "C");
-		result.put("C", voltageMapper.selectByTime(xx));
-		return result;
+		result.put("C", voltageMapper.selectByTime(xx));*/
+		return voltageMapper.selectByTime(xx);
+		
 	}
 
 	@Override

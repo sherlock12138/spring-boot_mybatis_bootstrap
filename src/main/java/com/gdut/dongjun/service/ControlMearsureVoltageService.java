@@ -44,6 +44,6 @@ public interface ControlMearsureVoltageService extends
 	 * @return Object
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date, String string);
+	public List<Object> selectByTime(String switchId, String date, String string);
 
 }

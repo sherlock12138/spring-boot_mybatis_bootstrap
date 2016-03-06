@@ -30,7 +30,7 @@ public interface ControlMearsureCurrentMapper extends
 	 * @return Object
 	 * @throws
 	 */
-	public List<LowVoltageCurrent> selectByTime(Map<String, Object> xx);
+	public List<Object> selectByTime(Map<String, Object> xx);
 
 	/**
 	 * 
