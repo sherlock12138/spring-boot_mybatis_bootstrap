@@ -1,14 +1,13 @@
 package com.gdut.dongjun.domain.vo;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.gdut.dongjun.domain.po.HighVoltageCurrent;
-import com.gdut.dongjun.domain.po.LowVoltageCurrent;
-import com.gdut.dongjun.domain.po.LowVoltageVoltage;
+import com.gdut.dongjun.util.GenericUtil;
+import com.gdut.dongjun.util.TimeUtil;
 
 /**
  *@Author link xiaoMian <972192420@qq.com>
@@ -65,29 +64,25 @@ public class ChartData {
 		List<Integer> chaseA = list.get(0).getData();
 		List<Integer> chaseB = list.get(1).getData();
 		List<Integer> chaseC = list.get(2).getData();
-		
-		Field field;
-		char chase;
+		List<String> xData = new ArrayList<>();
+		Object chase;
 		
 		for(T o : data) {
 			
-			field = o.getClass().getDeclaredField("phase");
-			field.setAccessible(true);
-			chase = field.get(o).toString().charAt(0);
-			field = o.getClass().getDeclaredField("value");
-			field.setAccessible(true);
-			switch(chase) {
-			case 'A' : chaseA.add(Integer.valueOf(field.get(o).toString()));break;
-			case 'B' : chaseB.add(Integer.valueOf(field.get(o).toString()));break;
-			case 'C' : chaseC.add(Integer.valueOf(field.get(o).toString()));break;
-			}
-		}
-		
-		List<String> xData = new ArrayList<>();
-		for(int i = 0; i < data.size() / 2; i ++) {
+			chase = GenericUtil.getPrivateObjectValue(o, "phase");
 			
-			xData.add(""); 	
+			if(chase == null) {
+				return null;
+			}
+			switch(chase.toString().charAt(0)) {
+			case 'A' : chaseA.add(GenericUtil.getPrivatyIntegerValue(o, "value"));break;
+			case 'B' : chaseB.add(GenericUtil.getPrivatyIntegerValue(o, "value"));break;
+			case 'C' : chaseC.add(GenericUtil.getPrivatyIntegerValue(o, "value"));break;
+			}
+			
+			xData.add(TimeUtil.timeFormat((Date)GenericUtil.getPrivateObjectValue(o, "time")));
 		}
+		chartData.getxAxis().get(0).setData(xData);
 		return chartData;
 	}
 	
