@@ -12,10 +12,29 @@ $(document).ready(function() {
 
 var search_chart_switch_id;//用于搜索报表的开关id
 function zTreeOnClick(event, treeId, treeNode) {
-
+	var id = treeNode.id;
+	var type = treeNode.type;
+	var begin_time = $('#begin_search_date').val();
+	var end_time = $('#end_search_date').val();
+	//创建折线图
+	var myChart = echarts.init(document.getElementById('VoltageChart'));
+	var option = $.ajax({
+		url: '/dongjun/select_chart_by_switch_id',
+		method: 'POST',
+		data : {
+			switchId: id,
+			type: type,
+			beginDate: begin_time,
+			endDate: end_time,
+			cov: 1
+		}
+	}).success(function (data) {
+		option = data;
+		myChart.setOption(option);
+	})
 	//点击事件
-	search_chart_switch_id = treeNode.id;
-	search_chart_by_switch_id();
+	//search_chart_switch_id = treeNode.id;
+	//search_chart_by_switch_id();
 	
 	
 	
@@ -315,3 +334,4 @@ function lineChart() {
 	}
 	return lineChart;
 }
+

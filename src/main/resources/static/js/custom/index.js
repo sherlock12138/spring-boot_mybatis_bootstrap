@@ -246,10 +246,16 @@ function getFontCss(treeId, treeNode) {
  */
 var polylines = new Array();// 旧的线
 function zTreeOnClick(event, treeId, treeNode) {
-
+	//alert('dsa')
 	// 地图定位
-	map.panTo(new BMap.Point(treeNode.longitude, treeNode.latitude));
-
+	var pt = new BMap.Point(treeNode.longitude, treeNode.latitude);
+	map.panTo(pt);
+	var marker2 = new BMap.Marker(pt); // 创建标注
+	map.addOverlay(marker2);
+	marker2.setAnimation(BMAP_ANIMATION_BOUNCE);
+	setTimeout(function() {
+		map.removeOverlay(marker2);
+	}, 2500);
 	var url;
 	var type = $("#zTree_node_type").val();
 	switch (type) {
@@ -559,7 +565,9 @@ function switchs_draw(node, switch_icon, click_switch) {
 	marker2.name = node.name;
 	// mraker2.isWorning = false;//设置报警标志
 	// ****************************************************************
+
 	map.addOverlay(marker2); // 将标注添加到地图中
+
 
 	var label;
 	if(node.showName == null || node.showName == "") {
@@ -1051,8 +1059,10 @@ function hvswitchStatusSpy(id) {
  */
 //var worning_switch = "../../ico/worning_switch.jpg";// 报警状态的图标
 var worning_switch = '../../ico/tuDing.gif'; // 更新报警图标，为动图
-var close_switch = '../../ico/voltage-close.jpg'; // 更新合闸图标
-var open_switch = '../../ico/voltage-open.jpg';  // 更新开闸图标
+var close_switch_high = '../../ico/highvoltage-close.jpg'; // 更新合闸图标
+var open_switch_high = '../../ico/highvoltage-open.jpg';  // 更新开闸图标
+var close_switch_low = '../../ico/lowvoltage-close.jpg';
+var open_switch_low = '../../ico/lowvoltage-open.jpg';
 var outLine_switch = '../../ico/voltage-outLine.jpg';
 
 var oldList = [];
@@ -1080,13 +1090,11 @@ function hitchEventSpy() {
 						
 						if(nodeList.length != 0) {
 							if(data[i].status == "00") {
-								switchs_draw(nodeList[0], open_switch, click_high_voltage_switch);	//开闸描绘
+								switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);	//开闸描绘
 								if(data[i].open == true) {
 									if(isDistinct(nodeList[0].id, alarmList)) {
 										alarmList.push(nodeList[0].id);	//status与open同时符合才报警
-										
-										//var data = getVoiceData(nodeList[0].name);
-										//console.log(data);
+
 										playVoice(getVoiceData(nodeList[0].name));
 										update(nodeList, 2);  // 树节点变红
 										worning_switchs_draw(nodeList[0]); //声音的 图标的
@@ -1127,8 +1135,34 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
-	console.log('alarm' + alarmList);
-}	
+}
+
+function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
+	/*    原函数来自于switchs_draw，由此改编
+	*/
+	var icon = node.type == 1 ? switch_icon1 : switch_icon2;
+	var pt = new BMap.Point(node.longitude, node.latitude);
+	var myIcon = new BMap.Icon(icon, new BMap.Size(20, 20));
+	var marker2 = new BMap.Marker(pt, {
+		icon : myIcon
+	});
+	marker2.id = node.id;// 设置id
+	marker2.type = node.type;
+	marker2.name = node.name;
+	map.addOverlay(marker2); // 将标注添加到地图中
+	var label;
+	if(node.showName == null || node.showName == "") {
+		label = new BMap.Label(node.name, {
+			offset : new BMap.Size(20, -18)
+		});
+	} else {
+		label = new BMap.Label(node.showName, {
+			offset : new BMap.Size(20, -18)
+		});
+	}
+	marker2.addEventListener("click", click_switch);
+
+}
 
 function deleteAlarmSwitch(node) {
 	
