@@ -569,16 +569,16 @@ function switchs_draw(node, switch_icon, click_switch) {
 	map.addOverlay(marker2); // 将标注添加到地图中
 
 
-	var label;
-	if(node.showName == null || node.showName == "") {
-		label = new BMap.Label(node.name, {
-			offset : new BMap.Size(20, -18)
-		});
-	} else {
-		label = new BMap.Label(node.showName, {
-			offset : new BMap.Size(20, -18)
-		});
-	}
+//	var label;
+//	if(node.showName == null || node.showName == "") {
+//		label = new BMap.Label(node.name, {
+//			offset : new BMap.Size(20, -18)
+//		});
+//	} else {
+//		label = new BMap.Label(node.showName, {
+//			offset : new BMap.Size(20, -18)
+//		});
+//	}
 	// 添加文字提示
 	 
 	//marker2.setLabel(label);
@@ -1090,11 +1090,11 @@ function hitchEventSpy() {
 						
 						if(nodeList.length != 0) {
 							if(data[i].status == "00") {
-								switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);	//开闸描绘
+								switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch);	//开闸描绘
 								if(data[i].open == true) {
 									if(isDistinct(nodeList[0].id, alarmList)) {
 										alarmList.push(nodeList[0].id);	//status与open同时符合才报警
-
+										switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);
 										playVoice(getVoiceData(nodeList[0].name));
 										update(nodeList, 2);  // 树节点变红
 										worning_switchs_draw(nodeList[0]); //声音的 图标的
@@ -1150,16 +1150,16 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 	marker2.type = node.type;
 	marker2.name = node.name;
 	map.addOverlay(marker2); // 将标注添加到地图中
-	var label;
-	if(node.showName == null || node.showName == "") {
-		label = new BMap.Label(node.name, {
-			offset : new BMap.Size(20, -18)
-		});
-	} else {
-		label = new BMap.Label(node.showName, {
-			offset : new BMap.Size(20, -18)
-		});
-	}
+//	var label;
+//	if(node.showName == null || node.showName == "") {
+//		label = new BMap.Label(node.name, {
+//			offset : new BMap.Size(20, -18)
+//		});
+//	} else {
+//		label = new BMap.Label(node.showName, {
+//			offset : new BMap.Size(20, -18)
+//		});
+//	}
 	marker2.addEventListener("click", click_switch);
 
 }

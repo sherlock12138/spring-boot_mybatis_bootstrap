@@ -42,6 +42,13 @@ function zTreeOnClick(event, treeId, treeNode) {
 	//search_chart_by_switch_id();
 }
 
+/** 用于tabpanel切换标签页时加载不同的图表
+/** param： 树的点击节点
+/** param： 图表类型，1电压，0电流，2功率
+/** param： 对应实例化图表的ID
+/**
+*/
+
 function show_chart(treeNode, num, Chartname) {
 	var option;
 	var id = treeNode.id;
