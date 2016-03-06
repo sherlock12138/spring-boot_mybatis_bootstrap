@@ -63,7 +63,7 @@ function show_chart(treeNode, num) {
 		}
 	}).success(function (data) {
 		option = data;
-		myChart.setOption(JSON.parse(option));
+		myChart.setOption(option);
 	})
 }
 

@@ -102,6 +102,7 @@ public class ChartController {
 	 * @throws NoSuchFieldException 
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
+	 * @throws InstantiationException 
 	 */
 	@RequestMapping("/select_chart_by_switch_id")
 	@ResponseBody
@@ -109,7 +110,7 @@ public class ChartController {
 			@RequestParam(required = true) String switchId,
 			@RequestParam(required = true) int type,
 			@RequestParam(required = true) int cov, String beginDate,
-			String endDate) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+			String endDate) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InstantiationException {
 
 		if (beginDate == null || beginDate == "") {// 使用当前日期
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式

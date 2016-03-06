@@ -1,5 +1,6 @@
 package com.gdut.dongjun.domain.vo;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ChartData {
 		series.add(new ChaseData("C相"));
 	}
 	
-	public <T> ChartData getJsonChart(List<T> data) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public <T> ChartData getJsonChart(List<T> data) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InstantiationException {
 		
 		ChartData chartData = new ChartData();
 		List<ChaseData> list = chartData.getSeries();
@@ -65,13 +66,20 @@ public class ChartData {
 		List<Integer> chaseB = list.get(1).getData();
 		List<Integer> chaseC = list.get(2).getData();
 		
+		Field field;
+		char chase;
+		
 		for(T o : data) {
-			o.getClass().getDeclaredField("phase").get(o);
-			System.out.println(o);
-			switch(o.toString().charAt(0)) {
-			case 'A' : chaseA.add(((HighVoltageCurrent) o).getValue());break;
-			case 'B' : chaseB.add(((HighVoltageCurrent) o).getValue());break;
-			case 'C' : chaseC.add(((HighVoltageCurrent) o).getValue());break;
+			
+			field = o.getClass().getDeclaredField("phase");
+			field.setAccessible(true);
+			chase = field.get(o).toString().charAt(0);
+			field = o.getClass().getDeclaredField("value");
+			field.setAccessible(true);
+			switch(chase) {
+			case 'A' : chaseA.add(Integer.valueOf(field.get(o).toString()));break;
+			case 'B' : chaseB.add(Integer.valueOf(field.get(o).toString()));break;
+			case 'C' : chaseC.add(Integer.valueOf(field.get(o).toString()));break;
 			}
 		}
 		
@@ -80,7 +88,6 @@ public class ChartData {
 			
 			xData.add(""); 	
 		}
-		chartData.getxAxis().get(0).setData(xData);
 		return chartData;
 	}
 	
