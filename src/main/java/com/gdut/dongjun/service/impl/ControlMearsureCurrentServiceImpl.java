@@ -52,22 +52,22 @@ public class ControlMearsureCurrentServiceImpl extends
 	}
 
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String beginDate,
+	public List<Object> selectByTime(String switchId, String beginDate,
 			String endDate) {
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		//Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> xx = MapUtil.warp("switchId", switchId);
-		xx.put("phase", "A");
+		//xx.put("phase", "A");
 		xx.put("beginDate", beginDate);
 		xx.put("endDate", endDate);
-		result.put("A", currentMapper.selectByTime(xx));
+		/*result.put("A", currentMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "B");
 		result.put("B", currentMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "C");
-		result.put("C", currentMapper.selectByTime(xx));
-		return result;
+		result.put("C", currentMapper.selectByTime(xx));*/
+		return currentMapper.selectByTime(xx);
 	}
 
 	@Override

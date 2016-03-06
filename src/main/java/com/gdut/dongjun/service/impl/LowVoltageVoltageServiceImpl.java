@@ -51,23 +51,23 @@ public class LowVoltageVoltageServiceImpl extends BaseServiceImpl<LowVoltageVolt
 	}
 
 	@Override
-	public Map<String, Object> selectByTime(String switchId, String beginDate,
+	public List<Object> selectByTime(String switchId, String beginDate,
 			String endDate) {
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		//Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> xx = new HashMap<String, Object>();
 		xx.put("switchId", switchId);
-		xx.put("phase", "A");
+		//xx.put("phase", "A");
 		xx.put("beginDate", beginDate);
 		xx.put("endDate", endDate);
-		result.put("A", voltageMapper.selectByTime(xx));
+		/*result.put("A", voltageMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "B");
 		result.put("B", voltageMapper.selectByTime(xx));
 		xx.remove("phase");
 		xx.put("phase", "C");
-		result.put("C", voltageMapper.selectByTime(xx));
-		return result;
+		result.put("C", voltageMapper.selectByTime(xx));*/
+		return voltageMapper.selectByTime(xx);
 	}
 
 	@Override

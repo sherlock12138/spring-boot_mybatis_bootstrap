@@ -27,7 +27,7 @@ public class LowVoltageCurrentDAOImpl extends
 	}
 
 	@Override
-	public List<LowVoltageCurrent> selectByTime(Map<String, Object> xx) {
+	public List<Object> selectByTime(Map<String, Object> xx) {
 		// TODO Auto-generated method stub
 		return template.selectList(getNamespace("selectByTime"), xx);
 	}

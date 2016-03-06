@@ -1,10 +1,8 @@
 package com.gdut.dongjun.web;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdut.dongjun.domain.vo.ChartData;
-import com.gdut.dongjun.domain.vo.ChartData.ChaseData;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
@@ -107,7 +104,7 @@ public class ChartController {
 	@ResponseBody
 	public Object selectChartBySwitchId(
 			@RequestParam(required = true) String switchId,
-			@RequestParam(required = true) String type,
+			@RequestParam(required = true) int type,
 			@RequestParam(required = true) int cov, String beginDate,
 			String endDate) {
 
@@ -126,38 +123,41 @@ public class ChartController {
 			endDate = df.format(date);
 		}
 
-		if (type == null) {
+		/*if (type == null) {
 			type = "0";
-		}
+		}*/
 		ChartData data = new ChartData();
 		switch (type) {
-		case "0":
+		case 0:
 			if(cov == 0) {
 				/*map.put("current",
-						currentService.selectByTime(switchId, beginDate, endDate));*/
+						);*/
+				return data.getJsonChart(currentService.selectByTime(switchId, beginDate, endDate));
 			} else {
 				/*map.put("voltage",
 						voltageService.selectByTime(switchId, beginDate, endDate));*/
+				return data.getJsonChart(voltageService.selectByTime(switchId, beginDate, endDate));
 			}
-		case "1":
+		case 1:
 			if(cov == 0) {
 				/*map.put("current",
 						currentService2.selectByTime(switchId, beginDate, endDate));*/
 				return data.getJsonChart(currentService2.selectByTime(switchId, beginDate, endDate));
 			} else {
-				map.put("voltage",
-						voltageService2.selectByTime(switchId, beginDate, endDate));
+				/*map.put("voltage",
+						*/
+				return data.getJsonChart(voltageService2.selectByTime(switchId, beginDate, endDate));
 			}
-			break;
-		case "2":
-			/*if(cov == 0) {
-				map.put("current",
-						currentService3.selectByTime(switchId, beginDate, endDate));
+		case 2:
+			if(cov == 0) {
+				/*map.put("current",
+						currentService3.selectByTime(switchId, beginDate, endDate));*/
+				return data.getJsonChart(currentService3.selectByTime(switchId, beginDate, endDate));
 			} else {
-				map.put("voltage",
-						voltageService3.selectByTime(switchId, beginDate, endDate));
-			}*/
-			break;
+				/*map.put("voltage",
+						voltageService3.selectByTime(switchId, beginDate, endDate));*/
+				return data.getJsonChart(voltageService3.selectByTime(switchId, beginDate, endDate));
+			}
 		default:
 			break;
 		}

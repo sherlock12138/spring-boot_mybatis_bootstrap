@@ -41,12 +41,19 @@
 
 
 	<select id="selectByTime" resultMap="BaseResultMap">
-		select * from
+		<!-- select * from
 		low_voltage_voltage where
 		switch_id = #{switchId} and phase = #{phase}
 		and
 		time between #{beginDate} and #{endDate}
-		<!--  like #{time}-->
+		 like #{time}
+		order By time Asc -->
+		select * from
+		low_voltage_voltage where
+		switch_id = #{switchId}
+		and
+		time between #{beginDate} and #{endDate}
+		 like #{time}
 		order By time Asc
 	</select>
 
