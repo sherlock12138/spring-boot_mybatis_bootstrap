@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="73c6084d-5ff9-4528-9834-05f7b6587610" name="!changes.default.changelist.name!" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/static/js/custom/Date.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/custom/Date.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/control_measure_switch_manager.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/control_measure_switch_manager.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/current_voltage_chart.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/current_voltage_chart.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/high_voltage_switch_manager.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/high_voltage_switch_manager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/static/js/custom/index.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/custom/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/line_manager.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/line_manager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/low_voltage_switch_manager.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/low_voltage_switch_manager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/substation_manager.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/substation_manager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="spring-boot_mybatis_bootstrap.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,8 +29,8 @@
       <file leaf-file-name="current_voltage_chart.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/templates/current_voltage_chart.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.1351352" vertical-offset="2254" max-vertical-offset="4508">
-              <caret line="79" column="40" selection-start-line="79" selection-start-column="25" selection-end-line="79" selection-end-column="40" />
+            <state vertical-scroll-proportion="-5.675676" vertical-offset="2590" max-vertical-offset="4508">
+              <caret line="100" column="51" selection-start-line="100" selection-start-column="51" selection-end-line="100" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -47,8 +39,8 @@
       <file leaf-file-name="current_voltage_chart.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8310502" vertical-offset="196" max-vertical-offset="9604">
-              <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.44748858" vertical-offset="224" max-vertical-offset="9940">
+              <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -577,14 +569,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/current_voltage_chart.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1351352" vertical-offset="2254" max-vertical-offset="4508">
-          <caret line="79" column="40" selection-start-line="79" selection-start-column="25" selection-end-line="79" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/left_side_switch_ZTree.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1084" max-vertical-offset="7756">
@@ -593,10 +577,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/current_voltage_chart.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.675676" vertical-offset="2590" max-vertical-offset="4508">
+          <caret line="100" column="51" selection-start-line="100" selection-start-column="51" selection-end-line="100" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/static/js/custom/current_voltage_chart.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8310502" vertical-offset="196" max-vertical-offset="9604">
-          <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.44748858" vertical-offset="224" max-vertical-offset="9940">
+          <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
           <folding />
         </state>
       </provider>

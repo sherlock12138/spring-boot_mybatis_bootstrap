@@ -12,13 +12,30 @@ $(document).ready(function() {
 
 var search_chart_switch_id;//用于搜索报表的开关id
 function zTreeOnClick(event, treeId, treeNode) {
+	<!-- 当点击Ztree默认先初始化电压曲线 -->
+	show_chart(treeNode, 1);
+	$('#showVchart').click(function () {
+		show_chart(treeNode, 1);
+	});
+	$('#showCchart').click(function () {
+		show_chart(treeNode, 0);
+	});
+	$("#showPchart").click(function () {
+		show_chart(treeNode, 2);
+	})
+	//点击事件
+	//search_chart_switch_id = treeNode.id;
+	//search_chart_by_switch_id();
+}
+
+function show_chart(treeNode, num) {
 	var id = treeNode.id;
 	var type = treeNode.type;
 	var begin_time = $('#begin_search_date').val();
 	var end_time = $('#end_search_date').val();
 	//创建折线图
 	var myChart = echarts.init(document.getElementById('VoltageChart'));
-	var option = $.ajax({
+	$.ajax({
 		url: '/dongjun/select_chart_by_switch_id',
 		method: 'POST',
 		data : {
@@ -26,19 +43,14 @@ function zTreeOnClick(event, treeId, treeNode) {
 			type: type,
 			beginDate: begin_time,
 			endDate: end_time,
-			cov: 1
+			cov: num
 		}
 	}).success(function (data) {
 		option = data;
 		myChart.setOption(option);
 	})
-	//点击事件
-	//search_chart_switch_id = treeNode.id;
-	//search_chart_by_switch_id();
-	
-	
-	
-};
+}
+
 
 function search_chart_by_switch_id(){
 	
