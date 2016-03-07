@@ -1,5 +1,6 @@
 package com.gdut.dongjun.domain.vo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,9 +62,9 @@ public class ChartData {
 		
 		ChartData chartData = new ChartData();
 		List<ChaseData> list = chartData.getSeries();
-		List<Integer> chaseA = list.get(0).getData();
-		List<Integer> chaseB = list.get(1).getData();
-		List<Integer> chaseC = list.get(2).getData();
+		List<Float> chaseA = list.get(0).getData();
+		List<Float> chaseB = list.get(1).getData();
+		List<Float> chaseC = list.get(2).getData();
 		List<String> xData = new ArrayList<>();
 		Object chase;
 		
@@ -75,9 +76,12 @@ public class ChartData {
 				return null;
 			}
 			switch(chase.toString().charAt(0)) {
-			case 'A' : chaseA.add(GenericUtil.getPrivatyIntegerValue(o, "value"));break;
-			case 'B' : chaseB.add(GenericUtil.getPrivatyIntegerValue(o, "value"));break;
-			case 'C' : chaseC.add(GenericUtil.getPrivatyIntegerValue(o, "value"));break;
+			case 'A' : chaseA.add(getFloatValue(
+					GenericUtil.getPrivatyIntegerValue(o, "value")));break;
+			case 'B' : chaseB.add(getFloatValue(
+					GenericUtil.getPrivatyIntegerValue(o, "value")));break;
+			case 'C' : chaseC.add(getFloatValue(
+					GenericUtil.getPrivatyIntegerValue(o, "value")));break;
 			}
 			
 			xData.add(TimeUtil.timeFormat((Date)GenericUtil.getPrivateObjectValue(o, "time")));
@@ -86,7 +90,12 @@ public class ChartData {
 		return chartData;
 	}
 	
-	//private 
+	private float getFloatValue(Integer value) {
+		
+		BigDecimal decimal = new BigDecimal(value);
+		decimal.setScale(2);
+		return decimal.floatValue();
+	}
 
 	public List<XAxis> getxAxis() {
 		return xAxis;
@@ -208,7 +217,7 @@ public class ChartData {
 		
 		private Map<String, Object> areaStyle = new HashMap<>(1);
 		
-		private List<Integer> data = new ArrayList<>();
+		private List<Float> data = new ArrayList<>();
 		
 		public ChaseData() {
 			areaStyle.put("normal", new HashMap<>());
@@ -251,11 +260,11 @@ public class ChartData {
 			this.areaStyle = areaStyle;
 		}
 
-		public List<Integer> getData() {
+		public List<Float> getData() {
 			return data;
 		}
 
-		public void setData(List<Integer> data) {
+		public void setData(List<Float> data) {
 			this.data = data;
 		}
 	}

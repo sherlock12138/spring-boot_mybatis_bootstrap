@@ -18,6 +18,7 @@ import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.LowVoltageCurrentService;
 import com.gdut.dongjun.service.LowVoltageVoltageService;
+import com.gdut.dongjun.util.TimeUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -123,6 +124,16 @@ public class ChartController {
 			long time = (date.getTime() / 1000) + 60 * 60 * 24;//秒  
             date.setTime(time * 1000);//毫秒 
 			endDate = df.format(date);
+		} 
+		if(TimeUtil.timeParse(beginDate).after(TimeUtil.timeParse(endDate))
+				|| TimeUtil.timeParse(beginDate).after(new Date())) {
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+			beginDate = df.format(new Date());
+			Date date = new Date();
+			long time = (date.getTime() / 1000) + 60 * 60 * 24;//秒  
+            date.setTime(time * 1000);//毫秒 
+			endDate = df.format(date);
 		}
 
 		/*if (type == null) {
@@ -161,7 +172,7 @@ public class ChartController {
 				return data.getJsonChart(voltageService3.selectByTime(switchId, beginDate, endDate));
 			}
 		default:
-			return null;
+			return "";
 		}
 
 	}

@@ -56,7 +56,13 @@
 		switch_id = #{switchId}
 		and
 		time between #{beginDate} and #{endDate}
-		order By time Asc
+		union
+		select * from
+		history_high_voltage_voltage where
+		switch_id = #{switchId}
+		and
+		time between #{beginDate} and #{endDate}
+		order By time Asc limit 2000
 	</select>
 
 	<select id="getRecentlyVoltage" resultMap="BaseResultMap">
