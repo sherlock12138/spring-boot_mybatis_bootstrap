@@ -1,3 +1,14 @@
+var currents;
+var voltages;
+
+$(document).ready(function() {
+
+	initail_datetimepicker();
+
+	$("#search_btn").click(search_chart_by_switch_id);//右侧搜索按钮
+
+
+});
 function zTreeOnClick(event, treeId, treeNode) {
 	<!-- 当点击Ztree默认先初始化电压曲线 -->
 	var node = treeNode;
@@ -65,44 +76,44 @@ function show_chart(treeNode, num, Chartname) {
 }
 
 
-//function search_chart_by_switch_id(){
-//
-//	$.ajax({
-//		type : "post",
-//		url : "select_chart_by_switch_id",
-//		async : false,
-//		data : {
-//			"type" : $("#zTree_node_type").val(),
-//			"beginDate" : $("#begin_search_date").val(),
-//			"endDate" : $("#end_search_date").val(),
-//			"switchId" : search_chart_switch_id
-//		},
-//		success : function(data) {
-//
-//			//不同的设备有不同 的精确度
-//			var vol_precision = 0;
-//			var cur_precision = 0;
-//
-//			switch ($("#zTree_node_type").val()) {
-//
-//			case '0':
-//				vol_precision = 10;
-//				cur_precision = 100;
-//			case '1':
-//				vol_precision = 100;
-//				cur_precision = 100;
-//			case '2':
-//				vol_precision = 100;
-//				cur_precision = 100;
-//			}
-//
-//			creat("current_chart", data.current, cur_precision);
-//			creat("voltage_chart", data.voltage, vol_precision);
-//			creat("power_chart", calculate_power(data.current, data.voltage),
-//					cur_precision * vol_precision);
-//		}
-//	})
-//}
+function search_chart_by_switch_id(){
+
+	$.ajax({
+		type : "post",
+		url : "select_chart_by_switch_id",
+		async : false,
+		data : {
+			"type" : $("#zTree_node_type").val(),
+			"beginDate" : $("#begin_search_date").val(),
+			"endDate" : $("#end_search_date").val(),
+			"switchId" : search_chart_switch_id
+		},
+		success : function(data) {
+
+			//不同的设备有不同 的精确度
+			var vol_precision = 0;
+			var cur_precision = 0;
+
+			switch ($("#zTree_node_type").val()) {
+
+			case '0':
+				vol_precision = 10;
+				cur_precision = 100;
+			case '1':
+				vol_precision = 100;
+				cur_precision = 100;
+			case '2':
+				vol_precision = 100;
+				cur_precision = 100;
+			}
+
+			creat("current_chart", data.current, cur_precision);
+			creat("voltage_chart", data.voltage, vol_precision);
+			creat("power_chart", calculate_power(data.current, data.voltage),
+					cur_precision * vol_precision);
+		}
+	})
+}
 
 /**
  * 
@@ -115,23 +126,23 @@ function show_chart(treeNode, num, Chartname) {
  * @return void
  * @throws
  */
-//function creat(id, data, precision) {
-//
-//	$("#" + id).remove(); // this is my <canvas> element
-//	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
-//
-//	var height = parseInt($("#parent_" + id).css('height')) - 10;
-//	height = height - (height % 5);
-//
-//	$("#" + id).parent().css("width", data.A.length * height / 5 + "px");
-//	$("#" + id).css("width", data.A.length * height / 5);
-//	$("#" + id).css("height", height);
-//
-//	var ctx = $("#" + id).get(0).getContext("2d");
-//	new Chart(ctx).Line(load(data, precision), {
-//		responsive : true,
-//	});
-//}
+function creat(id, data, precision) {
+
+	$("#" + id).remove(); // this is my <canvas> element
+	$("#parent_" + id).append('<canvas id="' + id + '" height="400"></canvas>');
+
+	var height = parseInt($("#parent_" + id).css('height')) - 10;
+	height = height - (height % 5);
+
+	$("#" + id).parent().css("width", data.A.length * height / 5 + "px");
+	$("#" + id).css("width", data.A.length * height / 5);
+	$("#" + id).css("height", height);
+
+	var ctx = $("#" + id).get(0).getContext("2d");
+	new Chart(ctx).Line(load(data, precision), {
+		responsive : true,
+	});
+}
 
 
 
@@ -146,19 +157,19 @@ function show_chart(treeNode, num, Chartname) {
  * @return void
  * @throws
  */
-//function initail_datetimepicker() {
-//
-//	$('.form_date').datetimepicker({
-//		language : 'zh-CN',
-//		weekStart : 1,
-//		todayBtn : 1,
-//		autoclose : 1,
-//		todayHighlight : 1,
-//		startView : 2,
-//		minView : 2,
-//		forceParse : 0,
-//	});
-//}
+function initail_datetimepicker() {
+
+	$('.form_date').datetimepicker({
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		forceParse : 0,
+	});
+}
 
 /**
  * 
@@ -168,9 +179,9 @@ function show_chart(treeNode, num, Chartname) {
  * @return void
  * @throws
  */
-//function initail_power_chart() {
-//	creat("power_chart", calculate_power(currents, voltages));
-//}
+function initail_power_chart() {
+	creat("power_chart", calculate_power(currents, voltages));
+}
 
 /**
  * 
@@ -180,30 +191,30 @@ function show_chart(treeNode, num, Chartname) {
  * @return void
  * @throws
  */
-//function initail_voltage_chart() {
-//
-//	$.ajax({
-//		type : "post",
-//		url : "voltage_chart",
-//		async : false,
-//		data : {
-//			"switchId" : "03"
-//		},
-//		success : function(data) {
-//
-//			for (var i = 0; i < data.A.length; i++) {
-//
-//				data.A[i].value = data.A[i].value / 100;
-//				data.B[i].value = data.B[i].value / 100;
-//				data.C[i].value = data.C[i].value / 100;
-//			}
-//			voltages = data;
-//			creat("voltage_chart", voltages);
-//
-//		}
-//
-//	})
-//}
+function initail_voltage_chart() {
+
+	$.ajax({
+		type : "post",
+		url : "voltage_chart",
+		async : false,
+		data : {
+			"switchId" : "03"
+		},
+		success : function(data) {
+
+			for (var i = 0; i < data.A.length; i++) {
+
+				data.A[i].value = data.A[i].value / 100;
+				data.B[i].value = data.B[i].value / 100;
+				data.C[i].value = data.C[i].value / 100;
+			}
+			voltages = data;
+			creat("voltage_chart", voltages);
+
+		}
+
+	})
+}
 /**
  * 
  * @Title: initail_current_chart
@@ -212,30 +223,30 @@ function show_chart(treeNode, num, Chartname) {
  * @return void
  * @throws
  */
-//function initail_current_chart() {
-//	/**
-//	 * 电流曲线
-//	 */
-//	$.ajax({
-//		type : "post",
-//		url : "current_chart",
-//		async : false,
-//		data : {
-//			"switchId" : "03"
-//		},
-//		success : function(data) {
-//
-//			for (var i = 0; i < data.A.length; i++) {
-//
-//				data.A[i].value = data.A[i].value / 100;
-//				data.B[i].value = data.B[i].value / 100;
-//				data.C[i].value = data.C[i].value / 100;
-//			}
-//			currents = data;
-//			creat("current_chart", currents);
-//		}
-//	})
-//}
+function initail_current_chart() {
+	/**
+	 * 电流曲线
+	 */
+	$.ajax({
+		type : "post",
+		url : "current_chart",
+		async : false,
+		data : {
+			"switchId" : "03"
+		},
+		success : function(data) {
+
+			for (var i = 0; i < data.A.length; i++) {
+
+				data.A[i].value = data.A[i].value / 100;
+				data.B[i].value = data.B[i].value / 100;
+				data.C[i].value = data.C[i].value / 100;
+			}
+			currents = data;
+			creat("current_chart", currents);
+		}
+	})
+}
 
 /**
  * 
@@ -250,31 +261,31 @@ function show_chart(treeNode, num, Chartname) {
  * @return any
  * @throws
  */
-//function calculate_power(currents, voltages) {
-//
-//	var len;
-//	if (voltages.A.length <= currents.A.length) {
-//		len = voltages.A.length;
-//	} else {
-//		len = currents.A.length;
-//	}
-//
-//	for (var i = 0; i < len; i++) {
-//
-//		if (voltages.A[i] != null && currents.A[i] != null) {
-//			voltages.A[i].value = voltages.A[i].value * currents.A[i].value;
-//		}
-//
-//		if (voltages.B[i] != null && currents.B[i] != null) {
-//			voltages.B[i].value = voltages.B[i].value * currents.B[i].value;
-//		}
-//
-//		if (voltages.C[i] != null && currents.C[i] != null) {
-//			voltages.C[i].value = voltages.C[i].value * currents.C[i].value;
-//		}
-//	}
-//	return voltages;
-//}
+function calculate_power(currents, voltages) {
+
+	var len;
+	if (voltages.A.length <= currents.A.length) {
+		len = voltages.A.length;
+	} else {
+		len = currents.A.length;
+	}
+
+	for (var i = 0; i < len; i++) {
+
+		if (voltages.A[i] != null && currents.A[i] != null) {
+			voltages.A[i].value = voltages.A[i].value * currents.A[i].value;
+		}
+
+		if (voltages.B[i] != null && currents.B[i] != null) {
+			voltages.B[i].value = voltages.B[i].value * currents.B[i].value;
+		}
+
+		if (voltages.C[i] != null && currents.C[i] != null) {
+			voltages.C[i].value = voltages.C[i].value * currents.C[i].value;
+		}
+	}
+	return voltages;
+}
 
 
 
@@ -287,28 +298,28 @@ function show_chart(treeNode, num, Chartname) {
  * @return any
  * @throws
  */
-//function load(data, precision) {
-//
-//	var chart = lineChart();
-//	for (var i = 0; i < data.A.length; i++) {
-//
-//		chart.labels[i] = getFormatDateByLong(data.A[i].time, "MM-dd hh:mm");
-//
-//		if (data.A[i] != null && precision != 0) {
-//			chart.datasets[0].data[i] = data.A[i].value / precision;
-//		}
-//		if (data.B[i] != null && precision != 0) {
-//
-//			chart.datasets[1].data[i] = data.B[i].value / precision;
-//		}
-//
-//		if (data.C[i] != null && precision != 0) {
-//			chart.datasets[2].data[i] = data.C[i].value / precision;
-//		}
-//
-//	}
-//	return chart;
-//}
+function load(data, precision) {
+
+	var chart = lineChart();
+	for (var i = 0; i < data.A.length; i++) {
+
+		chart.labels[i] = getFormatDateByLong(data.A[i].time, "MM-dd hh:mm");
+
+		if (data.A[i] != null && precision != 0) {
+			chart.datasets[0].data[i] = data.A[i].value / precision;
+		}
+		if (data.B[i] != null && precision != 0) {
+
+			chart.datasets[1].data[i] = data.B[i].value / precision;
+		}
+
+		if (data.C[i] != null && precision != 0) {
+			chart.datasets[2].data[i] = data.C[i].value / precision;
+		}
+
+	}
+	return chart;
+}
 
 /**
  * 
@@ -319,44 +330,44 @@ function show_chart(treeNode, num, Chartname) {
  * @return ___anonymous3850_4667
  * @throws
  */
-//function lineChart() {
-//	var lineChart = {
-//		labels : [],
-//		datasets : [ {
-//			scaleLabel : "My First dataset",
-//			fillColor : "rgba(220,220,220,0.2)",
-//			strokeColor : "#7EBBF9",
-//			pointColor : "#7EBBF9",
-//			pointStrokeColor : "#fff",
-//			pointHighlightFill : "#fff",
-//			pointHighlightStroke : "#7EBBF9",
-//			data : []
-//		}, {
-//			scaleLabel : "My First dataset",
-//			fillColor : "rgba(220,220,220,0.2)",
-//			strokeColor : "#2975B5",
-//			pointColor : "#2975B5",
-//			pointStrokeColor : "#fff",
-//			pointHighlightFill : "#fff",
-//			pointHighlightStroke : "#2975B5",
-//			data : []
-//		}, {
-//			scaleLabel : "My First dataset",
-//			fillColor : "rgba(220,220,220,0.2)",
-//			strokeColor : "#A572AA",
-//			pointColor : "#A572AA",
-//			pointStrokeColor : "#fff",
-//			pointHighlightFill : "#fff",
-//			pointHighlightStroke : "#A572AA",
-//			data : []
-//		}, ],
-//	// scaleGridLineWidth : 600,
-//	// datasetStrokeWidth : 6,
-//	// scaleFontSize : 12,
-//
-//	// scaleStepWidth : 20,
-//
-//	}
-//	return lineChart;
-//}
+function lineChart() {
+	var lineChart = {
+		labels : [],
+		datasets : [ {
+			scaleLabel : "My First dataset",
+			fillColor : "rgba(220,220,220,0.2)",
+			strokeColor : "#7EBBF9",
+			pointColor : "#7EBBF9",
+			pointStrokeColor : "#fff",
+			pointHighlightFill : "#fff",
+			pointHighlightStroke : "#7EBBF9",
+			data : []
+		}, {
+			scaleLabel : "My First dataset",
+			fillColor : "rgba(220,220,220,0.2)",
+			strokeColor : "#2975B5",
+			pointColor : "#2975B5",
+			pointStrokeColor : "#fff",
+			pointHighlightFill : "#fff",
+			pointHighlightStroke : "#2975B5",
+			data : []
+		}, {
+			scaleLabel : "My First dataset",
+			fillColor : "rgba(220,220,220,0.2)",
+			strokeColor : "#A572AA",
+			pointColor : "#A572AA",
+			pointStrokeColor : "#fff",
+			pointHighlightFill : "#fff",
+			pointHighlightStroke : "#A572AA",
+			data : []
+		}, ],
+	// scaleGridLineWidth : 600,
+	// datasetStrokeWidth : 6,
+	// scaleFontSize : 12,
+
+	// scaleStepWidth : 20,
+
+	}
+	return lineChart;
+}
 

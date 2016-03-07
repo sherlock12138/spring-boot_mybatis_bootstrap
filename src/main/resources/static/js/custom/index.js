@@ -1089,12 +1089,13 @@ function hitchEventSpy() {
 						var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
 						
 						if(nodeList.length != 0) {
+
 							if(data[i].status == "00") {
-								switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch);	//开闸描绘
+								switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);	//开闸描绘
 								if(data[i].open == true) {
 									if(isDistinct(nodeList[0].id, alarmList)) {
 										alarmList.push(nodeList[0].id);	//status与open同时符合才报警
-										switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);
+										//switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);
 										playVoice(getVoiceData(nodeList[0].name));
 										update(nodeList, 2);  // 树节点变红
 										worning_switchs_draw(nodeList[0]); //声音的 图标的
@@ -1117,12 +1118,12 @@ function hitchEventSpy() {
 					}
 				}
 				if(j < 0 && zTree.getNodesByParamFuzzy("id", newList[i]).length != 0) {
-					switchs_draw(zTree.getNodesByParamFuzzy("id", newList[i])[0], close_switch, click_high_voltage_switch);
+					switchs_drawByTye(zTree.getNodesByParamFuzzy("id", newList[i])[0], close_switch_high, close_switch_low, click_high_voltage_switch);
 				}
 			}
 			for(var i = oldList.length - 1; i >= 0; --i) {
 				if(oldList[i] != "") {
-					switchs_draw(zTree.getNodesByParamFuzzy("id", oldList[i])[0], outLine_switch, click_high_voltage_switch);
+					switchs_drawByTye(zTree.getNodesByParamFuzzy("id", oldList[i])[0], voltage_switch_icon_high, voltage_switch_icon_low, click_high_voltage_switch);
 				}
 			}
 			oldList = newList;
