@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 	initail_datetimepicker();
 
-	$("#search_btn").click(search_chart_by_switch_id);//右侧搜索按钮
+	//$("#search_btn").click(search_chart_by_switch_id);//右侧搜索按钮
 
 
 });
