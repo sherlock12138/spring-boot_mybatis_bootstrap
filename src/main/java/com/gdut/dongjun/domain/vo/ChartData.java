@@ -1,11 +1,14 @@
 package com.gdut.dongjun.domain.vo;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
 
 import com.gdut.dongjun.util.GenericUtil;
 import com.gdut.dongjun.util.TimeUtil;
@@ -93,8 +96,7 @@ public class ChartData {
 	private float getFloatValue(Integer value) {
 		
 		BigDecimal decimal = new BigDecimal(value);
-		decimal.setScale(2);
-		return decimal.floatValue();
+		return decimal.divide(new BigDecimal(100)).floatValue();
 	}
 
 	public List<XAxis> getxAxis() {
