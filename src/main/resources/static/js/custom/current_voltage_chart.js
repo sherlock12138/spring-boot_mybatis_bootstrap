@@ -35,9 +35,15 @@ function zTreeOnClick(event, treeId, treeNode) {
 		});
 	});
 	$('#showVExcal').click(function () {
-		show_table(node, 1);
+		show_table(node, 1, 'v_data_list');
 		$("#search_btn").unbind().click(function () {
-			show_table(node, 1);
+			show_table(node, 1, 'v_data_list');
+		});
+	});
+	$('#showCExcal').click(function () {
+		show_table(node, 0, 'c_data_list');
+		$("#search_btn").unbind().click(function () {
+			show_table(node, 0, 'c_data_list');
 		});
 	})
 	//点击事件
@@ -80,10 +86,10 @@ function show_chart(treeNode, num, Chartname) {
 	})
 }
 
-function show_table (node, num) {
+function show_table (node, num, tablename) {
 	var begin_time = $('#begin_search_date').val();
 	var end_time = $('#end_search_date').val();
-	$('#data_list').DataTable( {
+	$('#' + tablename).DataTable( {
 		destroy: true,// destroy之后才能重新加载
 		"ordering": false,
 		"info":     false,
