@@ -43,7 +43,7 @@ function loadEventListWithSwitchId(_url, switchId) {
 					"data" : "hitchPhase"
 				}, {
 					"data" : "hitchReason"
-				}, ],
+				}],
 				"createdRow" : function(row, data, index) {
 
 					var hitchTime = $('td', row).eq(0).text();

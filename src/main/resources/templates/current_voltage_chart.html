@@ -12,7 +12,11 @@
 	rel="stylesheet" media="screen" />
 <link href="../../css/chart.css" rel="stylesheet" />
 <link href="../../css/global.css" rel="stylesheet" />
-
+    <link href="../../css/dataTables/dataTables.tableTools.css"
+          rel="stylesheet" />
+    <link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
+    <link href="../../css/dataTables/dataTables.bootstrap.css"
+          rel="stylesheet" />
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
     <script src="../../js/html5shiv.js"></script>
@@ -97,14 +101,42 @@
               <li class="active"><a data-toggle="tab" href="#VoltageChart" id="showVchart">电压曲线图</a></li>
               <li><a data-toggle="tab" href="#current" id="showCchart">电流曲线图</a></li>
               <li><a data-toggle="tab" href="#power" id="showPchart">功率曲线图</a></li>
-              <li><a href="#excalChart" data-toggle="tab">数据表格</a></li>
+              <li><a href="#excalChartV" data-toggle="tab" id="showVExcal">电压数据表格</a></li>
+              <li><a href="#excalChartC" data-toggle="tab" id="showCExcal">电压数据表格</a></li>
           </ul>
           <div class="clean"></div>
           <div class="tab-content">
               <div class="tab-pane Mychart active" id="VoltageChart"></div>
               <div class="tab-pane Mychart" id="current"></div>
               <div class="tab-pane Mychart" id="power"></div>
-              <div class="tab-pane Mychart" id="excalChart"></div>
+              <div class="tab-pane Mychart" id="excalChartV">
+                  <table id="data_list" class="table table-bordered table-striped table-hover table-condensed success" cellspacing="0" width="100%">
+                      <thead>
+                      <th>时间</th>
+                      <th>A相</th>
+                      <th>B相</th>
+                      <th>C相</th>
+                      </thead>
+                      <!--<tr>-->
+                          <!--&lt;!&ndash;<td th:text="${data.time)}"></td>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<td th:text="${data.aValue}"></td>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<td th:text="${data.aValue}"></td>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<td th:text="${data.aValue}"></td>&ndash;&gt;-->
+                      <!--</tr>-->
+
+                      <!--<tr th:each="switch:${switches}" th:if="*{switch!=null}">-->
+                          <!--<td th:text="${switch.time}"></td>-->
+                          <!--<td class="hide" th:text="${switch.id}"></td>-->
+                          <!--<td class="hide" th:text="${switch.companyId}"></td>-->
+                          <!--<td><a href="#edit_switch_modal" role="button"-->
+                                 <!--class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>-->
+                          <!--<td><a href="#del_switch_modal"-->
+                                 <!--class="del_switch_btn btn btn-danger" data-toggle="modal"-->
+                                 <!--data-backdrop="static">删除&raquo; </a></td>-->
+                      <!--</tr>-->
+                  </table>
+              </div>
+              <div class="tab-pane Mychart" id="excalChartC"></div>
           </div>
 
 			</div>
@@ -150,5 +182,9 @@
   <script src="../../js/custom/gobal.js"></script>
 	<script src="../../js/ZTree/jquery.ztree.core-3.5.js"></script>
 
+<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+<script src="../../js/dataTables/jquery.dataTables.js"></script>
+<script src="../../js/dataTables/dataTables.tableTools.js"></script>
+<script src="../../js/dataTables/dataTables_initial.js"></script>
 </body>
 </html>

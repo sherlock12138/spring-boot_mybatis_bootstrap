@@ -29,12 +29,17 @@ function zTreeOnClick(event, treeId, treeNode) {
 		});
 	});
 	$("#showPchart").click(function () {
-
 		show_chart(node, 2);
 		$("#search_btn").unbind().click(function () {
 			show_chart(node, 2);
 		});
 	});
+	$('#showVExcal').click(function () {
+		show_table(node, 1);
+		$("#search_btn").unbind().click(function () {
+			show_table(node, 1);
+		});
+	})
 	//点击事件
 	//search_chart_switch_id = treeNode.id;
 	//search_chart_by_switch_id();
@@ -46,7 +51,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 /** param： 对应实例化图表的ID
 /**
 */
-
+////dongjun/select_table_by_id?switchId=&type=&cov=&beginDate=&endDate=
 function show_chart(treeNode, num, Chartname) {
 	var option;
 	var id = treeNode.id;
@@ -75,6 +80,84 @@ function show_chart(treeNode, num, Chartname) {
 	})
 }
 
+function show_table (node, num) {
+	var begin_time = $('#begin_search_date').val();
+	var end_time = $('#end_search_date').val();
+	$('#data_list').DataTable( {
+		destroy: true,// destroy之后才能重新加载
+		"ordering": false,
+		"info":     false,
+		"ajax" : {
+			url: '/dongjun/select_table_by_id',
+			method: 'post',
+			data: {
+				switchId: node.id,
+				type: node.type,
+				cov: num,
+				beginDate: begin_time,
+				endDate: end_time
+			}
+		},
+		"columns" : [ {
+			"data" : "time"
+		}, {
+			"data" : "aValue"
+		}, {
+			"data" : "bValue"
+		}, {
+			"data" : "cValue"
+		}]
+//		"columns": [
+//			{ "data": "time" },
+//			{ 	"data": "id"
+//				},
+//			{ 	"data": "companyId"
+//				},
+////			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+////			{ "data": null }// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+//		],
+		// 为下面的列设置默认值
+//		"columnDefs": [ {
+//			"targets": -2,
+//			"data": null,
+//			"defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
+//		},
+//			{
+//				"targets": -1,
+//				"data": null,
+//				"defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
+//			}],
+//		"fnInitComplete": function(oSettings, json) {
+//
+//			$(".edit_switch_btn").click(editSwitch);
+//			$(".del_switch_btn").click(delSwitch);
+//		}
+	} );
+
+//	$('#data_list').DataTable({
+//		"destroy" : true,// destroy之后才能重新加载
+//		"ajax" : {
+//			url: '/dongjun/select_table_by_id',
+//			method: 'post',
+//			data: {
+//				switchId: node.id,
+//				type: node.type,
+//				cov: num,
+//				beginDate: begin_time,
+//				endDate: end_time
+//			}
+//		},
+//		"columns" : [ {
+//			"data" : "time"
+//		}, {
+//			"data" : "aValue"
+//		}, {
+//			"data" : "bValue"
+//		}, {
+//			"data" : "cValue"
+//		}]
+//	})
+}
 
 function search_chart_by_switch_id(){
 
