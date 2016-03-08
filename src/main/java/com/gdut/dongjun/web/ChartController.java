@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdut.dongjun.domain.vo.ChartData;
+import com.gdut.dongjun.domain.vo.SwitchTableData;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
@@ -110,7 +111,8 @@ public class ChartController {
 	public Object selectChartBySwitchId(
 			@RequestParam(required = true) String switchId,
 			@RequestParam(required = true) int type,
-			@RequestParam(required = true) int cov, String beginDate,
+			@RequestParam(required = true) int cov, 
+			String beginDate,
 			String endDate) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InstantiationException {
 
 		if (beginDate == null || beginDate == "") {// 使用当前日期
@@ -120,16 +122,6 @@ public class ChartController {
 		if (endDate == null || endDate == "") {// 使用当前日期下一天的日期
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
 			
-			Date date = new Date();
-			long time = (date.getTime() / 1000) + 60 * 60 * 24;//秒  
-            date.setTime(time * 1000);//毫秒 
-			endDate = df.format(date);
-		} 
-		if(TimeUtil.timeParse(beginDate).after(TimeUtil.timeParse(endDate))
-				|| TimeUtil.timeParse(beginDate).after(new Date())) {
-			
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
-			beginDate = df.format(new Date());
 			Date date = new Date();
 			long time = (date.getTime() / 1000) + 60 * 60 * 24;//秒  
             date.setTime(time * 1000);//毫秒 
@@ -174,6 +166,50 @@ public class ChartController {
 		default:
 			return "";
 		}
-
+	}
+	
+	@RequestMapping("/select_table_by_id")
+	@ResponseBody
+	public Object selectTableById(@RequestParam(required = true) String switchId,
+			@RequestParam(required = true) int type,
+			@RequestParam(required = true) int cov, String beginDate,
+			String endDate) {
+		
+		if (beginDate == null || beginDate == "") {// 使用当前日期
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+			beginDate = df.format(new Date());
+		}
+		if (endDate == null || endDate == "") {// 使用当前日期下一天的日期
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+			
+			Date date = new Date();
+			long time = (date.getTime() / 1000) + 60 * 60 * 24;//秒  
+            date.setTime(time * 1000);//毫秒 
+			endDate = df.format(date);
+		}
+		
+		SwitchTableData data = new SwitchTableData();
+		switch (type) {
+		case 0:
+			if(cov == 0) {
+				return data.getJsonTable(currentService.selectByTime(switchId, beginDate, endDate));
+			} else {
+				return data.getJsonTable(voltageService.selectByTime(switchId, beginDate, endDate));
+			}
+		case 1:
+			if(cov == 0) {
+				return data.getJsonTable(currentService2.selectByTime(switchId, beginDate, endDate));
+			} else {
+				return data.getJsonTable(voltageService2.selectByTime(switchId, beginDate, endDate));
+			}
+		case 2:
+			if(cov == 0) {
+				return data.getJsonTable(currentService3.selectByTime(switchId, beginDate, endDate));
+			} else {
+				return data.getJsonTable(voltageService3.selectByTime(switchId, beginDate, endDate));
+			}
+		default:
+			return "";
+		}
 	}
 }

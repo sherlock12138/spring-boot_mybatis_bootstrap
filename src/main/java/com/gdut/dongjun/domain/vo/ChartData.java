@@ -1,14 +1,11 @@
 package com.gdut.dongjun.domain.vo;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.junit.Test;
 
 import com.gdut.dongjun.util.GenericUtil;
 import com.gdut.dongjun.util.TimeUtil;
@@ -17,7 +14,7 @@ import com.gdut.dongjun.util.TimeUtil;
  *@Author link xiaoMian <972192420@qq.com>
  *@ClassName ChartDataFormat.java
  *@Time 2016年3月2日下午3:34:56
- *@Description TODO
+ *@Description 将前端所需要的json返回
  *@Version 1.0 Topview
  */
 public class ChartData {
