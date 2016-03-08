@@ -17,7 +17,7 @@ import com.gdut.dongjun.util.TimeUtil;
  */
 public class SwitchTableData {
 	
-	private String id;
+	//private String id;
 	
 	private String time;
 	
@@ -38,7 +38,7 @@ public class SwitchTableData {
 			chase = GenericUtil.getPrivateObjectValue(data.get(i), "phase");
 			if(count == 0) {
 				tempData = new SwitchTableData();
-				tempData.setId(GenericUtil.getPrivateObjectValue(data.get(i), "switchId").toString());
+				//tempData.setId(GenericUtil.getPrivateObjectValue(data.get(i), "switchId").toString());
 				tempData.setTime(TimeUtil.timeFormat(
 						(Date)GenericUtil.getPrivateObjectValue(data.get(i), "time"), "yyyy-MM-dd HH:mm:ss"));
 			}
@@ -52,6 +52,7 @@ public class SwitchTableData {
 			}
 			if(count == 3) {
 				result.add(tempData);
+				count = 0;
 			}
 		}
 		return result;
@@ -63,13 +64,13 @@ public class SwitchTableData {
 		return decimal.divide(new BigDecimal(100)).floatValue();
 	}
 
-	public String getId() {
+/*	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
-	}
+	}*/
 	
 	public String getTime() {
 		return time;
