@@ -636,7 +636,7 @@ function click_high_voltage_switch() {
 	sessionStorage.latitude = this.point.lat;
 	var content = "<div class='BDM_custom_popup'>" + "<h4>"
 			+ this.name + '&nbsp;&nbsp;'
-			+ '<button class="btn btn-small btn-info" onclick="SetCenterPoint_high()">设为中心点</button>'
+			+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
 			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
 			+ '<span aria-hidden="true">' + '&times;'
 			+ '</span>' + '</button>'
