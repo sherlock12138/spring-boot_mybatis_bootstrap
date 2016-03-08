@@ -19,6 +19,7 @@ import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.LowVoltageCurrentService;
 import com.gdut.dongjun.service.LowVoltageVoltageService;
+import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.TimeUtil;
 
 @Controller
@@ -192,21 +193,21 @@ public class ChartController {
 		switch (type) {
 		case 0:
 			if(cov == 0) {
-				return data.getJsonTable(currentService.selectByTime(switchId, beginDate, endDate));
+				return MapUtil.warp("data", data.getJsonTable(currentService.selectByTime(switchId, beginDate, endDate)));
 			} else {
-				return data.getJsonTable(voltageService.selectByTime(switchId, beginDate, endDate));
+				return MapUtil.warp("data", data.getJsonTable(voltageService.selectByTime(switchId, beginDate, endDate)));
 			}
 		case 1:
 			if(cov == 0) {
-				return data.getJsonTable(currentService2.selectByTime(switchId, beginDate, endDate));
+				return MapUtil.warp("data", data.getJsonTable(currentService2.selectByTime(switchId, beginDate, endDate)));
 			} else {
-				return data.getJsonTable(voltageService2.selectByTime(switchId, beginDate, endDate));
+				return MapUtil.warp("data", data.getJsonTable(voltageService2.selectByTime(switchId, beginDate, endDate)));
 			}
 		case 2:
 			if(cov == 0) {
-				return data.getJsonTable(currentService3.selectByTime(switchId, beginDate, endDate));
+				return MapUtil.warp("data", data.getJsonTable(currentService3.selectByTime(switchId, beginDate, endDate)));
 			} else {
-				return data.getJsonTable(voltageService3.selectByTime(switchId, beginDate, endDate));
+				return MapUtil.warp("data", data.getJsonTable(voltageService3.selectByTime(switchId, beginDate, endDate)));
 			}
 		default:
 			return "";
