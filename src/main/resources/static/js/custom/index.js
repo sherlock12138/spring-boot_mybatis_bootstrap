@@ -1065,12 +1065,12 @@ var close_switch_low = '../../ico/lowvoltage-close.jpg';
 var open_switch_low = '../../ico/lowvoltage-open.jpg';
 var outLine_switch = '../../ico/voltage-outLine.jpg';
 
-var oldList = [];
+/*var oldList = [];
 var newList = [];
 var alarmList = [];
 var distinctList = [];
 function hitchEventSpy() {
-	
+
 	$.ajax({
 		type : "GET",
 		//url : "../../js/custom/alarmjson.json", //测试json
@@ -1136,6 +1136,56 @@ function hitchEventSpy() {
 	alarmTimer = setTimeout(function() {
 		hitchEventSpy();
 	}, 8 * 1000);
+}*/
+
+var oldList = [];
+function hitchEventSpy() {
+	
+	$.ajax({
+		type : "GET",
+		url: 'get_active_switch_status',
+		async : false,
+		data : {},
+		dataType: 'json',
+		success : function(data) {
+
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			
+			/**
+			 * 清除旧数据
+			 */
+			for(var length = oldList.length - 1; length >= 0; --length) {
+				switchs_drawByTye(oldList[length], outLine_switch, outLine_switch, click_high_voltage_switch);
+			}
+			oldList = [];
+			
+			for (var i = data.length - 1; i >= 0; --i) {
+				
+				if(data[i].id != null) {
+					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+					
+					if(nodeList.length != 0) {
+						oldList.push(nodeList[0].id);
+						if(data[i].status == "00") {
+							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);
+							if(data[i].open == true) {//status与open同时符合才报警
+	
+								playVoice(getVoiceData(nodeList[0].name));
+								update(nodeList, 2);  // 树节点变红
+								worning_switchs_draw(nodeList[0]);
+							}
+						} else {
+							switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch);
+						}
+					}
+				}
+			}	
+		}
+	});
+
+	alarmTimer = setTimeout(function() {
+		hitchEventSpy();
+	}, 8 * 1000);
 }
 
 function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
@@ -1165,7 +1215,7 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 
 }
 
-function deleteAlarmSwitch(node) {
+/*function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
 		if(node[0].id == alarmList[i]) {
@@ -1195,7 +1245,7 @@ function isDistinct(id, list) {
 		}
 	}
 	return true;
-}
+}*/
 
 function getVoiceData(name) {
 	var result;
@@ -1221,9 +1271,7 @@ function getVoiceData(name) {
 function playVoice(data) {
 	console.log(data);
 	var audioUrl ="data:audio/mp3;base64,"+ data;
-	for(var i = 0; i < 3; i++) {
-		new Audio( audioUrl ).play();
-	}
+	new Audio(audioUrl).play();
 }
 /**
  * 
