@@ -93,36 +93,7 @@
 						<td>B相电流</td>
 						<td>C相电流</td>
 					</thead>
-					<tr th:each="event:${hitch_events}" th:if="*{event!=null}">
-						<td th:text="${#dates.format(event.hitchTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${event.hitchPhase}"></td>
-						<!-- 故障原因 -->
-						<td th:if="*{event.hitchReason==1}">剩余电流</td>
-						<td th:if="*{event.hitchReason==2}">缺零</td>
-						<td th:if="*{event.hitchReason==3}">过载</td>
-						<td th:if="*{event.hitchReason==4}">短路</td>
-						<td th:if="*{event.hitchReason==5}">缺相</td>
-						<td th:if="*{event.hitchReason==6}">欠压</td>
-						<td th:if="*{event.hitchReason==7}">过压</td>
-						<td th:if="*{event.hitchReason==8}">接地</td>
-						<td th:if="*{event.hitchReason==9}">停电</td>
-						<td th:if="*{event.hitchReason==10}">定时试验</td>
-						<td th:if="*{event.hitchReason==11}">远程</td>
-						<td th:if="*{event.hitchReason==12}">闭锁</td>
-						<td th:if="*{event.hitchReason==13}">手动</td>
-						<td th:if="*{event.hitchReason==14}">互感器故障</td>
-						<td th:if="*{event.hitchReason==15}">合闸失败</td>
-						<td th:if="*{event.hitchReason==16}">设置失败</td>
 
-						<td th:text="${event.behitchAPhaseVoltage}"></td>
-						<td th:text="${event.behitchBPhaseVoltage}"></td>
-						<td th:text="${event.behitchCPhaseVoltage}"></td>
-						<td th:text="${event.behitchAPhaseCurrent}"></td>
-						<td th:text="${event.behitchBPhaseCurrent}"></td>
-						<td th:text="${event.behitchCPhaseCurrent}"></td>
-						<!--  <td th:text="${event.protocal}!=0?'07':'101'"></td>-->
-						<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
-					</tr>
 				</table>
 			</div>
 		</div>

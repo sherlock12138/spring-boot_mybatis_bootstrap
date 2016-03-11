@@ -726,7 +726,7 @@ function click_high_voltage_switch_open() {
 }
 
 
-function click_high_voltage_switch_close() {   // 0 合闸  1 报警
+function click_high_voltage_switch_close() {
 	obj_high = this;
 	sessionStorage.longtitude = this.point.lng;
 	sessionStorage.latitude = this.point.lat;
@@ -1330,7 +1330,6 @@ function hitchEventSpy() {
 							}
 						} else {
 							deleteAlarmSwitch(nodeList);
-							
 							switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch_close);
 						}
 					}

@@ -3,9 +3,68 @@ $(document).ready(function() {
 	/**
 	 * 初始化列表
 	 */
-	initial_table("hitch_event_list");
+
+	$('#hitch_event_list').DataTable(
+		{
+			"destroy": true,// destroy之后才能重新加载
+			"ajax": 'get_low_voltage_hitch_event_by_switch_id?switchId=07',
+			"columns": [
+				{
+					"data": "hitchTime"
+				},
+				{
+					"data": "hitchPhase"
+				},
+				{
+					"data": "hitchReason"
+				},
+				{
+					"data": "behitchAPhaseVoltage"
+				},
+				{
+					"data": "behitchBPhaseVoltage"
+				},
+				{
+					"data": "behitchCPhaseVoltage"
+				},
+				{
+					"data": "behitchAPhaseCurrent"
+				},
+				{
+					"data": "behitchBPhaseCurrent"
+				},
+				{
+					"data": "behitchCPhaseCurrent"
+				},
+			]
+		})
+
+	//initial_table("hitch_event_list");
 //	$(".del_event_btn").click(delSwitch);
 	loadSubstationSet();
+
+	$.ajax({
+		type : "post",
+		url : 'switch_list_by_line_id',
+		//async : false,
+		data : {
+			"lineId" : '07'
+		},
+		success : function(data) {
+
+			data = data.data;
+			var options = "";
+			for (var i = 0; i < data.length; i++) {
+
+				options += "<option value='" + data[i].id + "'>" + data[i].name
+					+ "</option>";
+			}
+			$("#switchs").empty();
+			$("#switchs").append(options);
+		}
+	})
+
+
 	/**
 	 * 绑定线路的切换
 	 */

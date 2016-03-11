@@ -85,16 +85,16 @@
 						<td>故障时间</td>
 						<td>故障相位</td>
             <td>故障表现</td>
-						<td>故障原因</td>
+						<!--<td>故障原因</td>-->
 					</thead>
-					<tr th:each="event:${hitch_events}" th:if="*{event!=null}">
-						<td th:text="${#dates.format(event.hitchTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${event.hitchPhase}"></td>
-						<!-- 故障原因 -->
-						<td th:if="*{event.hitchReason==0}">分闸</td>
-						<td th:if="*{event.hitchReason==1}">合闸</td>
-            <td th:text="${event.hitchPhase}"></td>
-					</tr>
+					<!--<tr th:each="event:${hitch_events}" th:if="*{event!=null}">-->
+						<!--<td th:text="${#dates.format(event.hitchTime,'yyyy-MM-dd HH:mm:ss')}"></td>-->
+						<!--<td th:text="${event.hitchPhase}"></td>-->
+						<!--&lt;!&ndash; 故障原因 &ndash;&gt;-->
+						<!--<td th:if="*{event.hitchReason==0}">分闸</td>-->
+						<!--<td th:if="*{event.hitchReason==1}">合闸</td>-->
+            <!--&lt;!&ndash;<td th:text="${event.hitchReason}"></td>&ndash;&gt;-->
+					<!--</tr>-->
 				</table>
 
 			</div>
@@ -157,7 +157,7 @@
 	<script src="../../js/custom/line_switch_set.js"></script>
 	<script src="../../js/custom/high_voltage_switch_hitch_event_manager.js"></script>
   <script src="../../js/custom/gobal.js"></script>
-	
+
 	
 </body>
 </html>
