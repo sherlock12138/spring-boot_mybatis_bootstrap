@@ -630,78 +630,11 @@ function SetCenterPoint_high() {
 	})
 }
 
-function click_high_voltage_switch(type) {   // 0 合闸  1 报警
+
+function click_high_voltage_switch_open() {
 	obj_high = this;
 	sessionStorage.longtitude = this.point.lng;
 	sessionStorage.latitude = this.point.lat;
-	var content0 = "<div class='BDM_custom_popup'>" + "<h4>"
-			+ this.name + '&nbsp;&nbsp;'
-			+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
-			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
-			+ '<span aria-hidden="true">' + '&times;'
-			+ '</span>' + '</button>'
-			+ "</h4>"
-			+ "<table class='table table-bordered table-condensed'>"
-			+ "<tbody>"
-			+ "<tr>"
-			+ "<td></td><td>电压</td><td>电流</td>"
-			+ "<td>过渡I段保护</td>"
-			+ "<td id='guo_liu_yi_duan'></td>"
-			+ "</tr>"
-			+ "<tr>"
-			+ "<td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td>"
-			+ "<td>过渡II段保护</td>"
-			+ "<td id='guo_liu_er_duan'></td>"
-			+ "</tr>"
-			+ "<tr>"
-			+ "<td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td>"
-			+ "<td>过渡III段保护</td>"
-			+ "<td id='guo_liu_san_duan'></td>"
-			+ "</tr>"
-			+ "<tr>"
-			+ "<td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td>"
-			+ "<td>零序过流保护</td>"
-			+ "<td id='ling_xu_guo_liu_'></td>"
-			+ "</tr>"
-			+ "</tbody></table>"
-			+ "<table class='table table-bordered table-condensed'>"
-			+ "<tbody>"
-			+ "<tr>"
-			+ "<td>断路器位置</td>"
-			+ "<td id='status'></td>"
-			+ "<td>PT2过压告警</td>"
-			+ "<td id='pt2_guo_ya'></td>"
-			+ "<td>重合闸动作</td>"
-			+ "<td id='chong_he_zha'></td>"
-			+ "</tr>"
-			+ "<tr>"
-			+ "<td>PT1有压</td>"
-			+ "<td id='pt1_you_ya'></td>"
-			+ "<td>交流失电告警</td>"
-			+ "<td id='jiao_liu_shi_dian'></td>"
-			+ "<td>遥控复归</td>"
-			+ "<td id='yao_kong_fu_gui'></td>"
-			+ "</tr>"
-			+ "<tr>"
-			+ "<td>PT2有压</td>"
-			+ "<td id='pt2_you_ya'></td>"
-			+ "<td>手动合闸动作</td>"
-			+ "<td id='shou_dong_he_zha'></td>"
-			+ "<td>遥控器合闸</td>"
-			+ "<td id='yao_kong_he_zha'></td>"
-			+ "</tr>"
-			+ "<tr>"
-			+ "<td>PT1过压告警</td>"
-			+ "<td id='pt1_guo_ya'></td>"
-			+ "<td>手动分闸动作</td>"
-			+ "<td id='shou_dong_fen_zha'></td>"
-			+ "<td>遥控器分闸</td>"
-			+ "<td id='yao_kong_fen_zha'></td>"
-			+ "</tr>"
-			+ "</tbody></table>"
-			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
-			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)' data-loading-text='分闸中...'>分闸</button>"
-			+ "</div>"
 	var content1 = "<div class='BDM_custom_popup'>" + "<h4>"
 		+ this.name + '&nbsp;&nbsp;'
 		+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
@@ -770,6 +703,102 @@ function click_high_voltage_switch(type) {   // 0 合闸  1 报警
 		+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
 		+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3)' data-loading-text='忽略'>忽略</button>"
 		+ "</div>"
+	var opts = {
+		width : 580, // 信息窗口宽度
+		height : 340, // 信息窗口高度
+		enableCloseOnClick: false,
+		enableMessage: false
+	}
+	var infoWindow = new BMap.InfoWindow(content, opts);
+	this.openInfoWindow(infoWindow);
+	if (old_icon != "") {
+
+		this.setIcon(old_icon);// 打开窗口就代表去处理了报警
+	}
+	id = this.id;
+	type = this.type;
+	hvswitchStatusSpy(this.id);
+	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+	infoWindow.addEventListener("close", function() {
+		clearTimeout(k);
+		clearTimeout(t);
+	});
+}
+
+
+function click_high_voltage_switch_close() {   // 0 合闸  1 报警
+	obj_high = this;
+	sessionStorage.longtitude = this.point.lng;
+	sessionStorage.latitude = this.point.lat;
+	var content = "<div class='BDM_custom_popup'>" + "<h4>"
+			+ this.name + '&nbsp;&nbsp;'
+			+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
+			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
+			+ '<span aria-hidden="true">' + '&times;'
+			+ '</span>' + '</button>'
+			+ "</h4>"
+			+ "<table class='table table-bordered table-condensed'>"
+			+ "<tbody>"
+			+ "<tr>"
+			+ "<td></td><td>电压</td><td>电流</td>"
+			+ "<td>过渡I段保护</td>"
+			+ "<td id='guo_liu_yi_duan'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>A相</td><td id='a_phase_voltage' class='red'></td><td id='a_phase_current' class='red'></td>"
+			+ "<td>过渡II段保护</td>"
+			+ "<td id='guo_liu_er_duan'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>B相</td><td id='b_phase_voltage' class='red'></td><td id='b_phase_current' class='red'></td>"
+			+ "<td>过渡III段保护</td>"
+			+ "<td id='guo_liu_san_duan'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td>"
+			+ "<td>零序过流保护</td>"
+			+ "<td id='ling_xu_guo_liu_'></td>"
+			+ "</tr>"
+			+ "</tbody></table>"
+			+ "<table class='table table-bordered table-condensed'>"
+			+ "<tbody>"
+			+ "<tr>"
+			+ "<td>断路器位置</td>"
+			+ "<td id='status'></td>"
+			+ "<td>PT2过压告警</td>"
+			+ "<td id='pt2_guo_ya'></td>"
+			+ "<td>重合闸动作</td>"
+			+ "<td id='chong_he_zha'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>PT1有压</td>"
+			+ "<td id='pt1_you_ya'></td>"
+			+ "<td>交流失电告警</td>"
+			+ "<td id='jiao_liu_shi_dian'></td>"
+			+ "<td>遥控复归</td>"
+			+ "<td id='yao_kong_fu_gui'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>PT2有压</td>"
+			+ "<td id='pt2_you_ya'></td>"
+			+ "<td>手动合闸动作</td>"
+			+ "<td id='shou_dong_he_zha'></td>"
+			+ "<td>遥控器合闸</td>"
+			+ "<td id='yao_kong_he_zha'></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td>PT1过压告警</td>"
+			+ "<td id='pt1_guo_ya'></td>"
+			+ "<td>手动分闸动作</td>"
+			+ "<td id='shou_dong_fen_zha'></td>"
+			+ "<td>遥控器分闸</td>"
+			+ "<td id='yao_kong_fen_zha'></td>"
+			+ "</tr>"
+			+ "</tbody></table>"
+			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3)' data-loading-text='忽略。。。'>忽略</button>"
+			+ "</div>"
+
 	// + "<div class='row'>"
 	// + "<div class='span4 text-center'>"
 	// + "<select id='cancel_control_type'>"
@@ -787,12 +816,7 @@ function click_high_voltage_switch(type) {   // 0 合闸  1 报警
 	}
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
-
-	if(type == 0) {  // 创建信息窗口对象
-		var infoWindow = new BMap.InfoWindow(content0, opts);
-	} else {
-		var infoWindow = new BMap.InfoWindow(content1, opts);
-	}
+  var infoWindow = new BMap.InfoWindow(content, opts);
 	this.openInfoWindow(infoWindow);
 	
 	// 窗口打开读取实时数据,switch_detail.js 中定义
@@ -1273,6 +1297,7 @@ function hitchEventSpy() {
 	$.ajax({
 		type : "GET",
 		url: 'get_active_switch_status',
+		//url : "../../js/custom/alarmjson.json",
 		async : false,
 		data : {},
 		dataType: 'json',
@@ -1296,7 +1321,7 @@ function hitchEventSpy() {
 					if(nodeList.length != 0) {
 						oldList.push(nodeList[0].id);
 						if(data[i].status == "00") {
-							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch(1));
+							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch_open);
 							if(data[i].open == true) {//status与open同时符合才报警
 								alarmList.push(nodeList[0].id);
 								playVoice(getVoiceData(nodeList[0].name));
@@ -1306,7 +1331,7 @@ function hitchEventSpy() {
 						} else {
 							deleteAlarmSwitch(nodeList);
 							
-							switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch(0));
+							switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch_close);
 						}
 					}
 				}
