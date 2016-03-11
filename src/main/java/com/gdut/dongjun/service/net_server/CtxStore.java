@@ -245,7 +245,7 @@ public abstract class CtxStore {
 
 				if (gprs != null && ctx.equals(gprs.getCtx())) {
 
-					ctxlist.remove(gprs);
+					ctxlist.remove(gprs);			
 				}
 			}
 		} else {
