@@ -701,7 +701,7 @@ function click_high_voltage_switch_open() {
 		+ "</tr>"
 		+ "</tbody></table>"
 		+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
-		+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3)' data-loading-text='忽略'>忽略</button>"
+		+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3)' data-loading-text='忽略...'>忽略</button>"
 		+ "</div>"
 	var opts = {
 		width : 580, // 信息窗口宽度
@@ -796,7 +796,7 @@ function click_high_voltage_switch_close() {   // 0 合闸  1 报警
 			+ "</tr>"
 			+ "</tbody></table>"
 			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
-			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3)' data-loading-text='忽略。。。'>忽略</button>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)' data-loading-text='分闸。。。'>分闸</button>"
 			+ "</div>"
 
 	// + "<div class='row'>"
