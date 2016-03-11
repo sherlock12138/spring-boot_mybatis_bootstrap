@@ -405,7 +405,7 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	click_low_voltage_switch);
 
 	forDrawPoint(getAllHighVoltageSwitch(), voltage_switch_icon_high,// 描绘高压开关(离线)
-	click_high_voltage_switch);
+	click_high_voltage_switch_out);
 
 	forDrawPoint(getAllControlMeasureSwitch(), control_measure_switch_icon,// 描绘管测开关
 	click_low_voltage_switch);
@@ -723,6 +723,60 @@ function click_high_voltage_switch() {
 	var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
 	this.openInfoWindow(infoWindow);
 	
+	// 窗口打开读取实时数据,switch_detail.js 中定义
+	// ********************************************************************
+	if (old_icon != "") {
+
+		this.setIcon(old_icon);// 打开窗口就代表去处理了报警
+	}
+	// 还没有提报警处理的需求 ==！
+	// ********************************************************************
+
+	id = this.id;
+	type = this.type;
+
+	// 高压开关状态
+	hvswitchStatusSpy(this.id);
+	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+
+	// 添加窗口关闭监听，停止读取实时数据
+	infoWindow.addEventListener("close", function() {
+		clearTimeout(k);
+		clearTimeout(t);
+	});
+
+}
+
+function click_high_voltage_switch_out() {
+	obj_high = this;
+	sessionStorage.longtitude = this.point.lng;
+	sessionStorage.latitude = this.point.lat;
+	var content = "<div class='BDM_custom_popup'>" + "<h4>"
+		+ this.name + '&nbsp;&nbsp;'
+		+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
+		+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
+		+ '<span aria-hidden="true">' + '&times;'
+		+ '</span>' + '</button>'
+		+ "</h4>"
+		+ "<table class='table table-bordered table-condensed'>"
+		+ "<tbody>"
+		+ "<tr>"
+		+ "<td>断路器位置</td>"
+		+ "<td id='status'></td>"
+		+ "</table>"
+		+ "</div>"
+	var opts = {
+		width : 580, // 信息窗口宽度
+		//height : 340, // 信息窗口高度
+		enableCloseOnClick: false,
+		enableMessage: false
+	}
+	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
+	// -47);
+
+	var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
+	this.openInfoWindow(infoWindow);
+
 	// 窗口打开读取实时数据,switch_detail.js 中定义
 	// ********************************************************************
 	if (old_icon != "") {

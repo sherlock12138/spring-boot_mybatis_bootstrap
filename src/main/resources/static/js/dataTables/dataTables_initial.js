@@ -1,7 +1,7 @@
 
 function initial_table(id) {
 
-	$("#" + id).dataTable({
+	var table = $("#" + id).DataTable({
 		dom : 'T<"clear">lfrtip',
 		tableTools : {
 			"sSwfPath" : "../../../resource/swf/copy_csv_xls_pdf.swf"
@@ -13,5 +13,10 @@ function initial_table(id) {
 		"oLanguage" : {
 			"sUrl" : "../../../resource/txt/dataTables_cn.txt"
 		},
+		"fnInitComplete": function(oSettings, json) {
+
+		}
 	});
+	$('#switch_list tr:eq(1)').addClass('online');
+
 }

@@ -134,8 +134,7 @@ function reloadDataTable(lineId){
             "defaultContent": '<a href="#location_switch_modal" role="button" class="location_switch_btn btn btn-primary" data-toggle="modal">设为定位中心</a>'
         }
         ],
-        "fnInitComplete": function(oSettings, json) { 
-
+        "fnInitComplete": function(oSettings, json) {
         	$(".edit_switch_btn").click(editSwitch);
         	$(".del_switch_btn").click(delSwitch);
         	$(".enter_map").click(enterMap);
