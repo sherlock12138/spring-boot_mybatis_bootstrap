@@ -15,11 +15,6 @@
  */
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
-import io.netty.channel.ChannelHandler.Sharable;
-
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +36,10 @@ import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.UUIDUtil;
-import com.gdut.dongjun.web.UserController;
+
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 @Service
 @Sharable
@@ -55,10 +53,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	private HighVoltageSwitchService switchService;
 	@Autowired
 	private HighVoltageHitchEventService hitchEventService;
-	@Autowired
-	private HighVoltageDeviceCommandUtil commandUtil;
-	@Autowired
-	private UserController controller;
+
 	private static final Logger logger = Logger
 			.getLogger(HighVoltageDataReceiver.class);
 
@@ -117,16 +112,13 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					s = list.get(0);
 					String id = s.getId();
 					gprs.setId(id);
-
 					logger.info(address + " is ready!");
+
 					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
 					logger.info("this device is not registered!!");
 				}
-			} else {
-				logger.info("can not get gprs,there is an error in setting ctx");
 			}
-
 		} else if (infoIdenCode.equals("09")) {
 			// 读数据(电流，电压)
 			logger.info("解析CV---------" + data);

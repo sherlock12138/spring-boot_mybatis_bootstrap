@@ -1139,6 +1139,7 @@ function hitchEventSpy() {
 }*/
 
 var oldList = [];
+var alarmList = [];
 function hitchEventSpy() {
 	
 	$.ajax({
@@ -1169,12 +1170,14 @@ function hitchEventSpy() {
 						if(data[i].status == "00") {
 							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch);
 							if(data[i].open == true) {//status与open同时符合才报警
-	
+								alarmList.push(nodeList[0].id);
 								playVoice(getVoiceData(nodeList[0].name));
 								update(nodeList, 2);  // 树节点变红
 								worning_switchs_draw(nodeList[0]);
 							}
 						} else {
+							deleteAlarmSwitch(nodeList);
+							
 							switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch);
 						}
 					}
@@ -1215,7 +1218,7 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 
 }
 
-/*function deleteAlarmSwitch(node) {
+function deleteAlarmSwitch(node) {
 	
 	for(var i = 0, length = alarmList.length; i < length; ++i) {
 		if(node[0].id == alarmList[i]) {
@@ -1237,7 +1240,7 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 		}
 	}
 }
-
+/*
 function isDistinct(id, list) {
 	for(var i = list.length - 1; i >= 0; --i) {
 		if(distinctList[i] == id) {
