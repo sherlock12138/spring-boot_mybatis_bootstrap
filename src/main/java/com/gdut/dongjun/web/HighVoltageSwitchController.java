@@ -1,6 +1,8 @@
 package com.gdut.dongjun.web;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,10 +23,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.LineService;
+import com.gdut.dongjun.service.net_server.CtxStore;
+import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.util.ClassLoaderUtil;
 import com.gdut.dongjun.util.DownloadAndUploadUtil;
 import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
+import com.gdut.dongjun.util.TimeUtil;
 import com.gdut.dongjun.util.UUIDUtil;
 
 @Controller
@@ -99,9 +104,72 @@ public class HighVoltageSwitchController {
 				"draw", 1);
 		int size = switchs.size();
 		map.put("recordsTotal", size);
-		map.put("data", switchs);
+		map.put("data", updateDate(switchs));
 		map.put("recordsFiltered", size);
 		return map;
+	}
+	
+	@RequestMapping("/online_order")
+	@ResponseBody
+	public Object getOnlineOrder(@RequestParam(required = false) String lineId) {
+		
+		int[] result = new int[20];
+		List<HighVoltageSwitch> switchs = switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
+		
+		for(int length = switchs.size(), i = 0, j = 0; i < length; ++i) {
+			
+			if(search(switchs.get(i).getId())) {
+				result[j] = i + 1;
+				++j;
+			}
+		}
+		return result;
+	}
+	
+	private List<HighVoltageSwitch> updateDate(List<HighVoltageSwitch> switchs) {
+		
+		String date = TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+		for(HighVoltageSwitch hvSwitch : switchs) {
+			
+			if(search(hvSwitch.getId())) {
+				hvSwitch.setOnlineTime(date);
+			}
+		}
+		return switchs;
+	}
+	
+	private boolean search(String id) {
+		
+		if(id == null) {
+			return false;
+		}
+		
+		for(SwitchGPRS gprs : CtxStore.getInstance()) {
+			if(gprs.getId() != null && gprs.getId().equals(id)) {
+				return true;
+			}
+		}
+		return false;
+ 	}
+	
+	public void updateOnlineTime(List<HighVoltageSwitch> switchs) {
+		
+		String date = TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+		for(HighVoltageSwitch hvSwitch : switchs) {
+			
+			if(search(hvSwitch.getId())) {
+				hvSwitch.setOnlineTime(date);
+			}
+			switchService.updateSwitch(hvSwitch);
+		}
+	}
+	
+	public void updateOnlineTime(HighVoltageSwitch highVoltageSwitch) {
+		
+		List<HighVoltageSwitch> list = new ArrayList<>(1);
+		list.add(highVoltageSwitch);
+		updateOnlineTime(list);
 	}
 
 	/**

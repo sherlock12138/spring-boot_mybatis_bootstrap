@@ -54,7 +54,8 @@ public class Application extends SpringBootServletInitializer {
 	public DataSource dataSource() {
 
 		com.mchange.v2.c3p0.ComboPooledDataSource ds = new ComboPooledDataSource();
-		ds.setJdbcUrl("jdbc:mysql://localhost:3306/elecon?useUnicode=true&amp;charaterEncoding=utf-8");
+		ds.setJdbcUrl("jdbc:mysql://localhost:3306/elecon?useUnicode=true&amp;charaterEncoding=utf-8&" +
+				"zeroDateTimeBehavior=convertToNull");
 		ds.setUser("root");
 		ds.setPassword("root");//elecon
 		try {
