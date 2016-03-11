@@ -1309,7 +1309,7 @@ function hitchEventSpy() {
 			 * 清除旧数据
 			 */
 			for(var length = oldList.length - 1; length >= 0; --length) {
-				switchs_drawByTye(oldList[length], outLine_switch, outLine_switch, click_high_voltage_switch);
+				switchs_drawByTye(oldList[length], outLine_switch, outLine_switch, click_high_voltage_switch_out);
 			}
 			oldList = [];
 			

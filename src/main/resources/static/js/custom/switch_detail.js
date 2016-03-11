@@ -159,6 +159,7 @@ function inogeSwitch(id) {
 			switchId: id
 		}
 	}).success(function () {
+		$("#security_modal").modal('hide');
 		alert('操作成功');
 	})
 }
