@@ -810,8 +810,7 @@ function click_high_voltage_switch_out() {
  * @throws
  */
 
-function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框
-                                  //  所以打算换个写法
+function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框,所以打算换个写法
 	/*$("#security_modal").modal('show');
 	$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
@@ -858,7 +857,7 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 	});*/
 	$("#security_modal").modal('show');
 	var timer;
-	$("#secu_confirm_btn").click(function() {
+	$("#secu_confirm_btn").unbind().click(function() {
 
 		var wait = 6;
 		timer = setInterval(function() {

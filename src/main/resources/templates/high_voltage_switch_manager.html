@@ -114,32 +114,13 @@ th, td {
 						<td>纬度</td>
 						<td>SIM</td>
 						<td>线路内序号</td>
+            <td>在线时间</td>
 						<td>进入地图</td>
 						<td>修改</td>
 						<td>删除</td>
 						<td>设为定位中心</td>
 					</thead>
-					<tr th:each="switch:${switches}" th:if="*{switch!=null}">
-						<td th:text="${switch.deviceNumber}"></td>
-						<td th:text="${switch.name}"></td>
-						<td th:text="${switch.showName}"></td>
-						<td class="hide" th:text="${switch.id}"></td>
-						<td class="hide" th:text="${switch.lineId}"></td>
-						<td th:text="${switch.address}"></td>
-						<td th:text="${switch.longitude}"></td>
-						<td th:text="${switch.latitude}"></td>
-						<td th:text="${switch.simNumber}"></td>
-						<td th:text="${switch.inlineIndex}"></td>
-						<td><button class="btn btn enter_map">进入地图 &raquo;</button></td>
-						<td><a href="#edit_switch_modal" role="button"
-							class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
-						<td><a href="#del_switch_modal"
-							class="del_switch_btn btn btn-danger" data-toggle="modal"
-							data-backdrop="static">删除&raquo; </a></td>
-						<td><a href="#location_switch_modal" role="button"
-							class="location_switch_btn btn btn-primary" data-toggle="modal">
-							设为定位中心</a></td>
-					</tr>
+
 				</table>
 			</div>
 		</div>
@@ -383,29 +364,30 @@ th, td {
 	<!-- Placed at the end of the document so the pages load faster 
 	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
 	-->
-	<script src="../../js/jquery.js"></script>
-	<script src="../../js/bootstrap-transition.js"></script>
-	<script src="../../js/bootstrap-alert.js"></script>
-	<script src="../../js/bootstrap-modal.js"></script>
-	<script src="../../js/bootstrap-dropdown.js"></script>
-	<script src="../../js/bootstrap-scrollspy.js"></script>
-	<script src="../../js/bootstrap-tab.js"></script>
-	<script src="../../js/bootstrap-tooltip.js"></script>
-	<script src="../../js/bootstrap-popover.js"></script>
-	<script src="../../js/bootstrap-button.js"></script>
-	<script src="../../js/bootstrap-collapse.js"></script>
-	<script src="../../js/bootstrap-carousel.js"></script>
-	<script src="../../js/bootstrap-typeahead.js"></script>
 
-	<!-- dataTables -->
-	<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
-	<script src="../../js/dataTables/jquery.dataTables.js"></script>
-	<script src="../../js/dataTables/dataTables.tableTools.js"></script>
-	<script src="../../js/dataTables/dataTables_initial.js"></script>
-
-	<!-- custom -->
-	<script src="../../js/custom/high_voltage_switch_manager.js"></script>
-	<script src="../../js/custom/substation_line_set.js"></script>
-  <script src="../../js/custom/gobal.js"></script>
 </body>
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap-transition.js"></script>
+<script src="../../js/bootstrap-alert.js"></script>
+<script src="../../js/bootstrap-modal.js"></script>
+<script src="../../js/bootstrap-dropdown.js"></script>
+<script src="../../js/bootstrap-scrollspy.js"></script>
+<script src="../../js/bootstrap-tab.js"></script>
+<script src="../../js/bootstrap-tooltip.js"></script>
+<script src="../../js/bootstrap-popover.js"></script>
+<script src="../../js/bootstrap-button.js"></script>
+<script src="../../js/bootstrap-collapse.js"></script>
+<script src="../../js/bootstrap-carousel.js"></script>
+<script src="../../js/bootstrap-typeahead.js"></script>
+
+<!-- dataTables -->
+<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+<script src="../../js/dataTables/jquery.dataTables.js"></script>
+<script src="../../js/dataTables/dataTables.tableTools.js"></script>
+<script src="../../js/dataTables/dataTables_initial.js"></script>
+
+<!-- custom -->
+<script src="../../js/custom/high_voltage_switch_manager.js"></script>
+<script src="../../js/custom/substation_line_set.js"></script>
+<script src="../../js/custom/gobal.js"></script>
 </html>

@@ -4,7 +4,8 @@ $(document).ready(function() {
 	 * 初始化列表
 	 */
 	initial_table("switch_list");
-	loadSubstationSet();	
+	loadSubstationSet();
+	//reloadDataTable(localStorage.getItem('defaultId'))
 	$("#add_switch_btn").click(addSwitch);
 	$(".edit_switch_btn").click(editSwitch);
 	$(".del_switch_btn").click(delSwitch);
@@ -30,7 +31,7 @@ $(document).ready(function() {
 				"latitude" : $("#editLatitude").val(),
 				"simNumber" : $("#editSim").val(),
 				"inlineIndex" : $("#editinlineIndex").val(),
-				"deviceNumber":$("#editDeviceNumber").val(),
+				"deviceNumber":$("#editDeviceNumber").val()
 			},
 			success : function(data) {
 
@@ -72,8 +73,7 @@ $(document).ready(function() {
 	
 	
 	
-	$(".lines").click(function(){
-		
+	$(".lines").change(function(){
 		reloadDataTable(this.value);
 	});
 	
@@ -107,6 +107,7 @@ function reloadDataTable(lineId){
 	        { "data": "latitude" }, 
 	        { "data": "simNumber" },
 	        { "data": "inlineIndex" },
+	        { "data": "onlineTime"},
 	        { "data": null},
             { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
             { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
@@ -135,12 +136,24 @@ function reloadDataTable(lineId){
         }
         ],
         "fnInitComplete": function(oSettings, json) {
+	        //alert('123')
         	$(".edit_switch_btn").click(editSwitch);
         	$(".del_switch_btn").click(delSwitch);
         	$(".enter_map").click(enterMap);
         	$(".location_switch_btn").click(locateSwitch);
           }
     } );
+
+	$.ajax({
+			url: '/dongjun/online_order',
+			method: 'POST',
+			data: {
+				'lineId': lineId
+			}
+		}).success(function(data) {
+
+		})
+
 }
 
 
