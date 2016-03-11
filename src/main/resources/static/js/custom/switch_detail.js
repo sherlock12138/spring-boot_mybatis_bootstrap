@@ -150,6 +150,18 @@ function closeSwitch(id, type) {
  * @return void
  * @throws
  */
+
+function inogeSwitch(id) {
+	$.ajax({
+		url: '/dongjun/ignore_hitch_event',
+		data: {
+			switchId: id
+		}
+	}).success(function () {
+		alert('操作成功');
+	})
+}
+
 function openSwitch(id, type) {
 
 	controlSwitch(id, type, 0);

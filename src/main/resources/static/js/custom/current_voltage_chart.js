@@ -66,6 +66,7 @@ function show_chart(treeNode, num, Chartname) {
 	var end_time = $('#end_search_date').val();
 	//创建折线图
 	var myChart = echarts.init(document.getElementById(Chartname));
+	myChart.showLoading();
 	$.ajax({
 		url: '/dongjun/select_chart_by_switch_id',
 		method: 'POST',
@@ -79,7 +80,6 @@ function show_chart(treeNode, num, Chartname) {
 	}).success(function (data) {
 		option = data;
 		myChart.setOption(option);
-		myChart.showLoading();
 		setTimeout(function () {
 			myChart.hideLoading();
 		}, 2000);

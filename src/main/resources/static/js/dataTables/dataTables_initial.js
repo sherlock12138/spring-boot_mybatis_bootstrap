@@ -10,10 +10,10 @@ function initial_table(id) {
 			{ "data": "deviceNumber" },
 			{ "data": "name" },
 			{ "data": "showName"},
-			{ 	"data": "id",
+			{  "data": "id",
 				"sClass": "dpass"
 			},
-			{ 	"data": "lineId",
+			{  "data": "lineId",
 				"sClass": "dpass"
 			},
 			{ "data": "address" },
@@ -26,10 +26,84 @@ function initial_table(id) {
 			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
 			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
 			{ "data": null}
+		],
+		"columnDefs": [
+			{
+				"targets": -4,
+				"data": null,
+				"defaultContent": '<button class="btn btn enter_map">进入地图 &raquo;</button>'
+			},
+			{
+				"targets": -3,
+				"data": null,
+				"defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
+			},
+			{
+				"targets": -2,
+				"data": null,
+				"defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
+			},
+			{
+				"targets": -1,
+				"data": null,
+				"defaultContent": '<a href="#location_switch_modal" role="button" class="location_switch_btn btn btn-primary" data-toggle="modal">设为定位中心</a>'
+			}
 		]
 	});
 
+}
 
+function initial_table_low(id) {
+	$("#" + id).DataTable({
+		"destroy": true,
+		"ajax": {
+			url: '/dongjun/switch_list_by_line_id?lineId=07'
+		},
+		"columns": [
+			{ "data": "deviceNumber" },
+			{ "data": "name" },
+			{ "data": "showName"},
+			{  "data": "id",
+				"sClass": "dpass"
+			},
+			{  "data": "lineId",
+				"sClass": "dpass"
+			},
+			{ "data": "address" },
+			{ "data": "longitude" },
+			{ "data": "latitude" },
+			{ "data": "simNumber" },
+			{ "data": "inlineIndex" },
+			{ "data": "onlineTime"},
+			{ "data": null},
+			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+			{ "data": null}
+		],
+		"columnDefs": [
+			{
+				"targets": -4,
+				"data": null,
+				"defaultContent": '<button class="btn btn enter_map">进入地图 &raquo;</button>'
+			},
+			{
+				"targets": -3,
+				"data": null,
+				"defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
+			},
+			{
+				"targets": -2,
+				"data": null,
+				"defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
+			},
+			{
+				"targets": -1,
+				"data": null,
+				"defaultContent": '<a href="#location_switch_modal" role="button" class="location_switch_btn btn btn-primary" data-toggle="modal">设为定位中心</a>'
+			}
+		]
+	});
+}
 
 //	$("#" + id).DataTable({
 //		dom : 'T<"clear">lfrtip',
@@ -49,4 +123,3 @@ function initial_table(id) {
 //	});
 	//$('#switch_list tr:eq(1)').addClass('online');
 
-}

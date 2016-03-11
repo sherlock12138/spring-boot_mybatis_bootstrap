@@ -1,10 +1,67 @@
 $(document).ready(function() {
 
+
+//	$.ajax({
+//		type : "post",
+//		url : "substation_list_by_company_id",
+//		method: 'post',
+//		//async : false,
+//		data : {},
+//		success : function(data) {
+//
+//			if(data!=null){
+//
+//				data = data.data;
+//				default_id = data[0].id;
+//				var options = "";
+//				for (var i = 0; i < data.length; i++) {
+//
+//					options += "<option value='" + data[i].id + "'>" + data[i].name
+//						+ "</option>";
+//				}
+//				Change_line(default_id);
+//				$(".substations").append(options);
+//				localStorage.setItem('defaultId', default_id);
+//			}
+//		}
+//	})
+//
+//	$(".substations").change(function(){
+//		Change_line(this.value);
+//
+//	});
+//
+////$(".lines").val('123')
+//
+//	function Change_line(lineId) {
+//		$.ajax({
+//			type : "post",
+//			url : "line_list_by_substation_id",
+//			async : false,
+//			data : {
+//				"substation_id":lineId
+//			},
+//			success : function(data) {
+//
+//				data = data.data;
+//				var options = "";
+//				for (var i = 0; i < data.length; i++) {
+//
+//					options += "<option value='" + data[i].id + "'>" + data[i].name
+//						+ "</option>";
+//				}
+//				$(".lines").empty();
+//				$(".lines").append(options);
+//			}
+//		})
+//	}
+
 	/**
 	 * 初始化列表
 	 */
-	initial_table("switch_list");
-	loadSubstationSet();	
+	//alert('123');
+	initial_table_low("switch_list");
+	loadSubstationSet();
 	$("#add_switch_btn").click(addSwitch);
 	$(".edit_switch_btn").click(editSwitch);
 	$(".del_switch_btn").click(delSwitch);
@@ -70,8 +127,7 @@ $(document).ready(function() {
 	
 	
 	
-	$(".lines").click(function(){
-		
+	$(".lines").change(function(){
 		reloadDataTable(this.value);
 	});
 	
@@ -88,48 +144,53 @@ $(document).ready(function() {
 function reloadDataTable(lineId){
 	
 	$('#switch_list').DataTable( {
-		"destroy": true,// destroy之后才能重新加载
-		"ajax": "switch_list_by_line_id.action?lineId="+lineId,
-        "columns": [
-            { "data": "deviceNumber" },        
-            { "data": "name" },
-            { 	"data": "id",
-            	"sClass": "dpass"
-            },
-            { 	"data": "lineId",
-            	"sClass": "dpass"
-            },
-	        { "data": "address" },   
-	        { "data": "longitude" },   
-	        { "data": "latitude" }, 
-	        { "data": "simNumber" },
-	        { "data": "inlineIndex" },
-	        { "data": null},
-            { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
-            { "data": null }// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
-        ],
-        
-        // 为下面的列设置默认值
-        "columnDefs": [ {
-            "targets": -3,
-            "data": null,
-            "defaultContent": '<button class="btn btn enter_map">进入地图 &raquo;</button>'
-        },{
-            "targets": -2,
-            "data": null,
-            "defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
-        },
-        {
-            "targets": -1,
-            "data": null,
-            "defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
-        }],
-        "fnInitComplete": function(oSettings, json) { 
-
-        	$(".edit_switch_btn").click(editSwitch);
-        	$(".del_switch_btn").click(delSwitch);
-        	$(".enter_map").click(enterMap);
-          }
+		"destroy": true,
+		"ajax": {
+			url: '/dongjun/switch_list_by_line_id?lineId=' + lineId
+		},
+		"columns": [
+			{ "data": "deviceNumber" },
+			{ "data": "name" },
+			{ "data": "showName"},
+			{  "data": "id",
+				"sClass": "dpass"
+			},
+			{  "data": "lineId",
+				"sClass": "dpass"
+			},
+			{ "data": "address" },
+			{ "data": "longitude" },
+			{ "data": "latitude" },
+			{ "data": "simNumber" },
+			{ "data": "inlineIndex" },
+			{ "data": "onlineTime"},
+			{ "data": null},
+			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+			{ "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
+			{ "data": null}
+		],
+		"columnDefs": [
+			{
+				"targets": -4,
+				"data": null,
+				"defaultContent": '<button class="btn btn enter_map">进入地图 &raquo;</button>'
+			},
+			{
+				"targets": -3,
+				"data": null,
+				"defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
+			},
+			{
+				"targets": -2,
+				"data": null,
+				"defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
+			},
+			{
+				"targets": -1,
+				"data": null,
+				"defaultContent": '<a href="#location_switch_modal" role="button" class="location_switch_btn btn btn-primary" data-toggle="modal">设为定位中心</a>'
+			}
+		]
     } );
 }
 

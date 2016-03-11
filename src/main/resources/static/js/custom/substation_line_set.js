@@ -4,7 +4,8 @@ function loadSubstationSet() {
 	$.ajax({
 		type : "post",
 		url : "substation_list_by_company_id",
-		async : false,
+		method: 'post',
+		//async : false,
 		data : {},
 		success : function(data) {
 
