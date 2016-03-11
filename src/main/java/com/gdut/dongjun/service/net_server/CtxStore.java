@@ -386,4 +386,9 @@ public abstract class CtxStore {
 		}
 	}
 
+	public static boolean isDistinct(String id) {
+		
+		return false;
+	}
+
 }
