@@ -897,6 +897,53 @@ function click_high_voltage_switch_out() {
 
 }
 
+// 即时刷新各个开关的状态
+function Refresh() {
+	$.ajax({
+		type : "GET",
+		url: 'get_active_switch_status',
+		//url : "../../js/custom/alarmjson.json",
+		async : false,
+		data : {},
+		dataType: 'json',
+		success : function(data) {
+
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+
+			/**
+			 * 清除旧数据
+			 */
+			for(var length = oldList.length - 1; length >= 0; --length) {
+				switchs_drawByTye(oldList[length], outLine_switch, outLine_switch, click_high_voltage_switch_out);
+			}
+			oldList = [];
+
+			for (var i = data.length - 1; i >= 0; --i) {
+
+				if(data[i].id != null) {
+					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
+
+					if(nodeList.length != 0) {
+						oldList.push(nodeList[0].id);
+						if(data[i].status == "00") {
+							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch_open);
+							if(data[i].open == true) {//status与open同时符合才报警
+								alarmList.push(nodeList[0].id);
+								playVoice(getVoiceData(nodeList[0].name));
+								update(nodeList, 2);  // 树节点变红
+								worning_switchs_draw(nodeList[0]);
+							}
+						} else {
+							deleteAlarmSwitch(nodeList);
+							switchs_drawByTye(nodeList[0], close_switch_high, close_switch_low, click_high_voltage_switch_close);
+						}
+					}
+				}
+			}
+		}
+	});
+}
+
 /**
  * 
  * @Title: security_modal
@@ -972,6 +1019,7 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 							if (t == 1) {
 
 								openSwitch(id, type);
+
 							} else if(t == 3) {
 
 								inogeSwitch(id)
@@ -979,18 +1027,22 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 
 								closeSwitch(id, type);
 							}
+							setTimeout(Refresh, 1000);
 						} else {
 
 							alert("安全密码错误！");
 						}
+						$("#controlCode").val('');
+						$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
 					}
 				});
 				clearInterval(timer);
 			} else {
 				wait--;
-				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
+				$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
 			}
 		}, 1000);
+
 	});
 
 	$('#cancel_control').click(function() {
@@ -1028,7 +1080,7 @@ function click_low_voltage_switch() {
 			+ "<tr><td>C相</td><td id='c_phase_voltage' class='red'></td><td id='c_phase_current' class='red'></td></tr>"
 			+ "</tbody></table>"
 			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>合闸</a>"
-			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(0)'>分闸</a>"
+			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)'>分闸</a>"
 			+ "</div>"
 
 	// + "<div class='row'>"
@@ -1383,7 +1435,7 @@ function deleteAlarmSwitch(node) {
 				alarmList[j] = [];
 			}
 			
-			alert("设备已响应：现为合闸状态");
+			//alert("设备已响应：现为合闸状态");
 			update(node, 0);
 			$('audio').remove();
 

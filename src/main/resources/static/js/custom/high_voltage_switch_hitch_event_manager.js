@@ -55,10 +55,8 @@ $(document)
 										$(".lines").val());
 							})
 
-					$("#switchs")
-							.click(
+					$("#switchs").change(
 									function() {
-
 										loadEventListWithSwitchId(
 												"get_high_voltage_hitch_event_by_switch_id.action?switchId=",
 												$("#switchs").val());
