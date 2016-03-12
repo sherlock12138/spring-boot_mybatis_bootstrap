@@ -26,7 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gdut.dongjun.domain.dao.HistoryDataTransfer;
 import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.domain.po.port.ProtocolPort;
-import com.gdut.dongjun.domain.vo.ChartData;
 import com.gdut.dongjun.service.ProtocolPortService;
 import com.gdut.dongjun.service.UserService;
 import com.gdut.dongjun.service.impl.enums.LoginResult;

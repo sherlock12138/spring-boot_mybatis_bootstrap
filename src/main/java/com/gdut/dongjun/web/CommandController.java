@@ -455,6 +455,7 @@ public class CommandController {
 			ActiveHighSwitch as = new ActiveHighSwitch();
 			as.setId(s.getId());
 			as.setOpen(s.isOpen());
+			//System.out.println("===========" + CtxStore.getStatusbyId(s.getId()).getStatus());
 			as.setStatus(CtxStore.getStatusbyId(s.getId()) == null ? null : 
 				CtxStore.getStatusbyId(s.getId()).getStatus());
 			list.add(as);
