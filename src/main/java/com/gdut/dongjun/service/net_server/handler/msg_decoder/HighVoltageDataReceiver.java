@@ -69,7 +69,9 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 		SwitchGPRS gprs = new SwitchGPRS();// 添加ctx到Store中
 		gprs.setCtx(ctx);
-		CtxStore.add(gprs);
+		if(CtxStore.get(ctx) == null) {
+			CtxStore.add(gprs);
+		}
 
 		// ***********************************************
 		// 设备刚连上我们的服务器还不知道它的地址的,先查一下它的地址
@@ -113,7 +115,13 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					String id = s.getId();
 					gprs.setId(id);
 					logger.info(address + " is ready!");
+					
+					if(CtxStore.get(id) != null) {
+						
 
+							CtxStore.remove(id);
+							CtxStore.add(gprs);
+					}
 					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
 					logger.info("this device is not registered!!");

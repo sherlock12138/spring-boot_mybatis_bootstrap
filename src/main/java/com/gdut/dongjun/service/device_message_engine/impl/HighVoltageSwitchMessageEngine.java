@@ -32,6 +32,7 @@ public class HighVoltageSwitchMessageEngine implements ControlMessageEngine,
 						HighCommandControlCode.CLOSE_SWITCH.toString())
 				+ util.readVoltageAndCurrent(address,
 						HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
+		System.out.println("合闸:" + test);
 		return test;
 	}
 
@@ -39,7 +40,7 @@ public class HighVoltageSwitchMessageEngine implements ControlMessageEngine,
 	public String generateOpenSwitchMessage(String address) {
 
 		Logger.getLogger(HighVoltageSwitchMessageEngine.class).info("执行分闸");
-		System.out.println("分闸" + util.openSwitchPre(address,
+		System.out.println("分闸:" + util.openSwitchPre(address,
 				HighCommandControlCode.PRE_OPEN_SWITCH.toString())
 				+ util.openSwitch(address,
 						HighCommandControlCode.OPEN_SWITCH.toString())
