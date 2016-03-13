@@ -1039,7 +1039,7 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 				clearInterval(timer);
 			} else {
 				wait--;
-				$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
+				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
 			}
 		}, 1000);
 
