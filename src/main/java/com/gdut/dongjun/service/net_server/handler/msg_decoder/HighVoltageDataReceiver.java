@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -186,10 +187,12 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
 					logger.info("-----------跳闸");
-
+					
 					event.setHitchTime(new Date());
-					event.setHitchReason(0);
 					event.setHitchPhase("A");
+					event.setHitchReason(getHitchReason(data.substring(160, 180)));
+					event.setChangeType(0);
+					event.setSolveWay(0);
 					event.setId(UUIDUtil.getUUID());
 					event.setSwitchId(id);
 					hitchEventService.insert(event);
@@ -204,8 +207,10 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 					logger.info("-----------合闸");
 					event.setHitchTime(new Date());
-					event.setHitchReason(1);
 					event.setHitchPhase("A");
+					event.setHitchReason(getHitchReason(data.substring(160, 180)));
+					event.setChangeType(1);
+					event.setSolveWay(0);
 					event.setId(UUIDUtil.getUUID());
 					event.setSwitchId(id);
 					hitchEventService.insert(event);
@@ -233,6 +238,25 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		}
 
 	};
+	
+	private String getHitchReason(String string) {
+		
+		for(int i = 0; i < string.length(); i = i + 2) {
+			if(string.substring(i, i + 2).equals("01")) {
+				return com.gdut.dongjun.service.impl
+						.enums.HighVoltageHitchEvent.getStatement(i / 2 + 1).toString();
+			}
+		}
+		return "未知报警";
+	}
+
+	@Test
+	public void testone() {
+		//String str = "68 0c 0c 68 f4 77 00 64 01 07 01 77 00 00 00 14 63 16 68 47 47 68 d4 77 00 09 94 14 01 77 00 01 40 b8 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 e8 03 00 88 13 00 92 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 db 16";
+		String str = "680c0c68f477002e0107017700016081fb16680c0c68d47700640107017700000014631600000000000068474768d4770009941401770001400f5600000000000000000000000000000000000000000000000000000000e80300851300940100";
+		str = str.replace(" ", "");
+		System.out.println(str.substring(14, 16));
+	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
