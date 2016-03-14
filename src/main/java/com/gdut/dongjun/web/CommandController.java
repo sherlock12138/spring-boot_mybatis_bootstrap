@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
 import com.gdut.dongjun.domain.po.ControlMearsureVoltage;
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
 import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.domain.po.LowVoltageVoltage;
@@ -25,12 +26,14 @@ import com.gdut.dongjun.domain.vo.ActiveHighSwitch;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
+import com.gdut.dongjun.service.HighVoltageHitchEventService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.LowVoltageCurrentService;
 import com.gdut.dongjun.service.LowVoltageVoltageService;
 import com.gdut.dongjun.service.device.Device;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
+import com.gdut.dongjun.util.MyBatisMapUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -49,6 +52,8 @@ public class CommandController {
 	private ControlMearsureCurrentService currentService3;
 	@Autowired
 	private ControlMearsureVoltageService voltageService3;
+	@Autowired
+	public HighVoltageHitchEventService eventService;
 
 	@Resource(name = "LowVoltageDevice")
 	private Device lowVoltageDevice;
@@ -458,6 +463,12 @@ public class CommandController {
 			//System.out.println("===========" + CtxStore.getStatusbyId(s.getId()).getStatus());
 			as.setStatus(CtxStore.getStatusbyId(s.getId()) == null ? null : 
 				CtxStore.getStatusbyId(s.getId()).getStatus());
+			if(s.isOpen() == true) {
+				HighVoltageHitchEvent event = eventService.getRecentHitchEvent(s.getId());
+				if(event != null) {
+					as.setHitchEventId(event.getId());
+				}
+			}
 			list.add(as);
 		}
 		return list;

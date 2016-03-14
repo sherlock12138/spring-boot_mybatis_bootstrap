@@ -38,6 +38,18 @@
             </foreach>
         </if>
     </select>
+    
+    <select id="updateSwitchByMap">
+		update high_voltage_switch
+		<if test="map != null">
+			<set>
+      			<foreach item="item" index="key" collection="map.entrySet()">
+      				${key}=#{item}
+      			</foreach>
+			</set>
+		</if>
+		where id=#{id}
+	</select>
 
     <select id="selectByLineIdInAsc" parameterType="java.lang.String"
         resultMap="BaseResultMap">

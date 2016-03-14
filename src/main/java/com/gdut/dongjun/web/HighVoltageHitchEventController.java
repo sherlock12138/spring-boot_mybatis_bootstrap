@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
+import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.HighVoltageHitchEventService;
+import com.gdut.dongjun.service.net_server.CtxStore;
+import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 
@@ -27,6 +32,7 @@ public class HighVoltageHitchEventController {
 
 	@Autowired
 	private HighVoltageHitchEventService hitchEventService;
+
 
 	/**
 	 * 
@@ -104,5 +110,21 @@ public class HighVoltageHitchEventController {
 			
 			return MapUtil.warp("success", "false");
 		}
+	}
+	
+	@RequestMapping("/ignore_hitch_event") 
+	@ResponseBody
+	public Object ignoreHitchEvent(@RequestParam(required = true)String switchId, HttpSession session) {
+		
+		if(CtxStore.changeOpen(switchId)) {
+			HighVoltageHitchEvent event = hitchEventService.getRecentHitchEvent(switchId);
+			if(event != null) {
+				event.setSolveWay("忽略");
+				event.setSolveTime(new Date());
+				event.setSolvePeople(((User)session.getAttribute("currentUser")).getName());
+				hitchEventService.updateByPrimaryKeySelective(event);
+			}
+		}
+		return MapUtil.warp("success", true);
 	}
 }

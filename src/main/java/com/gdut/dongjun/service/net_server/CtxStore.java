@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
 
 /**
@@ -386,11 +387,6 @@ public abstract class CtxStore {
 		}
 	}
 
-	public static boolean isDistinct(String id) {
-		
-		return false;
-	}
-
 	public static void remove(String id) {
 		
 		if(id == null) {
@@ -402,6 +398,19 @@ public abstract class CtxStore {
 			if(list.get(i).getId().equals(id)) {
 				list.remove(i);
 			}
+		}
+	}
+
+	public static boolean changeOpen(String switchId) {
+		
+		SwitchGPRS gprs = CtxStore.get(switchId);
+		if(gprs != null) {
+			CtxStore.remove(switchId);
+			gprs.setOpen(gprs.isOpen() == true ? false : true);
+			CtxStore.add(gprs);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

@@ -131,13 +131,4 @@ public class IndexController {
 		//String httpArg = "text=%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%8A%80%E6%9C%AF&ctp=1&per=0";
 		return VoiceFixUtil.request(httpUrl, httpArg);
 	}
-	
-	@RequestMapping("/ignore_hitch_event") 
-	@ResponseBody
-	public Object ignoreHitchEvent(@RequestParam(required = true)String switchId) {
-		
-		SwitchGPRS gprs = CtxStore.get(switchId);
-		gprs.setOpen(false);
-		return MapUtil.warp("success", true);
-	}
 }

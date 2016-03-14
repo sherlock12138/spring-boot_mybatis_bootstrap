@@ -14,6 +14,8 @@ public class ActiveHighSwitch {
 	private boolean open = false;
 	
 	private String status;
+	
+	private String hitchEventId;
 
 	public String getId() {
 		return id;
@@ -39,5 +41,11 @@ public class ActiveHighSwitch {
 		this.status = status;
 	}
 	
+	public String getHitchEventId() {
+		return hitchEventId;
+	}
 	
+	public void setHitchEventId(String hitchEventId) {
+		this.hitchEventId = hitchEventId;
+	}
 }

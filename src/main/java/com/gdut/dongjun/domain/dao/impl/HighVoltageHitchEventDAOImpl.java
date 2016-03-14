@@ -3,6 +3,9 @@
  */
 package com.gdut.dongjun.domain.dao.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.gdut.dongjun.domain.dao.HighVoltageHitchEventMapper;
@@ -20,4 +23,10 @@ import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 public class HighVoltageHitchEventDAOImpl extends SinglePrimaryKeyBaseDAOImpl<HighVoltageHitchEvent>
 implements HighVoltageHitchEventMapper {
 
+
+	@Override
+	public HighVoltageHitchEvent getRecentHitchEvent(String id) {
+		// TODO Auto-generated method stub
+		return template.selectOne(getNamespace("getRecentHitchEvent"), id);
+	}
 }

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.commonj.TimerManagerFactoryBean;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
@@ -35,6 +36,7 @@ import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
+import com.gdut.dongjun.util.TimeUtil;
 import com.gdut.dongjun.util.UUIDUtil;
 
 import io.netty.channel.ChannelHandler.Sharable;
@@ -243,7 +245,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					event.setHitchPhase("A");
 					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
 					event.setChangeType(0);
-					event.setSolveWay(0);
+					event.setSolveWay("分闸");
 					event.setId(UUIDUtil.getUUID());
 					event.setSwitchId(id);
 					//event.setSolvePeople();
@@ -262,7 +264,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					event.setHitchPhase("A");
 					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
 					event.setChangeType(1);
-					event.setSolveWay(0);
+					event.setSolveWay("合闸");
 					event.setId(UUIDUtil.getUUID());
 					event.setSwitchId(id);
 					hitchEventService.insert(event);
@@ -313,7 +315,15 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 
-		CtxStore.remove(ctx);// 从Store中移除这个context
+		
+		SwitchGPRS gprs = CtxStore.get(ctx);
+		if(gprs != null) {
+			CtxStore.remove(ctx);// 从Store中移除这个context
+			HighVoltageSwitch hvSwitch = switchService.selectByPrimaryKey(gprs.getId());
+			hvSwitch.setOnlineTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
+			switchService.updateByPrimaryKey(hvSwitch);
+		}
+		
 		CtxStore.printCtxStore();
 	}
 

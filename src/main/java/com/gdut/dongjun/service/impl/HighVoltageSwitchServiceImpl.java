@@ -213,5 +213,4 @@ public class HighVoltageSwitchServiceImpl extends
 		}
 		return true;
 	}
-
 }
