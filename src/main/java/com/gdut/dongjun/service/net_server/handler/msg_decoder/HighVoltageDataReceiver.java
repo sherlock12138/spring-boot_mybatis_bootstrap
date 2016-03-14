@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +90,12 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		logger.info("接收到的报文： " + data);
 		// 截取控制码
 		String infoIdenCode = data.substring(14, 16);
-
+		String hitchEventDesc = "控制回路";
+		if(data.length() == 190) {
+			
+			hitchEventDesc = getHitchReason(data.substring(140, 160));
+		}
+		
 		// 将接收到的客户端信息分类处理
 
 		// 读通信地址并将地址反转
@@ -141,7 +145,54 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			} else {
 				logger.error("there is an error in saving CV!");
 			}
-		} else if (infoIdenCode.equals("01")) {
+		} /*else if(infoIdenCode.equals("64")) {
+			
+			System.out.println("-----------haha");
+			String id = CtxStore.getIdbyAddress(data.substring(10, 14));
+			if (id != null) {
+
+				HighVoltageStatus s = CtxStore.getStatusbyId(id);
+				SwitchGPRS gprs = CtxStore.get(id);
+
+				String new_status = data.substring(66, 68);
+
+				if ("01".equals(s.getStatus()) && "00".equals(new_status)) {
+
+					gprs.setOpen(true);
+
+					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
+					logger.info("-----------test跳闸");
+					
+					event.setHitchTime(new Date());
+					event.setHitchPhase("A");
+					event.setHitchReason(getHitchReason(data.substring(160, 180)));
+					event.setChangeType(0);
+					event.setSolveWay(0);
+					event.setId(UUIDUtil.getUUID());
+					event.setSwitchId(id);
+					hitchEventService.insert(event);
+
+					logger.info("-----------test跳闸");
+				} else if ("01".equals(new_status)
+						&& "00".equals(s.getStatus())) {
+
+					gprs.setOpen(false);
+
+					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
+
+					logger.info("-----------test合闸");
+					event.setHitchTime(new Date());
+					event.setHitchPhase("A");
+					event.setHitchReason(getHitchReason(data.substring(160, 180)));
+					event.setChangeType(1);
+					event.setSolveWay(0);
+					event.setId(UUIDUtil.getUUID());
+					event.setSwitchId(id);
+					hitchEventService.insert(event);
+					logger.info("-----------test合闸");
+				}
+			}
+		}*/ else if (infoIdenCode.equals("01")) {
 
 			// System.out.println(data);
 			String address = data.substring(10, 14);
@@ -190,11 +241,12 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					
 					event.setHitchTime(new Date());
 					event.setHitchPhase("A");
-					event.setHitchReason(getHitchReason(data.substring(160, 180)));
+					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
 					event.setChangeType(0);
 					event.setSolveWay(0);
 					event.setId(UUIDUtil.getUUID());
 					event.setSwitchId(id);
+					//event.setSolvePeople();
 					hitchEventService.insert(event);
 
 					logger.info("-----------跳闸");
@@ -208,7 +260,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					logger.info("-----------合闸");
 					event.setHitchTime(new Date());
 					event.setHitchPhase("A");
-					event.setHitchReason(getHitchReason(data.substring(160, 180)));
+					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
 					event.setChangeType(1);
 					event.setSolveWay(0);
 					event.setId(UUIDUtil.getUUID());
@@ -236,8 +288,8 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			logger.info("undefine message received!");
 			logger.error("接收到的非法数据--------------------" + data);
 		}
-
-	};
+		
+	}
 	
 	private String getHitchReason(String string) {
 		
@@ -250,13 +302,13 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		return "未知报警";
 	}
 
-	@Test
+	/*@Test
 	public void testone() {
 		//String str = "68 0c 0c 68 f4 77 00 64 01 07 01 77 00 00 00 14 63 16 68 47 47 68 d4 77 00 09 94 14 01 77 00 01 40 b8 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 e8 03 00 88 13 00 92 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 db 16";
 		String str = "680c0c68f477002e0107017700016081fb16680c0c68d47700640107017700000014631600000000000068474768d4770009941401770001400f5600000000000000000000000000000000000000000000000000000000e80300851300940100";
 		str = str.replace(" ", "");
 		System.out.println(str.substring(14, 16));
-	}
+	}*/
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
