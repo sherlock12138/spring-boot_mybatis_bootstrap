@@ -1022,12 +1022,14 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 
 							} else if(t == 3) {
 
-								inogeSwitch(id)
+								inogeSwitch(id);
+								DeletWarmIcon();
 							} else {
 
 								closeSwitch(id, type);
+								DeletWarmIcon();
 							}
-							setTimeout(Refresh, 1000);
+							setTimeout(Refresh, 3000);
 						} else {
 
 							alert("安全密码错误！");
@@ -1373,7 +1375,7 @@ function hitchEventSpy() {
 					if(nodeList.length != 0) {
 						oldList.push(nodeList[0].id);
 						if(data[i].status == "00") {
-							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch_open);
+							switchs_drawByTye(nodeList[0], voltage_switch_icon_high, voltage_switch_icon_low, click_high_voltage_switch_open);
 							if(data[i].open == true) {//status与open同时符合才报警
 								alarmList.push(nodeList[0].id);
 								playVoice(getVoiceData(nodeList[0].name));
@@ -1529,11 +1531,14 @@ function worning_switchs_draw(node) {
   // 需要重复添加点击事件
 
 	//$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
-
+	var warmIcon = marker2;
+	DeletWarmIcon = function () {
+		map.removeOverlay(warmIcon);
+	};
   marker2.addEventListener("click", function (e) {
-    map.removeOverlay(marker2); // remove the alarm icon
+    map.removeOverlay(warmIcon); // remove the alarm icon
    // $('audio').remove(); // remove the audio
-    handleAlarm(node); // pop up a handle window
+    //handleAlarm(node); // pop up a handle window
   });
 }
 
