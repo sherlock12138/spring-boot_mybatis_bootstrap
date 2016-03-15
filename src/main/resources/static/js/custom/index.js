@@ -47,7 +47,7 @@ $(document).ready(function() {
 	})
 
 	// 轮询报警
-	hitchEventSpy();
+	setTimeout(hitchEventSpy, 0);
 
   // 5秒后报警测试
   //setTimeout(function () {
@@ -355,6 +355,9 @@ var close_switch = '../../ico/voltage-close.jpg';
  * @return void
  * @throws
  */
+var voltage_switch_icon_low = "../../ico/voltage-outLine_low.jpg";// 低压开关的图标
+var voltage_switch_icon_high = "../../ico/voltage-outLine_high.jpg";// 高压开关的图标
+var control_measure_switch_icon = "../../ico/control_measure_switch.jpg";// 低压开关的图标
 function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -391,9 +394,6 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 	// 遍历描绘定点
 	// *************************************************************
 
-	var voltage_switch_icon_low = "../../ico/voltage-outLine_low.jpg";// 低压开关的图标
-	var voltage_switch_icon_high = "../../ico/voltage-outLine_high.jpg";// 高压开关的图标
-	var control_measure_switch_icon = "../../ico/control_measure_switch.jpg";// 低压开关的图标
 
 	//var outLine = "../../ico/high_voltage_switch.jpg";
 	//var
@@ -630,8 +630,9 @@ function SetCenterPoint_high() {
 	})
 }
 
-
-function click_high_voltage_switch_open() {
+function click_high_voltage_switch_open(node,marker) {
+	var PreHandlerNode = node;
+	var PreHandlerMarker = marker;
 	obj_high = this;
 	sessionStorage.longtitude = this.point.lng;
 	sessionStorage.latitude = this.point.lat;
@@ -701,7 +702,7 @@ function click_high_voltage_switch_open() {
 		+ "</tr>"
 		+ "</tbody></table>"
 		+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
-		+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3)' data-loading-text='忽略...'>忽略</button>"
+		+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3,PreHandlerNode,PreHandlerMarker)' data-loading-text='忽略...'>忽略</button>"
 		+ "</div>"
 	var opts = {
 		width : 580, // 信息窗口宽度
@@ -953,7 +954,7 @@ function Refresh() {
  * @throws
  */
 
-function security_modal(t) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框,所以打算换个写法
+function security_modal(t, node, marker) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框,所以打算换个写法
 	/*$("#security_modal").modal('show');
 	$("#security_modal").on('hide.bs.modal', function(e) {
 		$("#controlCode").val('');
@@ -1022,12 +1023,10 @@ function security_modal(t) {  // 由于使用后窗口不会销毁从而开，�
 
 							} else if(t == 3) {
 
-								inogeSwitch(id);
-								DeletWarmIcon();
+								inogeSwitch(id,node, marker);
 							} else {
 
 								closeSwitch(id, type);
-								DeletWarmIcon();
 							}
 							setTimeout(Refresh, 3000);
 						} else {
@@ -1269,7 +1268,6 @@ var close_switch_high = '../../ico/highvoltage-close.jpg'; // 更新合闸图标
 var open_switch_high = '../../ico/highvoltage-open.jpg';  // 更新开闸图标
 var close_switch_low = '../../ico/lowvoltage-close.jpg';
 var open_switch_low = '../../ico/lowvoltage-open.jpg';
-var outLine_switch = '../../ico/voltage-outLine.jpg';
 
 /*var oldList = [];
 var newList = [];
@@ -1363,7 +1361,7 @@ function hitchEventSpy() {
 			 * 清除旧数据
 			 */
 			for(var length = oldList.length - 1; length >= 0; --length) {
-				switchs_drawByTye(oldList[length], outLine_switch, outLine_switch, click_high_voltage_switch_out);
+				switchs_drawByTye(oldList[length], voltage_switch_icon_high, voltage_switch_icon_low, click_high_voltage_switch_out);
 			}
 			oldList = [];
 			
@@ -1375,7 +1373,7 @@ function hitchEventSpy() {
 					if(nodeList.length != 0) {
 						oldList.push(nodeList[0].id);
 						if(data[i].status == "00") {
-							switchs_drawByTye(nodeList[0], voltage_switch_icon_high, voltage_switch_icon_low, click_high_voltage_switch_open);
+							switchs_drawByTye(nodeList[0], open_switch_high, open_switch_low, click_high_voltage_switch_open);
 							if(data[i].open == true) {//status与open同时符合才报警
 								alarmList.push(nodeList[0].id);
 								playVoice(getVoiceData(nodeList[0].name));
@@ -1420,7 +1418,10 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 //			offset : new BMap.Size(20, -18)
 //		});
 //	}
-	marker2.addEventListener("click", click_switch);
+	var marker = marker2;
+	marker2.addEventListener("click", function () {
+		click_switch(node, marker);
+	});
 
 }
 
@@ -1532,9 +1533,6 @@ function worning_switchs_draw(node) {
 
 	//$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
 	var warmIcon = marker2;
-	DeletWarmIcon = function () {
-		map.removeOverlay(warmIcon);
-	};
   marker2.addEventListener("click", function (e) {
     map.removeOverlay(warmIcon); // remove the alarm icon
    // $('audio').remove(); // remove the audio

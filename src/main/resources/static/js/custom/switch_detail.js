@@ -152,7 +152,7 @@ function closeSwitch(id, type) {
  * @throws
  */
 
-function inogeSwitch(id) {
+function inogeSwitch(id, node, marker) {
 	$.ajax({
 		url: '/dongjun/ignore_hitch_event',
 		data: {
@@ -161,6 +161,10 @@ function inogeSwitch(id) {
 	}).success(function () {
 		$("#security_modal").modal('hide');
 		alert('操作成功');
+		map.removeOverlay(marker);
+		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		node.highlight = 0;
+		zTree.updateNode(node);
 	})
 }
 
