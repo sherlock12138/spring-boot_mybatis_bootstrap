@@ -213,7 +213,7 @@ function getFontCss(treeId, treeNode) {
 	if (treeNode.highlight == 0) {
 
 		return {
-			color : "#999999",
+			color : "#333333",
 			"font-weight" : "bold"
 		}
 	} else if (treeNode.highlight == 1) {// 搜索
@@ -557,7 +557,8 @@ function switchs_draw(node, switch_icon, click_switch) {
 	var pt = new BMap.Point(node.longitude, node.latitude);
 	var myIcon = new BMap.Icon(switch_icon, new BMap.Size(20, 20));
 	var marker2 = new BMap.Marker(pt, {
-		icon : myIcon
+		icon : myIcon,
+		enableMassClear: false
 	}); // 创建标注
 	// ****************************************************************
 	marker2.id = node.id;// 设置id
@@ -603,10 +604,10 @@ var id;// 被点击的开关的id
 var type;// 被点击的开关的type
 var obj_high; // 用于存储当前信息窗口所对应的对象，然后再调用closeInfoWindow()进行销毁
 var obj_low;
+var PreHandlerNode;
 
 function CloseinfoWin_high() {
 	obj_high.closeInfoWindow();
-	console.log(obj_high);
 }
 function CloseinfoWin_low() {
 	obj_low.closeInfoWindow();
@@ -631,13 +632,12 @@ function SetCenterPoint_high() {
 }
 
 function click_high_voltage_switch_open(node,marker) {
-	var PreHandlerNode = node;
-	var PreHandlerMarker = marker;
-	obj_high = this;
-	sessionStorage.longtitude = this.point.lng;
-	sessionStorage.latitude = this.point.lat;
+	PreHandlerNode = node;
+	obj_high = marker;
+	sessionStorage.longtitude = marker.point.lng;
+	sessionStorage.latitude = marker.point.lat;
 	var content = "<div class='BDM_custom_popup'>" + "<h4>"
-		+ this.name + '&nbsp;&nbsp;'
+		+ marker.name + '&nbsp;&nbsp;'
 		+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
 		+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
 		+ '<span aria-hidden="true">' + '&times;'
@@ -701,8 +701,8 @@ function click_high_voltage_switch_open(node,marker) {
 		+ "<td id='yao_kong_fen_zha'></td>"
 		+ "</tr>"
 		+ "</tbody></table>"
-		+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
-		+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(3,PreHandlerNode,PreHandlerMarker)' data-loading-text='忽略...'>忽略</button>"
+		+ '<button id="close_switch_btn" class="btn btn-primary" onClick="security_modal(0)" data-loading-text="合闸中...">合闸</button>'
+		+ '<button id="open_switch_btn" class="btn btn-primary" onClick="security_modal(3,PreHandlerNode ,obj_high)" data-loading-text="忽略...">忽略</button>'
 		+ "</div>"
 	var opts = {
 		width : 580, // 信息窗口宽度
@@ -711,28 +711,27 @@ function click_high_voltage_switch_open(node,marker) {
 		enableMessage: false
 	}
 	var infoWindow = new BMap.InfoWindow(content, opts);
-	this.openInfoWindow(infoWindow);
+	marker.openInfoWindow(infoWindow);
 	if (old_icon != "") {
 
-		this.setIcon(old_icon);// 打开窗口就代表去处理了报警
+		marker.setIcon(old_icon);// 打开窗口就代表去处理了报警
 	}
-	id = this.id;
-	type = this.type;
-	hvswitchStatusSpy(this.id);
-	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+	id = marker.id;
+	type = marker.type;
+	hvswitchStatusSpy(marker.id);
+	readCurrentVoltage(marker.id, marker.type);// 读取实时数据。。
 	infoWindow.addEventListener("close", function() {
 		clearTimeout(k);
 		clearTimeout(t);
 	});
 }
-
-
-function click_high_voltage_switch_close() {
-	obj_high = this;
-	sessionStorage.longtitude = this.point.lng;
-	sessionStorage.latitude = this.point.lat;
+var test;
+function click_high_voltage_switch_close(node, marker) {
+	obj_high = marker;
+	sessionStorage.longtitude = marker.point.lng;
+	sessionStorage.latitude = marker.point.lat;
 	var content = "<div class='BDM_custom_popup'>" + "<h4>"
-			+ this.name + '&nbsp;&nbsp;'
+			+ marker.name + '&nbsp;&nbsp;'
 			+ '<button class="btn btn-info btn-mini" onclick="SetCenterPoint_high()">设为中心点</button>'
 			+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseinfoWin_high()">'
 			+ '<span aria-hidden="true">' + '&times;'
@@ -796,19 +795,9 @@ function click_high_voltage_switch_close() {
 			+ "<td id='yao_kong_fen_zha'></td>"
 			+ "</tr>"
 			+ "</tbody></table>"
-			+ "<button id='close_switch_btn' class='btn btn-primary' onClick='security_modal(0)' data-loading-text='合闸中...'>合闸</button>"
+			+ '<button id="close_switch_btn" class="btn btn-primary" onclick="security_modal(0)" data-loading-text="合闸中...">合闸</button>'
 			+ "<button id='open_switch_btn' class='btn btn-primary' onClick='security_modal(1)' data-loading-text='分闸。。。'>分闸</button>"
 			+ "</div>"
-
-	// + "<div class='row'>"
-	// + "<div class='span4 text-center'>"
-	// + "<select id='cancel_control_type'>"
-	// + "<option value='1'>取消预约跳闸</option>"
-	// + "<option value='3'>取消预约合闸</option>"
-	// + "<option value='5'>取消测试预约跳闸</option>"
-	// + "</select> <a id='cancel_control_switch_btn' class='btn btn-primary'
-	// onclick='cancelControlSwitch()'>确定</a>"
-	// + "</div>" + "</div>" + "</div>";
 	var opts = {
 		width : 580, // 信息窗口宽度
 		height : 340, // 信息窗口高度
@@ -818,23 +807,22 @@ function click_high_voltage_switch_close() {
 	// var currentInfoWindow = new InfoWindow(getMarkInfoView(marker), latLng,
 	// -47);
   var infoWindow = new BMap.InfoWindow(content, opts);
-	this.openInfoWindow(infoWindow);
-	
+	marker.openInfoWindow(infoWindow);
 	// 窗口打开读取实时数据,switch_detail.js 中定义
 	// ********************************************************************
 	if (old_icon != "") {
 
-		this.setIcon(old_icon);// 打开窗口就代表去处理了报警
+		marker.setIcon(old_icon);// 打开窗口就代表去处理了报警
 	}
 	// 还没有提报警处理的需求 ==！
 	// ********************************************************************
 
-	id = this.id;
-	type = this.type;
+	id = marker.id;
+	type = marker.type;
 
 	// 高压开关状态
-	hvswitchStatusSpy(this.id);
-	readCurrentVoltage(this.id, this.type);// 读取实时数据。。
+	hvswitchStatusSpy(marker.id);
+	readCurrentVoltage(marker.id, marker.type);// 读取实时数据。。
 
 	// 添加窗口关闭监听，停止读取实时数据
 	infoWindow.addEventListener("close", function() {
@@ -910,20 +898,23 @@ function Refresh() {
 		success : function(data) {
 
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-
+			
 			/**
 			 * 清除旧数据
 			 */
 			for(var length = oldList.length - 1; length >= 0; --length) {
-				switchs_drawByTye(oldList[length], outLine_switch, outLine_switch, click_high_voltage_switch_out);
+				switchs_drawByTye(oldList[length], voltage_switch_icon_high, voltage_switch_icon_low, click_high_voltage_switch_out);
+			}
+			for(var j = 0 ; j < oldMarker.length ; j++) {
+				map.removeOverlay(oldMarker[j]);
 			}
 			oldList = [];
-
+			oldMarker = [];
 			for (var i = data.length - 1; i >= 0; --i) {
-
+				
 				if(data[i].id != null) {
 					var nodeList = zTree.getNodesByParamFuzzy("id", data[i].id);
-
+					
 					if(nodeList.length != 0) {
 						oldList.push(nodeList[0].id);
 						if(data[i].status == "00") {
@@ -933,6 +924,8 @@ function Refresh() {
 								playVoice(getVoiceData(nodeList[0].name));
 								update(nodeList, 2);  // 树节点变红
 								worning_switchs_draw(nodeList[0]);
+							} else {
+								update(nodeList, 0);
 							}
 						} else {
 							deleteAlarmSwitch(nodeList);
@@ -940,115 +933,9 @@ function Refresh() {
 						}
 					}
 				}
-			}
+			}	
 		}
-	});
-}
-
-/**
- * 
- * @Title: security_modal
- * @Description: TODO
- * @param
- * @return void
- * @throws
- */
-
-function security_modal(t, node, marker) {  // 由于使用后窗口不会销毁从而开，合闸公用了导致多重弹框,所以打算换个写法
-	/*$("#security_modal").modal('show');
-	$("#security_modal").on('hide.bs.modal', function(e) {
-		$("#controlCode").val('');
-		$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
-	});
-	var timer;
-	$("#secu_confirm_btn").click(function() {
-		var wait = 6;
-		console.log(wait);
-		timer = setInterval(function() {
-			if (wait === 0) {
-
-				// ajax
-				$.ajax({
-					type : "post",
-					url : "security_confirm",
-					async : false,
-					data : {
-						"controlCode" : $("#controlCode").val()
-					},
-					success : function(data) {
-						if (data) {
-							if (t == 1) {
-								openSwitch(id, type);
-							} else {
-								closeSwitch(id, type);
-							}
-						} else {
-							alert("安全密码错误！");
-							$('#notice_msg').text('请输入正确的密码');
-						}
-					}
-				});
-				clearInterval(timer);
-			} else {
-				wait--;
-				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
-			}
-		}, 1000);
-	});
-
-	$('#cancel_control').click(function() {
-		clearInterval(timer);
-	});*/
-	$("#security_modal").modal('show');
-	var timer;
-	$("#secu_confirm_btn").unbind().click(function() {
-
-		var wait = 6;
-		timer = setInterval(function() {
-			if (wait === 0) {
-				$.ajax({
-					type : "post",
-					url : "security_confirm",
-					async : false,
-					data : {
-						"controlCode" : $("#controlCode").val()
-					},
-					success : function(data) {
-
-						if (data) {
-
-							if (t == 1) {
-
-								openSwitch(id, type);
-
-							} else if(t == 3) {
-
-								inogeSwitch(id,node, marker);
-							} else {
-
-								closeSwitch(id, type);
-							}
-							setTimeout(Refresh, 3000);
-						} else {
-
-							alert("安全密码错误！");
-						}
-						$("#controlCode").val('');
-						$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
-					}
-				});
-				clearInterval(timer);
-			} else {
-				wait--;
-				$('#notice_msg').text("将在 " + wait + " 秒内执行！");
-			}
-		}, 1000);
-
-	});
-
-	$('#cancel_control').click(function() {
-		clearInterval(timer);
-	});
+	})
 }
 
 /**
@@ -1341,7 +1228,7 @@ function hitchEventSpy() {
 		hitchEventSpy();
 	}, 8 * 1000);
 }*/
-
+var oldMarker = [];
 var oldList = [];
 var alarmList = [];
 function hitchEventSpy() {
@@ -1363,8 +1250,11 @@ function hitchEventSpy() {
 			for(var length = oldList.length - 1; length >= 0; --length) {
 				switchs_drawByTye(oldList[length], voltage_switch_icon_high, voltage_switch_icon_low, click_high_voltage_switch_out);
 			}
+			for(var j = 0 ; j < oldMarker.length ; j++) {
+				map.removeOverlay(oldMarker[j]);
+			}
 			oldList = [];
-			
+			oldMarker = [];
 			for (var i = data.length - 1; i >= 0; --i) {
 				
 				if(data[i].id != null) {
@@ -1402,7 +1292,8 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 	var pt = new BMap.Point(node.longitude, node.latitude);
 	var myIcon = new BMap.Icon(icon, new BMap.Size(20, 20));
 	var marker2 = new BMap.Marker(pt, {
-		icon : myIcon
+		icon : myIcon,
+		enableMassClear: false
 	});
 	marker2.id = node.id;// 设置id
 	marker2.type = node.type;
@@ -1419,8 +1310,9 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 //		});
 //	}
 	var marker = marker2;
+	var NODE = node;
 	marker2.addEventListener("click", function () {
-		click_switch(node, marker);
+		click_switch(NODE, marker);
 	});
 
 }
@@ -1522,8 +1414,10 @@ function worning_switchs_draw(node) {
   var pt = new BMap.Point(node.longitude, node.latitude);
   var myIcon = new BMap.Icon(worning_switch, new BMap.Size(80, 80));
   var marker2 = new BMap.Marker(pt, {
-   icon : myIcon
+   icon : myIcon,
+   //enableMassClear: true
   }); // 创建标注
+	marker2.setZIndex(9);
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
   map.panTo(pt);  // 将报警地点移到地图中间
   map.zoomTo(map.getZoom() + 3);
@@ -1532,6 +1426,7 @@ function worning_switchs_draw(node) {
   // 需要重复添加点击事件
 
 	//$("body").append( "<audio src='../../audio/wornning.wav' autoplay='true' loop=true></audio>");
+	oldMarker.push(marker2);
 	var warmIcon = marker2;
   marker2.addEventListener("click", function (e) {
     map.removeOverlay(warmIcon); // remove the alarm icon

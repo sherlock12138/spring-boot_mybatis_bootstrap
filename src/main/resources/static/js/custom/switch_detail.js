@@ -137,10 +137,9 @@ function controlSwitch(id, type, sign) {
  * @return void
  * @throws
  */
-function closeSwitch(id, type) {
-
+function closeSwitch(id, type, marker) {
 	controlSwitch(id, type, 1);
-
+	map.removeOverlay(marker);
 }
 
 /**
