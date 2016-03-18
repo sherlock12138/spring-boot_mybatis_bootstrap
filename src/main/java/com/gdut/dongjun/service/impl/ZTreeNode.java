@@ -21,6 +21,7 @@ public class ZTreeNode {
 	private String name; // 节点显示的值
 	private boolean open = true; // 是否展开节点
 	private List<ZTreeNode> children;// 子节点
+	private String parentName;
 	private String lineId;//线路Id
 	private String longitude;// 结合百度地图使用 ,经度
 	private String latitude;// 纬度
@@ -106,5 +107,13 @@ public class ZTreeNode {
 	
 	public String getShowName() {
 		return showName;
+	}
+	
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+	
+	public String getParentName() {
+		return parentName;
 	}
 }
