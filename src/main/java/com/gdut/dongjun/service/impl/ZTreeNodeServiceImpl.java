@@ -74,7 +74,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 					n1.setId(substations.get(i).getId());
 					n1.setName(substations.get(i).getName());
-
+					n1.setParentName(null);
 					List<Line> lines = lineService
 							.selectByParameters(MyBatisMapUtil
 									.warp("substation_id", substations.get(i)
@@ -90,6 +90,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 							n2.setId(lines.get(j).getId());
 							n2.setName(lines.get(j).getName());
+							n2.setParentName(substations.get(i).getName());
 
 							List<ZTreeNode> switchNodes = new LinkedList<ZTreeNode>();
 							switch (type) {
@@ -106,6 +107,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 										n3.setId(switchs.get(k).getId());
 										n3.setName(switchs.get(k).getName());
+										n3.setParentName(lines.get(j).getName());
 										n3.setLongitude(switchs.get(k)
 												.getLongitude().toString());
 										n3.setLatitude(switchs.get(k)
@@ -131,6 +133,8 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 										n3.setId(switchs2.get(k).getId());
 										n3.setName(switchs2.get(k).getName());
+										n3.setParentName(lines.get(j).getName());
+										//n3.setParentName(switchs2.get(k).getName());
 										n3.setLongitude(switchs2.get(k)
 												.getLongitude().toString());
 										n3.setLatitude(switchs2.get(k)
@@ -156,6 +160,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 										n3.setId(switchs3.get(k).getId());
 										n3.setName(switchs3.get(k).getName());
+										n3.setParentName(lines.get(j).getName());
 										n3.setLongitude(switchs3.get(k)
 												.getLongitude().toString());
 										n3.setLatitude(switchs3.get(k)
