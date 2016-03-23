@@ -241,7 +241,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
 					logger.info("-----------跳闸");
 					
-					event.setHitchTime(new Date());
+					event.setHitchTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 					event.setHitchPhase("A");
 					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
 					event.setChangeType(0);
@@ -260,7 +260,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
 
 					logger.info("-----------合闸");
-					event.setHitchTime(new Date());
+					event.setHitchTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 					event.setHitchPhase("A");
 					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
 					event.setChangeType(1);
