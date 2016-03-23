@@ -77,3 +77,15 @@ footer p {
 .online {
     color: green;
 }
+
+#show_line {
+    color: blue;
+}
+#Center {
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 25px;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #000000;
+}

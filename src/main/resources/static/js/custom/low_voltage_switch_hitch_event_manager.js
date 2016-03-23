@@ -42,42 +42,28 @@ $(document).ready(function() {
 	//initial_table("hitch_event_list");
 //	$(".del_event_btn").click(delSwitch);
 	loadSubstationSet();
-
-	$.ajax({
-		type : "post",
-		url : 'switch_list_by_line_id',
-		//async : false,
-		data : {
-			"lineId" : '07'
-		},
-		success : function(data) {
-
-			data = data.data;
-			var options = "";
-			for (var i = 0; i < data.length; i++) {
-
-				options += "<option value='" + data[i].id + "'>" + data[i].name
-					+ "</option>";
-			}
-			$("#switchs").empty();
-			$("#switchs").append(options);
-		}
-	})
-
-
 	/**
 	 * 绑定线路的切换
 	 */
-	$(".lines").click(function() {
+	$(".lines").change(function() {
 
-		loadSwitchListWithLineId("switch_list_by_line_id", $(".lines").val());
+		loadSwitchListWithLineId("switch_list_by_line_id", this.value);
 	})
 	
-	$("#switchs").click(function() {
+	$("#switchs").change(function() {
 
-		loadEventListWithSwitchId("get_low_voltage_hitch_event_by_switch_id.action?switchId=", $("#switchs").val());
+		loadEventListWithSwitchId("get_low_voltage_hitch_event_by_switch_id.action?switchId=", this.value);
+	})
+	$('#searchType').change(function() {
+		switch(this.value) {
+			case '变电站': fuzzySearchHandler(0); break;
+			case '线路': fuzzySearchHandler(1); break;
+			case '设备': fuzzySearchHandler(3); break;
+		}
 	})
 });
+
+
 
 function loadEventListWithSwitchId(_url, switchId) {
 

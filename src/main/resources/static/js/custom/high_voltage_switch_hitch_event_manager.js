@@ -8,21 +8,25 @@ $(document)
 					$("#hitch_event_list").DataTable({  // 初始化表格
 						"destroy": true,
 						"ajax": {
-							url: 'get_high_voltage_hitch_event_by_switch_id?switchId=07'
+							url: 'get_high_voltage_hitch_event_by_switch_id?switchId=75ab61fafa814ce8a587eeb6a6693464'
 						},
 						"columns" : [ {
 							"data" : "hitchTime"
 						}, {
+							"data" : "hitchReason"
+						}, {
 							"data" : "hitchPhase"
 						}, {
-							"data" : "hitchReason"
-						}],
+							"data" : "changeType"
+						}, {
+							"data": "solvePeople"
+						}, {
+							"data": "solveTime"
+						}, {
+							"data": "solveWay"
+						}]
 					});
-
-					//alert('dsa')
 					loadSubstationSet();
-					// $(".del_event_btn").click(delSwitch);
-
 					$.ajax({
 						type : "post",
 						url : 'high_voltage_switch_list_by_line_id',
@@ -31,16 +35,17 @@ $(document)
 							"lineId" : '07'
 						},
 						success : function(data) {
-
+							switchList = [];
 							data = data.data;
 							var options = "";
 							for (var i = 0; i < data.length; i++) {
-
+								switchList.push(data[i]);
 								options += "<option value='" + data[i].id + "'>" + data[i].name
 									+ "</option>";
 							}
 							$("#switchs").empty();
 							$("#switchs").append(options);
+							console.log(switchList);
 						}
 					})
 
@@ -53,19 +58,24 @@ $(document)
 								loadSwitchListWithLineId(
 										"high_voltage_switch_list_by_line_id",
 										$(".lines").val());
-							})
+							});
 
 					$("#switchs").change(
 									function() {
 										loadEventListWithSwitchId(
 												"get_high_voltage_hitch_event_by_switch_id.action?switchId=",
 												$("#switchs").val());
-									})
+									});
+					$('#searchType').change(function() {
+						switch(this.value) {
+							case '变电站': fuzzySearchHandler(0); break;
+							case '线路': fuzzySearchHandler(1); break;
+							case '设备': fuzzySearchHandler(2); break;
+						}
+					})
 				});
 
 function loadEventListWithSwitchId(_url, switchId) {
-
-	// alert(switchId)
 	$('#hitch_event_list').DataTable(
 			{
 				"destroy" : true,// destroy之后才能重新加载
@@ -73,45 +83,17 @@ function loadEventListWithSwitchId(_url, switchId) {
 				"columns" : [ {
 					"data" : "hitchTime"
 				}, {
+					"data" : "hitchReason"
+				}, {
 					"data" : "hitchPhase"
 				}, {
-					"data" : "hitchPreform"
+					"data" : "changeType"
 				}, {
-					"data" : "hitchReason"
-				}],
-				"createdRow" : function(row, data, index) {
-
-					var hitchTime = $('td', row).eq(0).text();
-					$('td', row).eq(0).text(
-							getFormatDate(new Date(parseInt(hitchTime, 10))))
-
-					var hitchReason = $('td', row).eq(2).text();
-					var r = "";
-					switch (parseInt(hitchReason)) {
-					case 0:
-						r += "分闸";
-						break;
-					case 1:
-						r += "合闸";
-						break;
-					}
-					$('td', row).eq(2).text(r);
-				}
-
+					"data": "solvePeople"
+				}, {
+					"data": "solveTime"
+				}, {
+					"data": "solveWay"
+				}]
 			});
 }
-
-// /**
-// *
-// * @Title: delSwitch
-// * @Description: TODO
-// * @param
-// * @return void
-// * @throws
-// */
-// function delSwitch() {
-//
-// var column = $(this).parent("td").prevAll();
-// $("#del_confirm_btn").attr("href",
-// "del_hitch_event?eventId=" + column[10].innerHTML);
-// }

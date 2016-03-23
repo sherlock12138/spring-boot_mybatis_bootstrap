@@ -8,21 +8,21 @@
 * @throws
  */
 function loadSwitchListWithLineId(_url, lineId) {
-
+	$('#searchType').val('变电站');
+	fuzzySearchHandler(0);
 	$.ajax({
 		type : "post",
 		url : _url,
 		async : false,
 		data : {
-
 			"lineId" : lineId
 		},
 		success : function(data) {
-
 			data = data.data;
 			var options = "";
+			switchList = [];
 			for (var i = 0; i < data.length; i++) {
-
+				switchList.push(data[i]);
 				options += "<option value='" + data[i].id + "'>" + data[i].name
 						+ "</option>";
 			}
@@ -30,7 +30,6 @@ function loadSwitchListWithLineId(_url, lineId) {
 			$("#switchs").append(options);
 		}
 	})
-
 }
 
 /**

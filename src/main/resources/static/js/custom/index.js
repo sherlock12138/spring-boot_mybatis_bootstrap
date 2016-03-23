@@ -248,6 +248,7 @@ var polylines = new Array();// 旧的线
 function zTreeOnClick(event, treeId, treeNode) {
 	//alert('dsa')
 	// 地图定位
+	$('#show_line').text(treeNode.parentName + '--' + treeNode.name);
 	var pt = new BMap.Point(treeNode.longitude, treeNode.latitude);
 	map.panTo(pt);
 	var marker2 = new BMap.Marker(pt); // 创建标注
@@ -327,9 +328,9 @@ function zTreeOnClick(event, treeId, treeNode) {
 function drawLine(point1, point2, i, map) {
 
 	var polyline = new BMap.Polyline([ point1, point2 ], {
-		strokeColor : "blue",
-		strokeWeight : 2,
-		strokeOpacity : 0.5
+		strokeColor : "black",
+		strokeWeight : 3,
+		strokeOpacity : 0.7
 	});
 	map.addOverlay(polyline); // 增加折线
 	polylines[i] = polyline;// 记录旧的线
@@ -367,7 +368,8 @@ function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
 		nodeList = zTree.getNodesByParamFuzzy("id", location_switch_id);
 		var center_lng = nodeList[0].longitude;
 		var center_lag = nodeList[0].latitude;
-		$('#Center').click(function () {
+		$('#Center').unbind().click(function () {
+			$('#show_line').text('您的中心点');
 			point = new BMap.Point(center_lng, center_lag);
 			map.centerAndZoom(point, location_scale == 0 ? 16 : location_scale);
 		});
@@ -833,6 +835,7 @@ function click_high_voltage_switch_close(node, marker) {
 }
 
 function click_high_voltage_switch_out() {
+	console.log(this);
 	obj_high = this;
 	sessionStorage.longtitude = this.point.lng;
 	sessionStorage.latitude = this.point.lat;
@@ -971,6 +974,7 @@ function security_modal(t, node, marker) {  // 由于使用后窗口不会销毁
 						} else {
 
 							alert("安全密码错误！");
+							clearInterval(timer);
 						}
 						$("#controlCode").val('');
 						$('#notice_msg').text("将在 " + ' ' + " 秒内执行！");
@@ -1350,6 +1354,7 @@ function switchs_drawByTye(node, switch_icon1, switch_icon2, click_switch) {
 	marker2.id = node.id;// 设置id
 	marker2.type = node.type;
 	marker2.name = node.name;
+	marker2.setZIndex(9);
 	map.addOverlay(marker2); // 将标注添加到地图中
 //	var label;
 //	if(node.showName == null || node.showName == "") {
@@ -1466,10 +1471,10 @@ function worning_switchs_draw(node) {
   var pt = new BMap.Point(node.longitude, node.latitude);
   var myIcon = new BMap.Icon(worning_switch, new BMap.Size(80, 80));
   var marker2 = new BMap.Marker(pt, {
-   icon : myIcon,
+   icon : myIcon
    //enableMassClear: true
   }); // 创建标注
-	marker2.setZIndex(9);
+	marker2.setZIndex(-1);
   map.addOverlay(marker2); // 将标注添加到地图中,覆盖原有的图标
   map.panTo(pt);  // 将报警地点移到地图中间
   map.zoomTo(map.getZoom() + 3);
@@ -1481,7 +1486,7 @@ function worning_switchs_draw(node) {
 	oldMarker.push(marker2);
 	var warmIcon = marker2;
   marker2.addEventListener("click", function (e) {
-    map.removeOverlay(warmIcon); // remove the alarm icon
+    //map.removeOverlay(warmIcon); // remove the alarm icon
    // $('audio').remove(); // remove the audio
     //handleAlarm(node); // pop up a handle window
   });

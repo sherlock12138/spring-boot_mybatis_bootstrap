@@ -15,7 +15,7 @@
 	</style>
 	<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
 	<link href="../../css/manager.css" rel="stylesheet" />
-
+  <link rel="stylesheet" href="../../css/awesomplete.css"/>
 	<!-- dataTables -->
 	<link href="../../css/dataTables/dataTables.tableTools.css" rel="stylesheet" />
 	<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
@@ -30,7 +30,31 @@
 	
 	<link rel="shortcut icon" href="../../ico/favicon.png" />
 	<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/bootstrap-transition.js"></script>
+    <script src="../../js/bootstrap-alert.js"></script>
+    <script src="../../js/bootstrap-modal.js"></script>
+    <script src="../../js/bootstrap-dropdown.js"></script>
+    <script src="../../js/bootstrap-scrollspy.js"></script>
+    <script src="../../js/bootstrap-tab.js"></script>
+    <script src="../../js/bootstrap-tooltip.js"></script>
+    <script src="../../js/bootstrap-popover.js"></script>
+    <script src="../../js/bootstrap-button.js"></script>
+    <script src="../../js/bootstrap-collapse.js"></script>
+    <script src="../../js/bootstrap-carousel.js"></script>
+    <script src="../../js/bootstrap-typeahead.js"></script>
+    <script src="../../js/awesomplete.min.js"></script>
+    <!-- dataTables -->
+    <script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+    <script src="../../js/dataTables/jquery.dataTables.js"></script>
+    <script src="../../js/dataTables/dataTables.tableTools.js"></script>
+    <script src="../../js/dataTables/dataTables_initial.js"></script>
 
+    <!-- custom -->
+    <script src="../../js/custom/Date.js"></script>
+    <script src="../../js/custom/substation_line_set.js"></script>
+    <script src="../../js/custom/line_switch_set.js"></script>
+    <script src="../../js/custom/low_voltage_switch_hitch_event_manager.js"></script>
 </head>
 
 <body>
@@ -41,7 +65,7 @@
           <div class="span5">
               <h2>
                   <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
-                  <span class="label label-default">1.00</span>
+                  <span class="label label-default">1.01</span>
               </h2>
           </div>
           <div class="span6 MENU">
@@ -61,7 +85,7 @@
 			<div class="span2 container-fluid well sidebar-nav">
 				<ul class="nav nav-list bs-docs-sidenav">
 					<li class="nav-header">事件管理</li>
-					<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+					<li><a href="low_voltage_hitch_event_manager" class="btn-success">低压开关故障事件</a></li>
 					<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
 					<li><a href="control_measure_hitch_event_manager">无功补偿开关故障事件</a></li>
 				</ul>
@@ -78,10 +102,24 @@
 						<label class="span3">线路:</label>
 						<select class='lines span9'></select>
 					</div>
-					<div class="form-group span3">
+					<div class="form-group span2">
 						<label class="span3">设备:</label>
 						<select id='switchs' class='span9'></select>
 					</div>
+          <div class="form-group span4">
+              <div class="input-append">
+                  <!--<input type="text" class="span7" id="search_content"/>-->
+                  <input class="awesomplete span7" type="text" list="searchlist" />
+                  <datalist id="searchlist">
+                  </datalist>
+                  <select name="" id="searchType" class="span4">
+                      <option value="变电站">变电站</option>
+                      <option value="线路">线路</option>
+                      <option value="设备">设备</option>
+                  </select>
+                  <button class="btn"><i class="fa fa-search" onclick="checkoutSearch()"></i></button>
+              </div>
+          </div>
 				</div>
 
 				<table id="hitch_event_list" class="table table-bordered table-striped table-hover table-condensed success" width="100%">
@@ -131,32 +169,7 @@
 	<!-- Placed at the end of the document so the pages load faster 
 	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
 	-->
-	<script src="../../js/jquery.js"></script>
-	<script src="../../js/bootstrap-transition.js"></script>
-	<script src="../../js/bootstrap-alert.js"></script>
-	<script src="../../js/bootstrap-modal.js"></script>
-	<script src="../../js/bootstrap-dropdown.js"></script>
-	<script src="../../js/bootstrap-scrollspy.js"></script>
-	<script src="../../js/bootstrap-tab.js"></script>
-	<script src="../../js/bootstrap-tooltip.js"></script>
-	<script src="../../js/bootstrap-popover.js"></script>
-	<script src="../../js/bootstrap-button.js"></script>
-	<script src="../../js/bootstrap-collapse.js"></script>
-	<script src="../../js/bootstrap-carousel.js"></script>
-	<script src="../../js/bootstrap-typeahead.js"></script>
-
-	<!-- dataTables -->
-	<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
-	<script src="../../js/dataTables/jquery.dataTables.js"></script>
-	<script src="../../js/dataTables/dataTables.tableTools.js"></script>
-	<script src="../../js/dataTables/dataTables_initial.js"></script>
-
-	<!-- custom -->
-	<script src="../../js/custom/Date.js"></script>
-	<script src="../../js/custom/substation_line_set.js"></script>
-	<script src="../../js/custom/line_switch_set.js"></script>
-	<script src="../../js/custom/low_voltage_switch_hitch_event_manager.js"></script>
-  <script src="../../js/custom/gobal.js"></script>
+<script src="../../js/custom/gobal.js"></script>
 	
 	
 </body>

@@ -14,7 +14,6 @@
 	<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
   <link href="../../css/manager.css" rel="stylesheet" />
   <link href="../../css/global.css" rel="stylesheet" />
-
 	<!-- dataTables -->
 	<link href="../../css/dataTables/dataTables.tableTools.css" rel="stylesheet" />
 	<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
@@ -27,7 +26,32 @@
 
 	<link rel="shortcut icon" href="../../ico/favicon.png" />
 	<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/bootstrap-transition.js"></script>
+    <script src="../../js/bootstrap-alert.js"></script>
+    <script src="../../js/bootstrap-modal.js"></script>
+    <script src="../../js/bootstrap-dropdown.js"></script>
+    <script src="../../js/bootstrap-scrollspy.js"></script>
+    <script src="../../js/bootstrap-tab.js"></script>
+    <script src="../../js/bootstrap-tooltip.js"></script>
+    <script src="../../js/bootstrap-popover.js"></script>
+    <script src="../../js/bootstrap-button.js"></script>
+    <script src="../../js/bootstrap-collapse.js"></script>
+    <script src="../../js/bootstrap-carousel.js"></script>
+    <script src="../../js/bootstrap-typeahead.js"></script>
 
+    <!-- dataTables -->
+    <script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+    <script src="../../js/dataTables/jquery.dataTables.js"></script>
+    <script src="../../js/dataTables/dataTables.tableTools.js"></script>
+    <script src="../../js/dataTables/dataTables_initial.js"></script>
+
+    <!-- custom -->
+    <script src="../../js/custom/Date.js"></script>
+    <script src="../../js/custom/substation_line_set.js"></script>
+    <script src="../../js/custom/line_switch_set.js"></script>
+    <script src="../../js/custom/high_voltage_switch_hitch_event_manager.js"></script>
+    <script src="../../js/custom/gobal.js"></script>
 </head>
 
 <body>
@@ -40,14 +64,14 @@
           <div class="span5">
               <h2>
                   <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
-                  <span class="label label-default">1.00</span>
+                  <span class="label label-default">1.01</span>
               </h2>
           </div>
           <div class="span6 MENU">
               <a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
               <a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
               <a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
-              <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-primary" id="event"><i class="fa fa-user"></i>事件</a>
+              <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-success" id="event"><i class="fa fa-user"></i>事件</a>
           </div>
           <div class="span1 log_out">
               <button class="btn btn-danger" id="log_out">退出</button>
@@ -61,7 +85,7 @@
 				<ul class="nav nav-list bs-docs-sidenav">
 					<li class="nav-header">事件管理</li>
 					<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
-					<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
+					<li><a href="high_voltage_hitch_event_manager" class="btn-success">高压开关故障事件</a></li>
 					<li><a href="control_measure_hitch_event_manager">无功补偿开关故障事件</a></li>
 				</ul>
 			</div>
@@ -77,27 +101,36 @@
 						<label class="span3">线路:</label>
 						<select class='lines span9'></select>
 					</div>
-					<div class="form-group span3">
-						<label class="span3">设备:</label>
-						<select id='switchs' class='span9'></select>
-					</div>
+            <div class="form-group span2">
+                <label class="span3">设备:</label>
+                <select id='switchs' class='span9'></select>
+            </div>
+            <div class="form-group span4">
+                <div class="input-append">
+                    <!--<input type="text" class="span7" id="search_content"/>-->
+                    <input class="awesomplete span7" type="text" list="searchlist" id="Search"/>
+                    <datalist id="searchlist">
+                    </datalist>
+                    <select id="searchType" class="span4">
+                        <option value="变电站">变电站</option>
+                        <option value="线路">线路</option>
+                        <option value="设备">设备</option>
+                    </select>
+                    <button class="btn"><i class="fa fa-search" onclick="checkoutSearch()"></i></button>
+                </div>
+            </div>
 				</div>
 
 				<table id="hitch_event_list" class="table table-bordered table-striped table-hover table-condensed success" width="100%">
 					<thead>
-						<td>故障时间</td>
-						<td>故障相位</td>
-            <td>故障表现</td>
-						<td>故障原因</td>
+						<td>报警时间</td>
+						<td>报警原因</td>
+            <td>报警相位</td>
+						<td>操作</td>
+            <td>解决人</td>
+            <td>解决时间</td>
+            <td>解决方式</td>
 					</thead>
-					<!--<tr th:each="event:${hitch_events}" th:if="*{event!=null}">-->
-						<!--<td th:text="${#dates.format(event.hitchTime,'yyyy-MM-dd HH:mm:ss')}"></td>-->
-						<!--<td th:text="${event.hitchPhase}"></td>-->
-						<!--&lt;!&ndash; 故障原因 &ndash;&gt;-->
-						<!--<td th:if="*{event.hitchReason==0}">分闸</td>-->
-						<!--<td th:if="*{event.hitchReason==1}">合闸</td>-->
-            <!--&lt;!&ndash;<td th:text="${event.hitchReason}"></td>&ndash;&gt;-->
-					<!--</tr>-->
 				</table>
 
 			</div>
@@ -134,32 +167,7 @@
 	<!-- Placed at the end of the document so the pages load faster 
 	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
 	-->
-	<script src="../../js/jquery.js"></script>
-	<script src="../../js/bootstrap-transition.js"></script>
-	<script src="../../js/bootstrap-alert.js"></script>
-	<script src="../../js/bootstrap-modal.js"></script>
-	<script src="../../js/bootstrap-dropdown.js"></script>
-	<script src="../../js/bootstrap-scrollspy.js"></script>
-	<script src="../../js/bootstrap-tab.js"></script>
-	<script src="../../js/bootstrap-tooltip.js"></script>
-	<script src="../../js/bootstrap-popover.js"></script>
-	<script src="../../js/bootstrap-button.js"></script>
-	<script src="../../js/bootstrap-collapse.js"></script>
-	<script src="../../js/bootstrap-carousel.js"></script>
-	<script src="../../js/bootstrap-typeahead.js"></script>
 
-	<!-- dataTables -->
-	<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
-	<script src="../../js/dataTables/jquery.dataTables.js"></script>
-	<script src="../../js/dataTables/dataTables.tableTools.js"></script>
-	<script src="../../js/dataTables/dataTables_initial.js"></script>
-
-	<!-- custom -->
-	<script src="../../js/custom/Date.js"></script>
-	<script src="../../js/custom/substation_line_set.js"></script>
-	<script src="../../js/custom/line_switch_set.js"></script>
-	<script src="../../js/custom/high_voltage_switch_hitch_event_manager.js"></script>
-  <script src="../../js/custom/gobal.js"></script>
 
 	
 </body>
