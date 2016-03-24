@@ -1,6 +1,7 @@
 .sidebar-nav {
   padding: 7px 0;
   height: calc(100% - 56px);
+  overflow-y :auto;
 }
 
 
@@ -54,4 +55,9 @@
 	height: 10px;
 	background-color: #A572AA;
 	display: block;
+}
+
+.Mychart {
+    width: 100%;
+    height: 95%;
 }

@@ -9,7 +9,58 @@ $(document).ready(function() {
 	$(".del_switch_btn").click(delSwitch);
 	loadSubstationSet();	
 	
+	/**
+	 * 编辑提交
+	 */
+	$("#edit_switch_confirm_btn").click(function() {
+
+		$.ajax({
+			type : "post",
+			url : "edit_line",
+			async : false,
+			data : {
+				"id" : $("#editId").val(),
+				"name" : $("#editName").val(),
+				"substationId" : $("#editLineId").val(),
+			},
+			success : function(data) {
+
+				if(data!=null){
+					
+					reloadDataTable(data);
+				}
+			}
+		})
+	});
 	
+	$("#add_switch_confirm_btn").click(function() {
+
+		$.ajax({
+			type : "post",
+			url : "edit_line",
+			async : false,
+			data : {
+				"id" : $("#inputId").val(),
+				"name" : $("#inputName").val(),
+				"substationId" : $("#inputLineId").val(),
+			},
+			success : function(data) {
+
+				if(data!=null){
+					
+					reloadDataTable(data);
+				}
+			}
+		})
+	});
+	
+	/**
+	 * 切换变电站时的监听
+	 */
+	$(".substations").click(function(){
+		
+		reloadDataTable(this.value);
+	});
 });
 
 /**
@@ -30,31 +81,37 @@ function loadSubstationSet() {
 		success : function(data) {
 
 			var options = "";
-			for (var i = 0; i < data.length; i++) {
+			for (var i = 0; i < data.data.length; i++) {
 
-				options += "<option value='" + data[i].id + "'>" + data[i].name
+				options += "<option value='" + data.data[i].id + "'>" + data.data[i].name
 						+ "</option>";
 			}
-			$("#substations").append(options);
+			$(".substations").append(options);
 			$("#inputLineId").append(options);
 		}
 	})
 }
 
+
 /**
- * 切换变电站时的监听
+ * 
+* @Title: reloadDataTable 
+* @Description: TODO
+* @param @param id   
+* @return void   
+* @throws
  */
-$("#substations").click(function(){
+function reloadDataTable(id){
 	
 	$('#switch_list').DataTable( {
 		destroy: true,// destroy之后才能重新加载
-        "ajax": "line_list_by_substation_id.action?substation_id="+this.value,
+        "ajax": "line_list_by_substation_id.action?substation_id="+id,
         "columns": [
             { "data": "name" },
             { 	"data": "id",
-            	"visible": false},
+            	"sClass": "dpass"},
             { 	"data": "substationId",
-	            "visible": false},
+                	"sClass": "dpass"},
             { "data": null},// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
             { "data": null }// 设置默认值 null，表示列不会获得数据源对象的信息,否则默认值会被覆盖掉
         ],
@@ -69,8 +126,13 @@ $("#substations").click(function(){
             "data": null,
             "defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
         }], 	
+        "fnInitComplete": function(oSettings, json) { 
+
+        	$(".edit_switch_btn").click(editSwitch);
+        	$(".del_switch_btn").click(delSwitch);
+          }
     } );
-});
+}
 
 /**
  * 
@@ -114,6 +176,28 @@ function editSwitch() {
 function delSwitch() {
 
 	var column = $(this).parent("td").prevAll();
-	$("#del_confirm_btn").attr("href",
-			"del_line?switchId=" + column[2].innerHTML);
+	$("#del_confirm_btn").click(function() {
+
+		$.ajax({
+			type : "post",
+			url : "del_line",
+			async : false,
+			data : {
+				"switchId" : column[2].innerHTML,
+			},
+			success : function(data) {
+
+				if(data!=null){
+					
+					reloadDataTable(data);
+				}
+			}
+		})
+	});
 }
+
+
+
+
+
+

@@ -2,6 +2,7 @@ package com.gdut.dongjun.service.net_server.server.impl;
 
 import java.util.List;
 
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -16,7 +17,7 @@ import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.service.net_server.initializer.ServerInitializer;
 import com.gdut.dongjun.service.net_server.server.NetServer;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
-import com.sun.xml.internal.bind.v2.TODO;
+
 
 /**
  * @author Sherlock-lee
@@ -31,44 +32,49 @@ public class HighVoltageServer extends NetServer {
 	private ServerInitializer initializer;
 	@Autowired
 	private HighVoltageSwitchService lowVoltageSwitchService;
-	private static final Logger logger = Logger.getLogger(HighVoltageServer.class);
+	private static final Logger logger = Logger
+			.getLogger(HighVoltageServer.class);
 
 	@Resource(name = "HighVoltageServerInitializer")
 	public void setInitializer(ServerInitializer initializer) {
 
 		super.initializer = initializer;
-//		super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
+		super.hitchEventBreak = 5*1000;
+		// super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
 	}
 
 	@Override
 	protected void hitchEventSpy() {
-
-	}
-
-	@Override
-	protected void timedCVReadTask() {
 
 		String msg = null;
 		List<HighVoltageSwitch> switchs = lowVoltageSwitchService
 				.selectByParameters(null);
 
 		if (switchs != null) {
+			
 			for (HighVoltageSwitch s : switchs) {
 
 				if (s.getId() != null && CtxStore.isReady(s.getId())) {
 
 					SwitchGPRS gprs = CtxStore.get(s.getId());
-					//String address = new HighVoltageDeviceCommandUtil().reverseString(s.getAddress());
+					// String address = new
+					// HighVoltageDeviceCommandUtil().reverseString(s.getAddress());
 					msg = new HighVoltageDeviceCommandUtil()
-							.readVoltageAndCurrent(s.getAddress(),
+							.readVoltageAndCurrent(gprs.getAddress(),
 									HighCommandControlCode.READ_VOLTAGE_CURRENT
 											.toString());
-					logger.info(msg);
-					logger.info("读取 "+ s.getAddress()+" 的电流电压");
+					logger.info("读取电流电压，报警状态---" + msg);
 					gprs.getCtx().writeAndFlush(msg);// 读取电压
 				}
 			}
 		}
+
 	}
+
+	@Override
+	protected void timedCVReadTask() {
+
+	}
+	
 
 }

@@ -3,6 +3,7 @@ package com.gdut.dongjun.web;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,8 @@ public class ControlMeasureSwitchController {
 	private ControlMearsureSwitchService switchService;
 	@Autowired
 	private LineService LineService;
+	private static final Logger logger = Logger
+			.getLogger(ControlMeasureHitchEventController.class);
 
 	/**
 	 * 
@@ -35,7 +38,7 @@ public class ControlMeasureSwitchController {
 	 * @param @param model
 	 * @param @return
 	 * @return String
-	 * @throws  high_voltage_
+	 * @throws high_voltage_
 	 */
 	@RequestMapping("/control_measure_switch_manager")
 	public String getLineSwitchList(String lineId, Model model) {
@@ -96,6 +99,27 @@ public class ControlMeasureSwitchController {
 
 	/**
 	 * 
+	 * @Title: selectCMByLineIdInAsc
+	 * @Description: TODO
+	 * @param @param lineId
+	 * @param @param model
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/selectCMByLineIdInAsc")
+	@ResponseBody
+	public Object selectCMByLineIdInAsc(
+			@RequestParam(required = true) String lineId, Model model) {
+
+		List<ControlMearsureSwitch> switchs = switchService
+				.selectByParameters(MyBatisMapUtil.warp("line_id", lineId));
+
+		return switchs;
+	}
+
+	/**
+	 * 
 	 * @Title: delSwitch
 	 * @Description: TODO
 	 * @param @param switchId
@@ -106,13 +130,19 @@ public class ControlMeasureSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/del_control_measure_switch")
+	@ResponseBody
 	public String delSwitch(@RequestParam(required = true) String switchId,
 			Model model, RedirectAttributes redirectAttributes) {
 
 		String lineId = switchService.selectByPrimaryKey(switchId).getLineId();
-		switchService.deleteByPrimaryKey(switchId);// 删除这个开关
-		redirectAttributes.addAttribute("lineId", lineId);
-		return "redirect:control_measure_switch_manager";
+		try {
+
+			switchService.deleteByPrimaryKey(switchId);// 删除这个开关
+		} catch (Exception e) {
+			logger.error("删除开关失败！");
+			return null;
+		}
+		return lineId;
 	}
 
 	/**
@@ -127,6 +157,7 @@ public class ControlMeasureSwitchController {
 	 * @throws
 	 */
 	@RequestMapping("/edit_control_measure_switch")
+	@ResponseBody
 	public String editSwitch(ControlMearsureSwitch switch1, Model model,
 			RedirectAttributes redirectAttributes) {
 
@@ -135,9 +166,15 @@ public class ControlMeasureSwitchController {
 		if (switch1.getId() == "") {
 			switch1.setId(UUIDUtil.getUUID());
 		}
-		switchService.updateByPrimaryKey(switch1);
-		redirectAttributes.addAttribute("lineId", switch1.getLineId());
-		return "redirect:control_measure_switch_manager";
+		try {
+
+			switchService.updateByPrimaryKey(switch1);
+		} catch (Exception e) {
+
+			logger.error("修改开关失败！");
+			return null;
+		}
+		return switch1.getLineId();
 	}
 
 }

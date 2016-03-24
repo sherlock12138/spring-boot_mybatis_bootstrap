@@ -111,7 +111,7 @@ public class LowVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			String address = data.substring(2, 14);
 			address = commandUtil.decodeAddress(address);
 			System.out.println(address);
-			String id = CtxStore.getId(address);
+			String id = CtxStore.getIdbyAddress(address);
 
 			if (id != null && address != null) {
 				saveCV(id, data);
@@ -122,7 +122,7 @@ public class LowVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 			String address = data.substring(2, 14);
 			address = commandUtil.decodeAddress(address);
-			String id = CtxStore.getId(address);
+			String id = CtxStore.getIdbyAddress(address);
 			data = commandUtil.dataDecode(data);
 
 			readHitchEvent(id, address, data);// 读取跳闸事件，处理

@@ -11,5 +11,7 @@ import com.gdut.dongjun.service.base.BaseService;
  * @package com.gdut.dongjun.service
  */
 public interface HighVoltageHitchEventService extends BaseService<HighVoltageHitchEvent> {
+
+	public HighVoltageHitchEvent getRecentHitchEvent(String id);
 	
 }

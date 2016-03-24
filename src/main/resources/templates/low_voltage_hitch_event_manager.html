@@ -15,7 +15,7 @@
 	</style>
 	<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
 	<link href="../../css/manager.css" rel="stylesheet" />
-
+  <link rel="stylesheet" href="../../css/awesomplete.css"/>
 	<!-- dataTables -->
 	<link href="../../css/dataTables/dataTables.tableTools.css" rel="stylesheet" />
 	<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
@@ -30,25 +30,53 @@
 	
 	<link rel="shortcut icon" href="../../ico/favicon.png" />
 	<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/bootstrap-transition.js"></script>
+    <script src="../../js/bootstrap-alert.js"></script>
+    <script src="../../js/bootstrap-modal.js"></script>
+    <script src="../../js/bootstrap-dropdown.js"></script>
+    <script src="../../js/bootstrap-scrollspy.js"></script>
+    <script src="../../js/bootstrap-tab.js"></script>
+    <script src="../../js/bootstrap-tooltip.js"></script>
+    <script src="../../js/bootstrap-popover.js"></script>
+    <script src="../../js/bootstrap-button.js"></script>
+    <script src="../../js/bootstrap-collapse.js"></script>
+    <script src="../../js/bootstrap-carousel.js"></script>
+    <script src="../../js/bootstrap-typeahead.js"></script>
+    <script src="../../js/awesomplete.min.js"></script>
+    <!-- dataTables -->
+    <script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+    <script src="../../js/dataTables/jquery.dataTables.js"></script>
+    <script src="../../js/dataTables/dataTables.tableTools.js"></script>
+    <script src="../../js/dataTables/dataTables_initial.js"></script>
 
+    <!-- custom -->
+    <script src="../../js/custom/Date.js"></script>
+    <script src="../../js/custom/substation_line_set.js"></script>
+    <script src="../../js/custom/line_switch_set.js"></script>
+    <script src="../../js/custom/low_voltage_switch_hitch_event_manager.js"></script>
 </head>
 
 <body>
-
+<span style="display: none" id="module" data-web="4"></span>
 	<div class="container-fluid">
 		<div class="hero-unit">
 			<div class="row-fluid">
-				<div class="span4">
-					<h2><img src="../../img/logo.png" style="height: 60px" />电网智能监控系统</h2>
-				</div>
-				<div class="span8">
-					<a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
-					<a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
-					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
-					<a href="#system" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
-					<a href="#about" class="btn banner-btn btn-primary"><i class="fa fa-info-circle"></i>关于</a>
-					<a href="#contact" class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
-				</div>
+          <div class="span5">
+              <h2>
+                  <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
+                  <span class="label label-default">1.01</span>
+              </h2>
+          </div>
+          <div class="span6 MENU">
+              <a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
+              <a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
+              <a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
+              <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-primary" id="event"><i class="fa fa-user"></i>事件</a>
+          </div>
+          <div class="span1 log_out">
+              <button class="btn btn-danger" id="log_out">退出</button>
+          </div>
 			</div>
 		</div>
 
@@ -56,18 +84,10 @@
 
 			<div class="span2 container-fluid well sidebar-nav">
 				<ul class="nav nav-list bs-docs-sidenav">
-					<li class="nav-header">资源管理</li>
-					<li><a href="substation_manager">变电站管理</a></li>
-					<li><a href="line_manager">线路管理</a></li>
-					<li class="nav-header">设备管理</li>
-					<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
-					<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
-					<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
-
 					<li class="nav-header">事件管理</li>
-					<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
+					<li><a href="low_voltage_hitch_event_manager" class="btn-success">低压开关故障事件</a></li>
 					<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
-					<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
+					<li><a href="control_measure_hitch_event_manager">无功补偿开关故障事件</a></li>
 				</ul>
 			</div>
 
@@ -75,17 +95,31 @@
 
 				<div class="form-inline">
 					<div class="form-group span3">
-						<label class="span3">变电站：</label>
-						<select id='substations' class="span9"></select>
+						<label class="span3">变电站:</label>
+						<select class="substations span9"></select>
 					</div>
 					<div class="form-group span3">
-						<label class="span3">线路：</label>
-						<select id='lines' class='span9'></select>
+						<label class="span3">线路:</label>
+						<select class='lines span9'></select>
 					</div>
-					<div class="form-group span3">
-						<label class="span3">设备：</label>
+					<div class="form-group span2">
+						<label class="span3">设备:</label>
 						<select id='switchs' class='span9'></select>
 					</div>
+          <div class="form-group span4">
+              <div class="input-append">
+                  <!--<input type="text" class="span7" id="search_content"/>-->
+                  <input class="awesomplete span7" type="text" list="searchlist" />
+                  <datalist id="searchlist">
+                  </datalist>
+                  <select name="" id="searchType" class="span4">
+                      <option value="变电站">变电站</option>
+                      <option value="线路">线路</option>
+                      <option value="设备">设备</option>
+                  </select>
+                  <button class="btn"><i class="fa fa-search" onclick="checkoutSearch()"></i></button>
+              </div>
+          </div>
 				</div>
 
 				<table id="hitch_event_list" class="table table-bordered table-striped table-hover table-condensed success" width="100%">
@@ -100,36 +134,7 @@
 						<td>B相电流</td>
 						<td>C相电流</td>
 					</thead>
-					<tr th:each="event:${hitch_events}" th:if="*{event!=null}">
-						<td th:text="${#dates.format(event.hitchTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${event.hitchPhase}"></td>
-						<!-- 故障原因 -->
-						<td th:if="*{event.hitchReason==1}">剩余电流</td>
-						<td th:if="*{event.hitchReason==2}">缺零</td>
-						<td th:if="*{event.hitchReason==3}">过载</td>
-						<td th:if="*{event.hitchReason==4}">短路</td>
-						<td th:if="*{event.hitchReason==5}">缺相</td>
-						<td th:if="*{event.hitchReason==6}">欠压</td>
-						<td th:if="*{event.hitchReason==7}">过压</td>
-						<td th:if="*{event.hitchReason==8}">接地</td>
-						<td th:if="*{event.hitchReason==9}">停电</td>
-						<td th:if="*{event.hitchReason==10}">定时试验</td>
-						<td th:if="*{event.hitchReason==11}">远程</td>
-						<td th:if="*{event.hitchReason==12}">闭锁</td>
-						<td th:if="*{event.hitchReason==13}">手动</td>
-						<td th:if="*{event.hitchReason==14}">互感器故障</td>
-						<td th:if="*{event.hitchReason==15}">合闸失败</td>
-						<td th:if="*{event.hitchReason==16}">设置失败</td>
 
-						<td th:text="${event.behitchAPhaseVoltage}"></td>
-						<td th:text="${event.behitchBPhaseVoltage}"></td>
-						<td th:text="${event.behitchCPhaseVoltage}"></td>
-						<td th:text="${event.behitchAPhaseCurrent}"></td>
-						<td th:text="${event.behitchBPhaseCurrent}"></td>
-						<td th:text="${event.behitchCPhaseCurrent}"></td>
-						<!--  <td th:text="${event.protocal}!=0?'07':'101'"></td>-->
-						<!-- th:attr="href=@{del_switch?switchId=} + ${switch.id}" -->
-					</tr>
 				</table>
 			</div>
 		</div>
@@ -164,32 +169,7 @@
 	<!-- Placed at the end of the document so the pages load faster 
 	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
 	-->
-	<script src="../../js/jquery.js"></script>
-	<script src="../../js/bootstrap-transition.js"></script>
-	<script src="../../js/bootstrap-alert.js"></script>
-	<script src="../../js/bootstrap-modal.js"></script>
-	<script src="../../js/bootstrap-dropdown.js"></script>
-	<script src="../../js/bootstrap-scrollspy.js"></script>
-	<script src="../../js/bootstrap-tab.js"></script>
-	<script src="../../js/bootstrap-tooltip.js"></script>
-	<script src="../../js/bootstrap-popover.js"></script>
-	<script src="../../js/bootstrap-button.js"></script>
-	<script src="../../js/bootstrap-collapse.js"></script>
-	<script src="../../js/bootstrap-carousel.js"></script>
-	<script src="../../js/bootstrap-typeahead.js"></script>
-
-	<!-- dataTables -->
-	<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
-	<script src="../../js/dataTables/jquery.dataTables.js"></script>
-	<script src="../../js/dataTables/dataTables.tableTools.js"></script>
-	<script src="../../js/dataTables/dataTables_initial.js"></script>
-
-	<!-- custom -->
-	<script src="../../js/custom/Date.js"></script>
-	<script src="../../js/custom/substation_line_set.js"></script>
-	<script src="../../js/custom/line_switch_set.js"></script>
-	<script src="../../js/custom/low_voltage_switch_hitch_event_manager.js"></script>
-	
+<script src="../../js/custom/gobal.js"></script>
 	
 	
 </body>

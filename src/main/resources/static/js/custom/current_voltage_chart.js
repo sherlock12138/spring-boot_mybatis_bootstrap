@@ -5,24 +5,119 @@ $(document).ready(function() {
 
 	initail_datetimepicker();
 
-	$("#search_btn").click(search_chart_by_switch_id);//右侧搜索按钮
+	//$("#search_btn").click(search_chart_by_switch_id);//右侧搜索按钮
 
 
 });
-
-var search_chart_switch_id;//用于搜索报表的开关id
 function zTreeOnClick(event, treeId, treeNode) {
-
+	<!-- 当点击Ztree默认先初始化电压曲线 -->
+	var node = treeNode;
+	show_chart(treeNode, 1, 'VoltageChart');
+	$("#search_btn").click(function () {
+		show_chart(node, 1, 'VoltageChart');
+	});
+	$('#showVchart').click(function () {
+		show_chart(node, 1, 'VoltageChart');
+		$("#search_btn").unbind().click(function () {
+			show_chart(node, 1, 'VoltageChart');
+		});
+	});
+	$('#showCchart').click(function () {
+		show_chart(node, 0, 'current');
+		$("#search_btn").unbind().click(function () {
+			show_chart(node, 0, 'current');
+		});
+	});
+	$("#showPchart").click(function () {
+		show_chart(node, 2);
+		$("#search_btn").unbind().click(function () {
+			show_chart(node, 2);
+		});
+	});
+	$('#showVExcal').click(function () {
+		show_table(node, 1, 'v_data_list');
+		$("#search_btn").unbind().click(function () {
+			show_table(node, 1, 'v_data_list');
+		});
+	});
+	$('#showCExcal').click(function () {
+		show_table(node, 0, 'c_data_list');
+		$("#search_btn").unbind().click(function () {
+			show_table(node, 0, 'c_data_list');
+		});
+	})
 	//点击事件
-	search_chart_switch_id = treeNode.id;
-	search_chart_by_switch_id();
-	
-	
-	
-};
+	//search_chart_switch_id = treeNode.id;
+	//search_chart_by_switch_id();
+}
+
+/** 用于tabpanel切换标签页时加载不同的图表
+/** param： 树的点击节点
+/** param： 图表类型，1电压，0电流，2功率
+/** param： 对应实例化图表的ID
+/**
+*/
+////dongjun/select_table_by_id?switchId=&type=&cov=&beginDate=&endDate=
+function show_chart(treeNode, num, Chartname) {
+	var option;
+	var id = treeNode.id;
+	var type = treeNode.type;
+	var begin_time = $('#begin_search_date').val();
+	var end_time = $('#end_search_date').val();
+	//创建折线图
+	var myChart = echarts.init(document.getElementById(Chartname));
+	myChart.showLoading();
+	$.ajax({
+		url: '/dongjun/select_chart_by_switch_id',
+		method: 'POST',
+		data : {
+			switchId: id,
+			type: type,
+			beginDate: begin_time,
+			endDate: end_time,
+			cov: num
+		}
+	}).success(function (data) {
+		option = data;
+		myChart.setOption(option);
+		setTimeout(function () {
+			myChart.hideLoading();
+		}, 2000);
+	})
+}
+
+function show_table (node, num, tablename) {
+	var begin_time = $('#begin_search_date').val();
+	var end_time = $('#end_search_date').val();
+	$('#' + tablename).DataTable( {
+		destroy: true,// destroy之后才能重新加载
+		"ordering": false,
+		"info":     false,
+		"ajax" : {
+			url: '/dongjun/select_table_by_id',
+			method: 'post',
+			data: {
+				switchId: node.id,
+				type: node.type,
+				cov: num,
+				beginDate: begin_time,
+				endDate: end_time
+			}
+		},
+		"columns" : [ {
+			"data" : "time"
+		}, {
+			"data" : "aValue"
+		}, {
+			"data" : "bValue"
+		}, {
+			"data" : "cValue"
+		}]
+	} );
+}
 
 function search_chart_by_switch_id(){
-	
+
 	$.ajax({
 		type : "post",
 		url : "select_chart_by_switch_id",
@@ -34,7 +129,7 @@ function search_chart_by_switch_id(){
 			"switchId" : search_chart_switch_id
 		},
 		success : function(data) {
-			
+
 			//不同的设备有不同 的精确度
 			var vol_precision = 0;
 			var cur_precision = 0;
@@ -315,3 +410,4 @@ function lineChart() {
 	}
 	return lineChart;
 }
+

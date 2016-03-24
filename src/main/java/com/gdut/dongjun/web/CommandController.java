@@ -1,36 +1,43 @@
 package com.gdut.dongjun.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
 import com.gdut.dongjun.domain.po.ControlMearsureVoltage;
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
+import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
 import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.domain.po.LowVoltageVoltage;
+import com.gdut.dongjun.domain.po.User;
+import com.gdut.dongjun.domain.vo.ActiveHighSwitch;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.ControlMearsureVoltageService;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
+import com.gdut.dongjun.service.HighVoltageHitchEventService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.LowVoltageCurrentService;
 import com.gdut.dongjun.service.LowVoltageVoltageService;
 import com.gdut.dongjun.service.device.Device;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
+import com.gdut.dongjun.util.MyBatisMapUtil;
 
 @Controller
 @RequestMapping("/dongjun")
+@SessionAttributes("currentUser")
 public class CommandController {
 
 	@Autowired
@@ -45,6 +52,8 @@ public class CommandController {
 	private ControlMearsureCurrentService currentService3;
 	@Autowired
 	private ControlMearsureVoltageService voltageService3;
+	@Autowired
+	public HighVoltageHitchEventService eventService;
 
 	@Resource(name = "LowVoltageDevice")
 	private Device lowVoltageDevice;
@@ -57,6 +66,44 @@ public class CommandController {
 
 	private static final Logger logger = Logger
 			.getLogger(CommandController.class);
+
+	// @RequestMapping("/read_switch_status")
+	// @ResponseBody
+	// public String switchStatus(@RequestParam(required = true) String
+	// switchId,
+	// int sign, int type) {
+	//
+	//
+	//
+	// }
+
+	/**
+	 * 
+	 * @Title: securityConfirm
+	 * @Description: TODO
+	 * @param @param controlCode
+	 * @param @param session
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/security_confirm")
+	@ResponseBody
+	public Object securityConfirm(
+			@RequestParam(required = true) String controlCode,
+			HttpSession session) {
+
+		User u = (User) session.getAttribute("currentUser");
+
+		if (controlCode != null && u != null && u.getControlCode() != null
+				&& controlCode.equals(u.getControlCode())) {
+			
+			return true;
+		} else {
+
+			return false;
+		}
+	}
 
 	/**
 	 * 
@@ -73,8 +120,8 @@ public class CommandController {
 	 */
 	@RequestMapping("/control_switch")
 	public String controlSwitch(@RequestParam(required = true) String switchId,
-			int sign, int type, Model model,
-			RedirectAttributes redirectAttributes) {
+			int sign, int type) {
+		System.out.println(type);
 
 		SwitchGPRS gprs = CtxStore.get(switchId);
 		String address = null;
@@ -86,6 +133,8 @@ public class CommandController {
 		} else {
 			// return "error";
 		}
+
+		// address = "7700";
 
 		switch (sign) {
 		case 0:// 开
@@ -121,6 +170,7 @@ public class CommandController {
 		default:
 			break;
 		}
+		logger.info("发送报文" + msg);
 		// 发送报文
 		if (msg != null && gprs != null && gprs.getCtx() != null) {
 
@@ -370,7 +420,62 @@ public class CommandController {
 	@ResponseBody
 	public Object readHitchEvent() {
 
+		// Map<String, Object> res = new HashMap<String, Object>();
+		//
+		// res.put("switchs", CtxStore.getInstance());
+		// res.put("high_voltage_status", CtxStore.getHighVoltageStatus());
 		return CtxStore.getInstance();
 	}
 
+	@RequestMapping("/read_lvswitch_status")
+	@ResponseBody
+	public Object read_lvswitch_status(String id) {
+
+		return CtxStore.get(id);
+	}
+
+	/**
+	 * 
+	 * @Title: read_hvswitch_status
+	 * @Description: 高压开关状态
+	 * @param @param id
+	 * @param @return
+	 * @return Object
+	 * @throws
+	 */
+	@RequestMapping("/read_hvswitch_status")
+	@ResponseBody
+	public Object read_hvswitch_status(String id) {
+
+		return CtxStore.getStatusbyId(id);
+	}
+	
+	@RequestMapping("/get_active_switch_status")
+	@ResponseBody
+	public Object getActiveSwitchStatus() {
+		List<SwitchGPRS> switchs = CtxStore.getInstance();
+		List<ActiveHighSwitch> list = new ArrayList<>();
+		for(SwitchGPRS s : switchs) {
+			ActiveHighSwitch as = new ActiveHighSwitch();
+			as.setId(s.getId());
+			as.setOpen(s.isOpen());
+			//System.out.println("===========" + CtxStore.getStatusbyId(s.getId()).getStatus());
+			as.setStatus(CtxStore.getStatusbyId(s.getId()) == null ? null : 
+				CtxStore.getStatusbyId(s.getId()).getStatus());
+			if(s.isOpen() == true) {
+				HighVoltageHitchEvent event = eventService.getRecentHitchEvent(s.getId());
+				if(event != null) {
+					as.setHitchEventId(event.getId());
+				}
+			}
+			list.add(as);
+		}
+		return list;
+	}
+
 }
+
+
+
+
+

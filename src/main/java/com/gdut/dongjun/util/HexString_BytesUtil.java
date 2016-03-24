@@ -1,6 +1,5 @@
 package com.gdut.dongjun.util;
 
-import org.junit.Test;
 
 /**
  * @Title: HexString_BytesUtil.java
@@ -84,13 +83,6 @@ public class HexString_BytesUtil {
 		return sb.toString();
 	}
 	
-	@Test
-	public void t(){
-		
-		hexStringToByteString("0f");
-	}
-	
-
 	/**
 	 * 
 	 * @Title: charToByte

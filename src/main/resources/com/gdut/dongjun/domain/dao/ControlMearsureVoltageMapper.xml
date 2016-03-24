@@ -47,7 +47,7 @@
 	<select id="selectByTime" resultMap="BaseResultMap">
 		select * from
 		control_mearsure_voltage where
-		switch_id = #{switchId} and phase = #{phase}
+		switch_id = #{switchId} 
 		and
 		time between #{beginDate} and #{endDate}
 		order By time Asc

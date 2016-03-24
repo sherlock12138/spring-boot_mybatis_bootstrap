@@ -76,6 +76,7 @@ public class ControlMeasureHitchEventController {
 		map.put("recordsFiltered", size);
 		return map;
 	}
+	
 
 	// /**
 	// *

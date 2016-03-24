@@ -43,7 +43,7 @@ public interface LowVoltageVoltageService extends BaseService<LowVoltageVoltage>
 	 * @return Object
 	 * @throws
 	 */
-	public Map<String, Object> selectByTime(String switchId, String date, String string);
+	public List<Object> selectByTime(String switchId, String date, String string);
 
 	/**
 	 * 

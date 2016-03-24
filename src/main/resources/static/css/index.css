@@ -1,8 +1,45 @@
 .sidebar-nav {
   padding: 7px 0;
   height: calc(100% - 56px);
+  overflow-y :auto;
 }
 
 #baidu_map {
   height: 100%;
 }
+
+.treeDemo {
+    height: 88%;
+}
+
+.BDM_custom_popup {
+  text-align: center;
+}
+
+.BDM_custom_popup > h4 {
+  margin-top: 0;
+}
+
+.BDM_custom_popup > .btn {
+  margin-right: 10px;
+  width: 60px;
+}
+
+.BDM_custom_popup .red {
+  color: red;
+}
+
+.green_point {
+	width: 10px;
+	height: 10px;
+	background-color: #4CB549;
+	display: block;
+}
+
+.red_point {
+	width: 10px;
+	height: 10px;
+	background-color: #F03726;
+	display: block;
+}
+

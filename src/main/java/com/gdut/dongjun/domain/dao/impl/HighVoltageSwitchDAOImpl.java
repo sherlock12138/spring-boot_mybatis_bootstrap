@@ -3,6 +3,8 @@
  */
 package com.gdut.dongjun.domain.dao.impl;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.gdut.dongjun.domain.dao.HighVoltageSwitchMapper;
@@ -19,5 +21,6 @@ import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 @Repository
 public class HighVoltageSwitchDAOImpl extends SinglePrimaryKeyBaseDAOImpl<HighVoltageSwitch>
 implements HighVoltageSwitchMapper {
+
 
 }

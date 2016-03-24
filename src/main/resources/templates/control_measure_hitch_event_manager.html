@@ -31,22 +31,26 @@
 </head>
 
 <body>
-
+<span style="display: none" id="module" data-web="4"></span>
 	<div class="container-fluid">
 
 		<div class="hero-unit">
 			<div class="row-fluid">
-				<div class="span4">
-					<h2><img src="../../img/logo.png" style="height: 60px" />电网智能监控系统</h2>
-				</div>
-				<div class="span8">
-					<a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
-					<a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
-					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
-					<a href="#system" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
-					<a href="#about" class="btn banner-btn btn-primary"><i class="fa fa-info-circle"></i>关于</a>
-					<a href="#contact" class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
-				</div>
+          <div class="span5">
+              <h2>
+                  <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
+                  <span class="label label-default">1.01</span>
+              </h2>
+          </div>
+          <div class="span6 MENU">
+              <a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
+              <a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
+              <a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
+              <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-primary" id="event"><i class="fa fa-user"></i>事件</a>
+          </div>
+          <div class="span1 log_out">
+              <button class="btn btn-danger" id="log_out">退出</button>
+          </div>
 			</div>
 		</div>
 
@@ -54,18 +58,10 @@
 		
 			<div class="span2 container-fluid well sidebar-nav">
 				<ul class="nav nav-list bs-docs-sidenav">
-					<li class="nav-header">资源管理</li>
-					<li><a href="substation_manager">变电站管理</a></li>
-					<li><a href="line_manager">线路管理</a></li>
-					<li class="nav-header">设备管理</li>
-					<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
-					<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
-					<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
-
 					<li class="nav-header">事件管理</li>
 					<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
 					<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
-					<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
+					<li><a href="control_measure_hitch_event_manager" class="btn-success">无功补偿开关故障事件</a></li>
 				</ul>
 			</div>
 
@@ -73,12 +69,12 @@
 				
 				<div class="form-inline">
 					<div class="form-group span3">
-						<label class="span3">变电站：</label>
-						<select id='substations' class="span9"></select>
+						<label class="span3">变电站:</label>
+						<select class="substations span9"></select>
 					</div>
 					<div class="form-group span3">
-						<label class="span3">线路：</label>
-						<select id='lines' class='span9'></select>
+						<label class="span3">线路:</label>
+						<select class='lines span9'></select>
 					</div>
 					<div class="form-group span3">
 						<label class="span3">设备：</label>
@@ -169,7 +165,7 @@
 	<script src="../../js/custom/substation_line_set.js"></script>
 	<script src="../../js/custom/line_switch_set.js"></script>
 	<script src="../../js/custom/control_measure_switch_hitch_event_manager.js"></script>
-	
+  <script src="../../js/custom/gobal.js"></script>
 	
 	
 </body>

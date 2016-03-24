@@ -1,8 +1,5 @@
 package com.gdut.dongjun.dto;
 
-import java.util.Date;
-
-import org.hamcrest.core.Is;
 
 public class HitchEvent {
 	/**

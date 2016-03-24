@@ -8,6 +8,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.gdut.dongjun.domain.po.HighVoltageSwitch;
+import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
+
 /**
  * @Title: ClientList.java
  * @Package com.gdut.dongjun.service.impl
@@ -25,6 +28,8 @@ public abstract class CtxStore {
 	private static final Logger logger = Logger.getLogger(CtxStore.class);
 	private static final List<SwitchGPRS> ctxlist = new LinkedList<SwitchGPRS>();
 
+	private static final List<HighVoltageStatus> hstalist = new LinkedList<HighVoltageStatus>();
+
 	private CtxStore() {
 		super();
 	}
@@ -40,6 +45,19 @@ public abstract class CtxStore {
 	public static List<SwitchGPRS> getInstance() {
 
 		return ctxlist;
+	}
+
+	/**
+	 * 
+	 * @Title: getHighVoltageStatus
+	 * @Description: TODO
+	 * @param @return
+	 * @return List<HighVoltageStatus>
+	 * @throws
+	 */
+	public static List<HighVoltageStatus> getHighVoltageStatus() {
+
+		return hstalist;
 	}
 
 	/**
@@ -114,7 +132,7 @@ public abstract class CtxStore {
 	 * @return SwitchGPRS
 	 * @throws
 	 */
-	public static String getId(String address) {
+	public static String getIdbyAddress(String address) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("remove(SwitchGPRS) - start");
 		}
@@ -124,6 +142,38 @@ public abstract class CtxStore {
 
 				if (gprs != null && address.equals(gprs.getAddress())) {
 					return gprs.getId();
+				}
+
+			}
+		} else {
+			logger.info("ctxlist is empty!");
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("remove(SwitchGPRS) - end");
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @Title: getStatusbyId
+	 * @Description: TODO
+	 * @param @param id
+	 * @param @return
+	 * @return HighVoltageStatus
+	 * @throws
+	 */
+	public static HighVoltageStatus getStatusbyId(String id) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("remove(SwitchGPRS) - start");
+		}
+		if (ctxlist != null) {
+
+			for (HighVoltageStatus gprs : hstalist) {
+
+				if (gprs != null && gprs.getId().equals(id)) {
+					return gprs;
 				}
 
 			}
@@ -159,6 +209,26 @@ public abstract class CtxStore {
 
 	/**
 	 * 
+	 * @Title: addStatus
+	 * @Description: TODO
+	 * @param @param ctx
+	 * @return void
+	 * @throws
+	 */
+	public static void addStatus(HighVoltageStatus ctx) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("add(SwitchGPRS) - start");
+		}
+
+		hstalist.add(ctx);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("add(SwitchGPRS) - end");
+		}
+	}
+
+	/**
+	 * 
 	 * @Title: remove
 	 * @Description: TODO
 	 * @param @param ctx
@@ -176,7 +246,7 @@ public abstract class CtxStore {
 
 				if (gprs != null && ctx.equals(gprs.getCtx())) {
 
-					ctxlist.remove(gprs);
+					ctxlist.remove(gprs);			
 				}
 			}
 		} else {
@@ -242,6 +312,21 @@ public abstract class CtxStore {
 				&& gprs.getCtx() != null) {
 			return true;
 		} else {
+			
+//			if (gprs == null) {
+//				
+//				logger.info("gprs == null");
+//			}else if (gprs.getId() == null) {
+//				
+//				logger.info("gprs.getId() == null");
+//			}else if (gprs.getAddress() == null) {
+//				
+//				logger.info("gprs.getAddress() == null");
+//			}else if (gprs.getCtx() == null) {
+//				
+//				logger.info("gprs.getCtx() == null");
+//			} 
+//			logger.info("not ready");
 			return false;
 		}
 	}
@@ -299,6 +384,33 @@ public abstract class CtxStore {
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("printCtxStore() - end");
+		}
+	}
+
+	public static void remove(String id) {
+		
+		if(id == null) {
+			return;
+		}
+		
+		List<SwitchGPRS> list = CtxStore.getInstance();
+		for(int length = list.size() - 1, i = length; i >= 0; --i) {
+			if(list.get(i).getId().equals(id)) {
+				list.remove(i);
+			}
+		}
+	}
+
+	public static boolean changeOpen(String switchId) {
+		
+		SwitchGPRS gprs = CtxStore.get(switchId);
+		if(gprs != null) {
+			CtxStore.remove(switchId);
+			gprs.setOpen(gprs.isOpen() == true ? false : true);
+			CtxStore.add(gprs);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

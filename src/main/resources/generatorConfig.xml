@@ -4,7 +4,7 @@
 	<classPathEntry location="E:\mysql-connector-java-5.1.7-bin.jar" />
 	<context id="context1" targetRuntime="MyBatis3">
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://10.21.23.141:3306/ele" userId="root"
+			connectionURL="jdbc:mysql://localhost:3306/elecon" userId="root"
 			password="root">
 		</jdbcConnection>
 		<javaModelGenerator targetPackage="com.gdut.dongjun.domain.po"
@@ -16,20 +16,25 @@
 		<javaClientGenerator targetPackage="com.gdut.dongjun.domain.dao"
 			targetProject="E:\generator" type="XMLMAPPER" />
 
-		<table schema="root" tableName="low_voltage_switch" domainObjectName="LowVoltageSwitch"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
+		<table schema="root" tableName="low_voltage_switch"
+			domainObjectName="LowVoltageSwitch" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
+
+		<table schema="root" tableName="high_voltage_hitch_event"
+			domainObjectName="HighVoltageHitchEvent" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
+
+		<table schema="root" tableName="control_mearsure_switch"
+			domainObjectName="ControlMearsureSwitch" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
 			
-		<table schema="root" tableName="high_voltage_switch" domainObjectName="HighVoltageSwitch"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
-			
-			<table schema="root" tableName="control_mearsure_switch" domainObjectName="ControlMearsureSwitch"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
+		<table schema="root" tableName="location_switch"
+			domainObjectName="LocationSwitch" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
 
 		<!-- <table schema="root" tableName="control_mearsure_current" domainObjectName="ControlMearsureCurrent" 
 			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 

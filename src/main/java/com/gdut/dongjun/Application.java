@@ -13,6 +13,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.directwebremoting.servlet.DwrServlet;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -20,9 +21,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -30,6 +33,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class Application extends SpringBootServletInitializer {
 
 	@Override
@@ -50,7 +54,8 @@ public class Application extends SpringBootServletInitializer {
 	public DataSource dataSource() {
 
 		com.mchange.v2.c3p0.ComboPooledDataSource ds = new ComboPooledDataSource();
-		ds.setJdbcUrl("jdbc:mysql://10.21.23.141:3306/ele?useUnicode=true&amp;charaterEncoding=utf-8");
+		ds.setJdbcUrl("jdbc:mysql://localhost:3306/elecon?useUnicode=true&amp;charaterEncoding=utf-8&" +
+				"zeroDateTimeBehavior=convertToNull");
 		ds.setUser("root");
 		ds.setPassword("root");//elecon
 		try {
@@ -260,6 +265,29 @@ public class Application extends SpringBootServletInitializer {
 		realm.setPermissionsLookupEnabled(true);
 		return realm;
 	}
+
+	/*@Bean
+	public ServletRegistrationBean servletRegistrationBean() {
+		ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
+		servletRegistrationBean.setName("dwr-invoker");
+		servletRegistrationBean.addInitParameter("activeReverseAjaxEnabled", "true");
+		servletRegistrationBean.addInitParameter("debug", "true");
+		servletRegistrationBean.setServlet(new DwrServlet());
+		servletRegistrationBean.addUrlMappings("/dwr/*");
+
+		return servletRegistrationBean;
+	}*/
+/*	@Bean
+	public ServletListenerRegistrationBean<HistoryDataListener> listenerRegistration() {
+		
+		ServletListenerRegistrationBean<HistoryDataListener> listenerRegistration = 
+				new ServletListenerRegistrationBean<>();
+		
+		listenerRegistration.setListener(new HistoryDataListener());
+		listenerRegistration.setOrder(9);
+		
+		return listenerRegistration;
+	}*/
 
 	public static void main(String[] args) throws Exception {
 

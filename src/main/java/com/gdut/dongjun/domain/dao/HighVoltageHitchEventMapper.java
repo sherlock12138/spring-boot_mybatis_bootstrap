@@ -16,4 +16,6 @@ import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 public interface HighVoltageHitchEventMapper extends
 SinglePrimaryKeyBaseMapper<HighVoltageHitchEvent> {
 
+	HighVoltageHitchEvent getRecentHitchEvent(String id);
+
 }

@@ -46,7 +46,13 @@
 	<select id="selectByTime" resultMap="BaseResultMap">
 		select * from
 		high_voltage_current where
-		switch_id = #{switchId} and phase = #{phase}
+		switch_id = #{switchId}
+		and
+		time between #{beginDate} and #{endDate}
+		union
+		select * from
+		history_high_voltage_current where
+		switch_id = #{switchId}
 		and
 		time between #{beginDate} and #{endDate}
 		order By time Asc

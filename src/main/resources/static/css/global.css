@@ -63,3 +63,29 @@ body {
 footer p {
 	margin: 0;
 }
+
+
+.MENU{
+    padding: 20px;
+}
+
+.log_out {
+    padding-top: 3.8%;
+    padding-left: 1%;
+}
+
+.online {
+    color: green;
+}
+
+#show_line {
+    color: blue;
+}
+#Center {
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 25px;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #000000;
+}

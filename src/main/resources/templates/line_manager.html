@@ -1,58 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<title>电网智能监控系统 - 上海东君电气有限公司</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8" />
+<title>电网智能监控系统 - 上海东君电气有限公司</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 
-	<link href="../../css/bootstrap.css" rel="stylesheet" />
-	<style type="text/css">
-		th, td {
-			white-space: nowrap;
-		}
-	</style>
-	<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
-	<link href="../../css/manager.css" rel="stylesheet" />
-	<link href="../../css/global.css" rel="stylesheet" />
+<link href="../../css/bootstrap.css" rel="stylesheet" />
+<style type="text/css">
+th, td {
+	white-space: nowrap;
+}
+</style>
+<link href="../../css/bootstrap-responsive.css" rel="stylesheet" />
+<link href="../../css/manager.css" rel="stylesheet" />
+<link href="../../css/global.css" rel="stylesheet" />
 
-	<!-- dataTables -->
-	<link href="../../css/dataTables/dataTables.tableTools.css" rel="stylesheet" />
-	<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
-	<link href="../../css/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+<!-- dataTables -->
+<link href="../../css/dataTables/dataTables.tableTools.css"
+	rel="stylesheet" />
+<link href="../../css/dataTables/jquery.dataTables.css" rel="stylesheet" />
+<link href="../../css/dataTables/dataTables.bootstrap.css"
+	rel="stylesheet" />
 
 
 
-	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-	<!--[if lt IE 9]>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
 	  <script src="../../js/html5shiv.js"></script>
 	<![endif]-->
 
-	
-	<link rel="shortcut icon" href="../../ico/favicon.png" />
-	<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link rel="shortcut icon" href="../../ico/favicon.png" />
+<link
+	href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"
+	rel="stylesheet" />
 
 </head>
 
 <body>
 
-	
+<span style="display: none" id="module" data-web="2"></span>
 
 	<div class="container-fluid">
 
 		<div class="hero-unit">
 			<div class="row-fluid">
-				<div class="span4">
-					<h2><img src="../../img/logo.png" style="height: 60px" />电网智能监控系统</h2>
-				</div>
-				<div class="span8">
-					<a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
-					<a href="low_voltage_switch_manager" class="btn banner-btn btn-primary"><i class="fa fa-cog"></i>管理</a>
-					<a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
-					<a href="#system" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>系统</a>
-					<a href="#about" class="btn banner-btn btn-primary"><i class="fa fa-info-circle"></i>关于</a>
-					<a href="#contact" class="btn banner-btn btn-primary"><i class="fa fa-phone"></i>联系</a>
-				</div>
+          <div class="span5">
+              <h2>
+                  <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
+                  <span class="label label-default">1.01</span>
+              </h2>
+          </div>
+          <div class="span6 MENU">
+              <a href="index" class="btn banner-btn btn-primary"><i class="fa fa-map-marker"></i>监控</a>
+              <a href="low_voltage_switch_manager" class="btn banner-btn btn-primary" id="manage"><i class="fa fa-cog"></i>管理</a>
+              <a href="current_voltage_chart" class="btn banner-btn btn-primary"><i class="fa fa-area-chart"></i>报表</a>
+              <a href="low_voltage_hitch_event_manager" class="btn banner-btn btn-primary"><i class="fa fa-user"></i>事件</a>
+          </div>
+          <div class="span1 log_out">
+              <button class="btn btn-danger" id="log_out">退出</button>
+          </div>
 			</div>
 		</div>
 
@@ -62,16 +70,16 @@
 				<ul class="nav nav-list bs-docs-sidenav">
 					<li class="nav-header">资源管理</li>
 					<li><a href="substation_manager">变电站管理</a></li>
-					<li><a href="#">线路管理</a></li>
+					<li><a href="" class="btn-success">线路管理</a></li>
 					<li class="nav-header">设备管理</li>
 					<li><a href="low_voltage_switch_manager">低压开关管理</a></li>
 					<li><a href="high_voltage_switch_manager">高压开关管理</a></li>
-					<li><a href="control_measure_switch_manager">无功无场开关管理</a></li>
-
-					<li class="nav-header">事件管理</li>
-					<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>
-					<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>
-					<li><a href="control_measure_hitch_event_manager">无功无场故障事件</a></li>
+					<li><a href="control_measure_switch_manager">无功补偿开关管理</a></li>
+          <li><a href="">温度监控</a></li>
+					<!--<li class="nav-header">事件管理</li>-->
+					<!--<li><a href="low_voltage_hitch_event_manager">低压开关故障事件</a></li>-->
+					<!--<li><a href="high_voltage_hitch_event_manager">高压开关故障事件</a></li>-->
+					<!--<li><a href="control_measure_hitch_event_manager">无功补偿开关故障事件</a></li>-->
 				</ul>
 			</div>
 
@@ -79,12 +87,17 @@
 
 				<div class="form-inline">
 					<div class="form-group span3">
-						<label class="span3">变电站：</label>
-						<select id='substations' class="span9"></select>
+						<label class="span3">变电站:</label> <select
+							class="substations span9"></select>
+					</div>
+					<div class="form-group span3">
+						<a href="#add_switch_modal" class="btn btn-primary"
+							id="add_switch_btn" data-toggle="modal" data-backdrop="static">添加线路</a>
 					</div>
 				</div>
 
-				<table id="switch_list" class="table table-bordered table-striped table-hover table-condensed success">
+				<table id="switch_list"
+					class="table table-bordered table-striped table-hover table-condensed success">
 					<thead>
 						<td>名称</td>
 						<td class="hidden">Id</td>
@@ -97,8 +110,11 @@
 						<td class="hide" th:text="${switch.id}"></td>
 						<td class="hide" th:text="${switch.substationId}"></td>
 
-						<td><a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
-						<td><a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a></td>
+						<td><a href="#edit_switch_modal" role="button"
+							class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
+						<td><a href="#del_switch_modal"
+							class="del_switch_btn btn btn-danger" data-toggle="modal"
+							data-backdrop="static">删除&raquo; </a></td>
 					</tr>
 				</table>
 			</div>
@@ -106,14 +122,15 @@
 		</div>
 
 		<!-- Add_Switch_Modal -->
-		<div id="add_switch_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="add_switch_modal" class="modal hide fade" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
 				<h3>添加线路</h3>
 			</div>
 			<div class="modal-body">
-				<form id="add_switch_form" class="form-horizontal"
-					action="edit_line">
+				<div id="add_switch_form" class="form-horizontal">
 					<!-- action="edit_switch" -->
 					<div class="control-group">
 						<label class="control-label" for="inputName">名称</label>
@@ -134,14 +151,14 @@
 							<select id='inputLineId' class='span2' name="substationId"></select>
 						</div>
 					</div>
-					
+
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
 						<button id="add_switch_confirm_btn" class="btn btn-primary"
-							type="submit">添加</button>
+							data-dismiss="modal" aria-hidden="true">添加</button>
 						<!--  btn-primary -->
 					</div>
-				</form>
+				</div>
 
 			</div>
 		</div>
@@ -155,8 +172,7 @@
 				<h3>编辑线路</h3>
 			</div>
 			<div class="modal-body">
-				<form id="edit_switch_form" class="form-horizontal"
-					action="edit_line">
+				<div id="edit_switch_form" class="form-horizontal">
 					<!-- action="edit_switch" -->
 					<div class="control-group">
 						<label class="control-label" for="editName">名称</label>
@@ -179,10 +195,10 @@
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
 						<button id="edit_switch_confirm_btn" class="btn btn-primary"
-							type="submit">确定</button>
+							data-dismiss="modal" aria-hidden="true">确定</button>
 						<!--  btn-primary -->
 					</div>
-				</form>
+				</div>
 
 			</div>
 		</div>
@@ -199,7 +215,8 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-				<a id="del_confirm_btn" class="btn btn-danger">删除</a>
+				<a id="del_confirm_btn" class="btn btn-danger" data-dismiss="modal"
+					aria-hidden="true">删除</a>
 			</div>
 		</div>
 
@@ -238,5 +255,6 @@
 
 	<!-- custom -->
 	<script src="../../js/custom/line_manager.js"></script>
+  <script src="../../js/custom/gobal.js"></script>
 </body>
 </html>

@@ -3,7 +3,6 @@ package com.gdut.dongjun.service.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,7 +74,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 					n1.setId(substations.get(i).getId());
 					n1.setName(substations.get(i).getName());
-
+					n1.setParentName(null);
 					List<Line> lines = lineService
 							.selectByParameters(MyBatisMapUtil
 									.warp("substation_id", substations.get(i)
@@ -91,6 +90,7 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 							n2.setId(lines.get(j).getId());
 							n2.setName(lines.get(j).getName());
+							n2.setParentName(substations.get(i).getName());
 
 							List<ZTreeNode> switchNodes = new LinkedList<ZTreeNode>();
 							switch (type) {
@@ -107,10 +107,15 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 										n3.setId(switchs.get(k).getId());
 										n3.setName(switchs.get(k).getName());
+										n3.setParentName(lines.get(j).getName());
 										n3.setLongitude(switchs.get(k)
 												.getLongitude().toString());
 										n3.setLatitude(switchs.get(k)
 												.getLatitude().toString());
+										n3.setLineId(switchs.get(k).getLineId());
+										n3.setAddress(switchs.get(k).getAddress());
+										n3.setType(0);
+										n3.setShowName(switchs.get(k).getShowName());
 									}
 									switchNodes.add(n3);
 								}
@@ -128,10 +133,16 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 										n3.setId(switchs2.get(k).getId());
 										n3.setName(switchs2.get(k).getName());
+										n3.setParentName(lines.get(j).getName());
+										//n3.setParentName(switchs2.get(k).getName());
 										n3.setLongitude(switchs2.get(k)
 												.getLongitude().toString());
 										n3.setLatitude(switchs2.get(k)
 												.getLatitude().toString());
+										n3.setLineId(switchs2.get(k).getLineId());
+										n3.setAddress(switchs2.get(k).getAddress());
+										n3.setType(1);
+										n3.setShowName(switchs2.get(k).getShowName());
 									}
 									switchNodes.add(n3);
 								}
@@ -149,10 +160,15 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 
 										n3.setId(switchs3.get(k).getId());
 										n3.setName(switchs3.get(k).getName());
+										n3.setParentName(lines.get(j).getName());
 										n3.setLongitude(switchs3.get(k)
 												.getLongitude().toString());
 										n3.setLatitude(switchs3.get(k)
 												.getLatitude().toString());
+										n3.setLineId(switchs3.get(k).getLineId());
+										n3.setAddress(switchs3.get(k).getAddress());
+										n3.setType(2);
+										n3.setShowName(switchs3.get(k).getShowName());
 									}
 									switchNodes.add(n3);
 								}
@@ -160,19 +176,27 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 							default:
 								break;
 							}
-							n2.setChildren(switchNodes);
+							if(switchNodes != null && switchNodes.size() != 0) {
+								n2.setChildren(switchNodes);
+							}
 						}
-						lineNodes.add(n2);
+						if(n2 != null && n2.getChildren() != null && !n2.getChildren().isEmpty()) {
+							lineNodes.add(n2);
+						}
 					}
-					n1.setChildren(lineNodes);
+					if(lineNodes != null && !lineNodes.isEmpty()) {
+						n1.setChildren(lineNodes);
+					}
 				}
-				nodes.add(n1);
+				if(n1 != null && n1.getChildren() != null && !n1.getChildren().isEmpty()) {
+					nodes.add(n1);
+				}
 			}
 		}
 		return nodes;
 	}
 
-	@Test
+	/*@Test
 	public void t() {
 
 		List<ZTreeNode> nodes = new LinkedList<ZTreeNode>();
@@ -188,5 +212,5 @@ public class ZTreeNodeServiceImpl implements ZTreeNodeService {
 			nodes.add(n1);
 		}
 	}
-
+*/
 }

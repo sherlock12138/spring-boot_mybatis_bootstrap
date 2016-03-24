@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdut.dongjun.domain.dao.HistoryDataTransfer;
 import com.gdut.dongjun.domain.po.User;
+import com.gdut.dongjun.domain.po.port.ProtocolPort;
+import com.gdut.dongjun.service.ProtocolPortService;
 import com.gdut.dongjun.service.UserService;
 import com.gdut.dongjun.service.impl.enums.LoginResult;
 import com.gdut.dongjun.service.net_server.server.NetServer;
@@ -46,6 +49,14 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private org.apache.shiro.mgt.SecurityManager manager;
+	
+	@Autowired
+	public ProtocolPortService protocol;
+	
+	@Autowired
+	public HistoryDataTransfer transfer;
+	
+	private Thread thread;
 	private static final Logger logger = Logger.getLogger(UserController.class);
 
 	@RequestMapping(value = "/login")
@@ -98,7 +109,9 @@ public class UserController {
 		return LoginResult.LOGIN_PASS.value();
 	}
 
+	
 	/**
+	 * @throws InterruptedException 
 	 * 
 	 * @Title: netServerTrigger
 	 * @Description: TODO
@@ -109,18 +122,47 @@ public class UserController {
 	@RequestMapping(value = "/net_server_trigger")
 	@ResponseBody
 	public Object netServerTrigger(@RequestParam(required = true) String name,
-			@RequestParam(required = true) String password) {
+			@RequestParam(required = true) String password, HttpSession session) throws InterruptedException {
 
-		lowVoltageNetServer.setPort(8463);
-		HighVoltageNetServer.setPort(5000);
-		ControlMeasureNetServer.setPort(8465);
+		 
+		ProtocolPort port = protocol.selectByPrimaryKey("1");
+		if(null != port) {
+			lowVoltageNetServer.setPort(port.getLvPort());
+			HighVoltageNetServer.setPort(port.getHvPort());
+			ControlMeasureNetServer.setPort(port.getConPort());
+			
+			logger.info("低压开关端口号：" + port.getLvPort());
+			logger.info("高压开关端口号：" + port.getHvPort());
+			logger.info("管控开关端口号：" + port.getConPort());
+		}
 
 		if (name.equals("sherlock") && password.equals("33132212")) {
-
+			
 			lowVoltageNetServer.start();
 			HighVoltageNetServer.start();
 			ControlMeasureNetServer.start();
 		}
+		
+		
+		thread = new Thread() {
+			@Override
+			public void run() {
+				while(true) {
+					
+					logger.info("开始进行历史数据的转移");
+					transfer.transferData();
+					try {
+						sleep(1000 * 60 * 60 * 6);	//6小时
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+
+		thread.setDaemon(true);
+		thread.start();
 		return "";
 	}
 
@@ -146,9 +188,23 @@ public class UserController {
 			HighVoltageNetServer.stop();
 			ControlMeasureNetServer.stop();
 		}
+		
+		if(thread != null && thread.isInterrupted()) {
+			thread.interrupt();
+		}
 		return "";
 	}
-
-
-
+	
+	
+	@RequestMapping(value="/logout")
+	@ResponseBody
+	public Object logout() {
+		
+		Subject subject = SecurityUtils.getSubject();
+		
+		if (subject.isAuthenticated()) {
+			subject.logout(); 
+		}
+		return "";
+	}
 }

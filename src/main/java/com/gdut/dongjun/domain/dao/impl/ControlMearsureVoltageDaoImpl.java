@@ -34,7 +34,7 @@ public class ControlMearsureVoltageDaoImpl extends
 	}
 
 	@Override
-	public List<LowVoltageVoltage> selectByTime(Map<String, Object> xx) {
+	public List<Object> selectByTime(Map<String, Object> xx) {
 		// TODO Auto-generated method stub
 		return template.selectList(getNamespace("selectByTime"), xx);
 	}

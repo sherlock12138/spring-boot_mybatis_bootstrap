@@ -43,6 +43,7 @@ public abstract class Device {
 	 * @return String
 	 * @throws
 	 */
+	// @Pointcut
 	public String generateCloseSwitchMessage(String address) {
 
 		if (cme != null) {
@@ -53,6 +54,8 @@ public abstract class Device {
 		}
 
 	}
+
+	
 
 	/**
 	 * @param address

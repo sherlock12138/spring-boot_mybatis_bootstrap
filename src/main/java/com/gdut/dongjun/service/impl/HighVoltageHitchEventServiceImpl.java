@@ -3,16 +3,11 @@
  */
 package com.gdut.dongjun.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gdut.dongjun.domain.dao.ControlMearsureCurrentMapper;
 import com.gdut.dongjun.domain.dao.HighVoltageHitchEventMapper;
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
-import com.gdut.dongjun.domain.po.LowVoltageHitchEvent;
-import com.gdut.dongjun.dto.HitchEvent;
 import com.gdut.dongjun.service.HighVoltageHitchEventService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 
@@ -40,6 +35,12 @@ implements HighVoltageHitchEventService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public HighVoltageHitchEvent getRecentHitchEvent(String id) {
+		
+		return currentMapper.getRecentHitchEvent(id);
 	}
 
 }

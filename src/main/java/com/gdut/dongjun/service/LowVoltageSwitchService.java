@@ -83,14 +83,39 @@ public interface LowVoltageSwitchService extends BaseService<LowVoltageSwitch> {
 	public String getSwitchId(String address);
 
 	/**
-	 * @param id 
+	 * 
+	 * @Title: createStudentAndParentExcel
+	 * @Description: TODO
+	 * @param @param filePath
+	 * @param @param sapis
+	 * @return boolean
+	 * @throws
+	 */
+	public boolean createSwitchExcel(String filePath,
+			List<LowVoltageSwitch> sapis);
+
+	/**
+	 * 
+	 * @Title: uploadSwitch
+	 * @Description: TODO
+	 * @param @param vo
+	 * @param @param lineId
+	 * @param @return
+	 * @return boolean
+	 * @throws
+	 */
+	public boolean uploadSwitch(String vo, String lineId);
+
+	/**
+	 * @param id
 	 * 
 	 * @Title: updateSwtichOpen
 	 * @Description: TODO
-	 * @param String id
+	 * @param String
+	 *            id
 	 * @return void
 	 * @throws
 	 */
-//	public void updateSwtichOpen(String id);
+	// public void updateSwtichOpen(String id);
 
 }
