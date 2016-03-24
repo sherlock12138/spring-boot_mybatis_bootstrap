@@ -25,6 +25,7 @@ import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
+import com.gdut.dongjun.util.TimeUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -101,7 +102,7 @@ public class HighVoltageHitchEventController {
 		if(list != null && list.size() != 0) {
 			
 			HighVoltageHitchEvent hitchEvent = list.get(0);
-			hitchEvent.setSolveTime(new Date());
+			hitchEvent.setSolveTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			hitchEvent.setSolvePeople(solvePeople);
 			hitchEventService.updateByPrimaryKey(hitchEvent);
 			
@@ -120,7 +121,7 @@ public class HighVoltageHitchEventController {
 			HighVoltageHitchEvent event = hitchEventService.getRecentHitchEvent(switchId);
 			if(event != null) {
 				event.setSolveWay("忽略");
-				event.setSolveTime(new Date());
+				event.setSolveTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 				event.setSolvePeople(((User)session.getAttribute("currentUser")).getName());
 				hitchEventService.updateByPrimaryKeySelective(event);
 			}
