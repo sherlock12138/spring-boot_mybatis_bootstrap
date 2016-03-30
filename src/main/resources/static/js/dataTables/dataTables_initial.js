@@ -48,7 +48,14 @@ function initial_table(id) {
 				"data": null,
 				"defaultContent": '<a href="#location_switch_modal" role="button" class="location_switch_btn btn btn-primary" data-toggle="modal">设为定位中心</a>'
 			}
-		]
+		],
+		"fnInitComplete": function(oSettings, json) {
+			//alert('123')
+			$(".edit_switch_btn").unbind().click(editSwitch);
+			$(".del_switch_btn").unbind().click(delSwitch);
+			$(".enter_map").unbind().click(enterMap);
+			$(".location_switch_btn").unbind().click(locateSwitch);
+		}
 	});
 
 }
