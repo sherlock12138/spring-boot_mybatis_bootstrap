@@ -5,6 +5,17 @@ $(document).ready(function() {
 //	});
 	$.ajax({
 	    type: 'POST',
+	    url: 'net_server_trigger',
+	    async: false,
+	    dataType: 'json',
+	    data : {
+	    	name : 'sherlock',
+	    	password : '33132212'
+	    }
+	});
+	
+	$.ajax({
+	    type: 'POST',
 	    url: 'get_location_switch',
 	    async: false,
 	    dataType: 'json',
