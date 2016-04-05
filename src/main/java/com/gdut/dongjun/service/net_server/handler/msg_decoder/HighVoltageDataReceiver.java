@@ -120,11 +120,12 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					gprs.setId(id);
 					logger.info(address + " is ready!");
 
-					if (CtxStore.get(id) != null) {
+					/*if (CtxStore.get(id) != null) {
 
 						CtxStore.remove(id);
 						CtxStore.add(gprs);
-					}
+					}*/
+					CtxStore.add(gprs);
 					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
 					logger.info("this device is not registered!!");
@@ -142,24 +143,6 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 				saveCV(id, data);
 			} else {
 				logger.error("there is an error in saving CV!");
-			}
-		} else if (infoIdenCode.equals("64")) {
-
-			// System.out.println(data);
-			String address = data.substring(10, 14);
-			String id = CtxStore.getIdbyAddress(address);
-
-			if (id != null && address != null) {
-
-				HighVoltageStatus s = CtxStore.getStatusbyId(id);
-				SwitchGPRS gprs = CtxStore.get(id);
-
-				if (s == null) {
-
-					s = new HighVoltageStatus();
-					s.setId(id);
-					CtxStore.addStatus(s);
-				}
 			}
 		} else if (infoIdenCode.equals("01")) {
 
