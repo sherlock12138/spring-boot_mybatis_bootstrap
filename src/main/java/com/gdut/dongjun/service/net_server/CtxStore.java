@@ -395,7 +395,7 @@ public abstract class CtxStore {
 		
 		List<SwitchGPRS> list = CtxStore.getInstance();
 		for(int length = list.size() - 1, i = length; i >= 0; --i) {
-			if(list.get(i).getId().equals(id)) {
+			if(list.get(i).getId() != null && list.get(i).getId().equals(id)) {
 				list.remove(i);
 			}
 		}
