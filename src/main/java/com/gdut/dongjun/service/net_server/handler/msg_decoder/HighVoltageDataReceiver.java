@@ -120,12 +120,11 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					gprs.setId(id);
 					logger.info(address + " is ready!");
 
-					/*if (CtxStore.get(id) != null) {
+					if (CtxStore.get(id) != null) {
 
 						CtxStore.remove(id);
 						CtxStore.add(gprs);
-					}*/
-					CtxStore.add(gprs);
+					}
 					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
 					logger.info("this device is not registered!!");

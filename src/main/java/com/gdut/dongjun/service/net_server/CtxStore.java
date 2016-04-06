@@ -172,7 +172,7 @@ public abstract class CtxStore {
 
 			for (HighVoltageStatus gprs : hstalist) {
 
-				if (gprs != null && gprs.getId().equals(id)) {
+				if (gprs != null && gprs.getId() != null && gprs.getId().equals(id)) {
 					return gprs;
 				}
 

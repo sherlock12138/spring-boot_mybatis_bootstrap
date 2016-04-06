@@ -457,19 +457,21 @@ public class CommandController {
 		List<SwitchGPRS> switchs = CtxStore.getInstance();
 		List<ActiveHighSwitch> list = new ArrayList<>();
 		for(SwitchGPRS s : switchs) {
-			ActiveHighSwitch as = new ActiveHighSwitch();
-			as.setId(s.getId());
-			as.setOpen(s.isOpen());
-			//System.out.println("===========" + CtxStore.getStatusbyId(s.getId()).getStatus());
-			as.setStatus(CtxStore.getStatusbyId(s.getId()) == null ? null : 
-				CtxStore.getStatusbyId(s.getId()).getStatus());
-			if(s.isOpen() == true) {
-				HighVoltageHitchEvent event = eventService.getRecentHitchEvent(s.getId());
-				if(event != null) {
-					as.setHitchEventId(event.getId());
+			
+			if(CtxStore.getStatusbyId(s.getId()) != null) {
+				
+				ActiveHighSwitch as = new ActiveHighSwitch();
+				as.setId(s.getId());
+				as.setOpen(s.isOpen());
+				as.setStatus(CtxStore.getStatusbyId(s.getId()).getStatus());
+				if(s.isOpen() == true) {
+					HighVoltageHitchEvent event = eventService.getRecentHitchEvent(s.getId());
+					if(event != null) {
+						as.setHitchEventId(event.getId());
+					}
 				}
+				list.add(as);
 			}
-			list.add(as);
 		}
 		return list;
 	}
