@@ -31,12 +31,13 @@ $(document).ready(function() {
 				"latitude" : $("#editLatitude").val(),
 				"simNumber" : $("#editSim").val(),
 				"inlineIndex" : $("#editinlineIndex").val(),
-				"deviceNumber":$("#editDeviceNumber").val()
+				"deviceNumber":$("#editDeviceNumber").val(),
+				'onlineTime': $('#inLineTime').val()
 			},
 			success : function(data) {
 
 				if(data!=null){
-					
+					alert('修改成功')
 					reloadDataTable(data);
 				}
 			}
@@ -59,12 +60,12 @@ $(document).ready(function() {
 				"latitude" : $("#inputLatitude").val(),
 				"simNumber" : $("#inputSim").val(),
 				"inlineIndex" : $("#inlineIndex").val(),
-				"deviceNumber":$("#inputDeviceNumber").val(),
+				"deviceNumber":$("#inputDeviceNumber").val()
 			},
 			success : function(data) {
 
 				if(data!=null){
-					
+					alert('添加成功')
 					reloadDataTable(data);
 				}
 			}
@@ -104,7 +105,7 @@ function reloadDataTable(lineId){
             },
 	        { "data": "address" },   
 	        { "data": "longitude" },   
-	        { "data": "latitude" }, 
+	        { "data": "latitude" },
 	        { "data": "simNumber" },
 	        { "data": "inlineIndex" },
 	        { "data": "onlineTime"},
@@ -137,10 +138,10 @@ function reloadDataTable(lineId){
         ],
         "fnInitComplete": function(oSettings, json) {
 	        //alert('123')
-        	$(".edit_switch_btn").click(editSwitch);
-        	$(".del_switch_btn").click(delSwitch);
-        	$(".enter_map").click(enterMap);
-        	$(".location_switch_btn").click(locateSwitch);
+        	$(".edit_switch_btn").unbind().click(editSwitch);
+        	$(".del_switch_btn").unbind().click(delSwitch);
+        	$(".enter_map").unbind().click(enterMap);
+        	$(".location_switch_btn").unbind().click(locateSwitch);
           }
     } );
 
@@ -197,17 +198,18 @@ function addSwitch() {
 function editSwitch() {
 
 	var column = $(this).parent("td").prevAll();
-	$("#editDeviceNumber").val(column[10].innerHTML);
-	$("#editName").val(column[9].innerHTML);
-	$("#editShowName").val(column[8].innerHTML);
-	$("#editId").val(column[7].innerHTML);
-	$("#editLineId").val(column[6].innerHTML);
-	$("#editAddress").val(column[5].innerHTML);
-	$("#editLongitude").val(column[4].innerHTML);
-	$("#editLatitude").val(column[3].innerHTML);
-
-	$("#editSim").val(column[2].innerHTML);
-	$("#editinlineIndex").val(column[1].innerHTML);
+	console.log(column);
+	$("#editDeviceNumber").val(column[11].innerHTML);
+	$("#editName").val(column[10].innerHTML);
+	$("#editShowName").val(column[9].innerHTML);
+	$("#editId").val(column[8].innerHTML);
+	$("#editLineId").val(column[7].innerHTML);
+	$("#editAddress").val(column[6].innerHTML);
+	$("#editLongitude").val(column[5].innerHTML);
+	$("#editLatitude").val(column[4].innerHTML);
+	$('#inLineTime').val(column[1].innerHTML);
+	$("#editSim").val(column[3].innerHTML);
+	$("#editinlineIndex").val(column[2].innerHTML);
 }
 
 
