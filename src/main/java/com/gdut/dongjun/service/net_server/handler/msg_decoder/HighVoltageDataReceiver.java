@@ -131,6 +131,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 				}
 			}
 		} else if (infoIdenCode.equals("09")) {
+			System.out.println("hehehhehe" + data);
 			// 读数据(电流，电压)
 			logger.info("解析CV---------" + data);
 
