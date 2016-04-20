@@ -10,10 +10,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gdut.dongjun.domain.dao.ControlMearsureCurrentMapper;
 import com.gdut.dongjun.domain.dao.HighVoltageCurrentMapper;
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
-import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 import com.gdut.dongjun.util.MapUtil;
@@ -86,9 +84,12 @@ HighVoltageCurrentService {
 	 * @see com.gdut.dongjun.service.HighVoltageCurrentService#getRecentlyCurrent()
 	 */
 	@Override
-	public List<HighVoltageCurrent> getRecentlyCurrent() {
+	public List<HighVoltageCurrent> getRecentlyCurrent(String switchId, String phase) {
 		// TODO Auto-generated method stub
-		return currentMapper.getRecentlyCurrent();
+		HighVoltageCurrent hc  = new HighVoltageCurrent();
+		hc.setSwitchId(switchId);
+		hc.setPhase(phase);
+		return currentMapper.getRecentlyCurrent(hc);
 	}
 
 	@Override

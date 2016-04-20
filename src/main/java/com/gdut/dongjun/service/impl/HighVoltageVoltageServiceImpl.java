@@ -3,7 +3,6 @@
  */
 package com.gdut.dongjun.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.dao.HighVoltageVoltageMapper;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
-import com.gdut.dongjun.domain.po.LowVoltageVoltage;
-import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 import com.gdut.dongjun.util.MyBatisMapUtil;
@@ -71,9 +68,12 @@ HighVoltageVoltageService {
 	}
 
 	@Override
-	public List<HighVoltageVoltage> getRecentlyVoltage() {
+	public List<HighVoltageVoltage> getRecentlyVoltage(String switchId, String phase) {
 		// TODO Auto-generated method stub
-		return voltageMapper.getRecentlyVoltage();
+		HighVoltageVoltage hv = new HighVoltageVoltage();
+		hv.setSwitchId(switchId);
+		hv.setPhase(phase);
+		return voltageMapper.getRecentlyVoltage(hv);
 	}
 
 	@Override

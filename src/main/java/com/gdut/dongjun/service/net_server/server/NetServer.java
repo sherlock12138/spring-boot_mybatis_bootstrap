@@ -1,6 +1,7 @@
 package com.gdut.dongjun.service.net_server.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -17,9 +18,11 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLException;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.service.net_server.initializer.ServerInitializer;
+
 
 /**
  * @Title: NetServer.java
@@ -40,11 +43,12 @@ public abstract class NetServer {
 	protected int hitchEventBreak = defaultHitchEventBreak;// 报警事件监听的间隔
 	protected int cvReadBreak = defaultCVReadBreak;// 电流电压读取的间隔
 
-	protected static final int defaultHitchEventBreak = 5 * 60 * 1000;
-	protected static final int defaultCVReadBreak = 15 * 60 * 1000;
+	protected static final int defaultHitchEventBreak = 30 * 60 * 1000;
+	protected static final int defaultCVReadBreak = 30 * 60 * 1000;
 
 	static final boolean SSL = false;//当需要实现加密连接时才打开，否则会报错！！，没有加包头
 	private int port;
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	// Integer.parseInt(System.getProperty("port", "8463"));
 
@@ -196,18 +200,29 @@ public abstract class NetServer {
 	 * @since 1.0
 	 */
 	class HitchEventSpyThread extends Thread {
-
+		
 		/**
 		 * 报警事件监听线程
 		 */
 		@Override
 		public void run() {
+			
+			/**
+			 * 等所有开关建立链路后开启第一次总召
+			*/
+			/*try {
+				sleep(1000 * 30);
+				logger.info("开始发起总召。。。");
+				hitchEventSpy();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}*/
 
 			while (hitchEventSypSign) {
 
 				try {
-
 					Thread.sleep(hitchEventBreak);
+					logger.info("开始发起总召。。。");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -229,7 +244,7 @@ public abstract class NetServer {
 		@Override
 		public void run() {
 
-			while (cvReadTaskSign) {
+			/*while (cvReadTaskSign) {
 
 				try {
 
@@ -239,7 +254,8 @@ public abstract class NetServer {
 					e.printStackTrace();
 				}
 				timedCVReadTask();
-			}
+			}*/
+			timedCVReadTask();
 		}
 	}
 

@@ -37,9 +37,9 @@ SinglePrimaryKeyBaseDAOImpl<HighVoltageCurrent> implements HighVoltageCurrentMap
 	}
 
 	@Override
-	public List<HighVoltageCurrent> getRecentlyCurrent() {
+	public List<HighVoltageCurrent> getRecentlyCurrent(HighVoltageCurrent hc) {
 		// TODO Auto-generated method stub
-		return template.selectList(getNamespace("getRecentlyCurrent"));
+		return template.selectList(getNamespace("getRecentlyCurrent"), hc);
 
 	}
 }

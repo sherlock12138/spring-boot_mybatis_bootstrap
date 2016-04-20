@@ -33,7 +33,6 @@ import com.gdut.dongjun.service.LowVoltageVoltageService;
 import com.gdut.dongjun.service.device.Device;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
-import com.gdut.dongjun.util.MyBatisMapUtil;
 
 @Controller
 @RequestMapping("/dongjun")
@@ -258,8 +257,8 @@ public class CommandController {
 			break;
 		case "1":// 高压开关
 			// 从数据库中查询结果
-			List<HighVoltageVoltage> cliList2 = voltageService2
-					.getRecentlyVoltage();
+			/*List<HighVoltageVoltage> cliList2 = voltageService2
+					.getRecentlyVoltage(switchId);
 
 			if (cliList2 != null) {
 				for (HighVoltageVoltage current : cliList2) {
@@ -278,6 +277,21 @@ public class CommandController {
 						break;
 					}
 				}
+			}*/
+			List<HighVoltageVoltage> cliList2 = voltageService2
+					.getRecentlyVoltage(switchId, "A");
+			if(cliList2 != null && cliList2.size() != 0) {
+				deStrings[0] = cliList2.get(0).getValue();
+			}
+			cliList2 = voltageService2
+					.getRecentlyVoltage(switchId, "B");
+			if(cliList2 != null && cliList2.size() != 0) {
+				deStrings[1] = cliList2.get(0).getValue();
+			}
+			cliList2 = voltageService2
+					.getRecentlyVoltage(switchId, "C");
+			if(cliList2 != null && cliList2.size() != 0) {
+				deStrings[2] = cliList2.get(0).getValue();
 			}
 			break;
 		case "2":// 管控开关
@@ -355,9 +369,21 @@ public class CommandController {
 		case "1":// 高压开关
 			// 从数据库中查询结果
 			List<HighVoltageCurrent> cliList2 = currentService2
-					.getRecentlyCurrent();
-
-			if (cliList2 != null) {
+					.getRecentlyCurrent(switchId, "A");
+			if(cliList2 != null && cliList2.size() != 0) {
+				deStrings[0] = cliList2.get(0).getValue();
+			}
+			cliList2 = currentService2
+					.getRecentlyCurrent(switchId, "B");
+			if(cliList2 != null && cliList2.size() != 0) {
+				deStrings[1] = cliList2.get(0).getValue();
+			}
+			cliList2 = currentService2
+					.getRecentlyCurrent(switchId, "C");
+			if(cliList2 != null && cliList2.size() != 0) {
+				deStrings[2] = cliList2.get(0).getValue();
+			}
+			/*if (cliList2 != null) {
 				for (HighVoltageCurrent current : cliList2) {
 					String p = current.getPhase();
 					switch (p) {
@@ -374,7 +400,7 @@ public class CommandController {
 						break;
 					}
 				}
-			}
+			}*/
 			break;
 		case "2":// 管控开关
 			// 从数据库中查询结果

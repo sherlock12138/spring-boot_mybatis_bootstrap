@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.gdut.dongjun.domain.dao.base.SinglePrimaryKeyBaseMapper;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
-import com.gdut.dongjun.domain.po.LowVoltageVoltage;
 
 /**
  * @author zjd
@@ -51,5 +50,5 @@ public interface HighVoltageVoltageMapper extends
 	 * @return List<Voltage>
 	 * @throws
 	 */
-	public List<HighVoltageVoltage> getRecentlyVoltage();
+	public List<HighVoltageVoltage> getRecentlyVoltage(HighVoltageVoltage hv);
 }
