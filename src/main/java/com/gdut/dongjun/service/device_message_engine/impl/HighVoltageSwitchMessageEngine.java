@@ -1,7 +1,6 @@
 package com.gdut.dongjun.service.device_message_engine.impl;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.service.device_message_engine.ControlMessageEngine;
@@ -62,11 +61,6 @@ public class HighVoltageSwitchMessageEngine implements ControlMessageEngine,
 				HighCommandControlCode.READ_VOLTAGE_CURRENT.toString());
 	}
 	
-	@Test
-	public void get() {
-		generateReadAPhaseCurrentMessage("0066");
-	}
-
 	@Override
 	public String generateReadBPhaseCurrentMessage(String address) {
 		return util.readVoltageAndCurrent(address,

@@ -17,8 +17,10 @@ import com.gdut.dongjun.service.impl.enums.HighCommandControlCode;
 public class HighVoltageDeviceCommandUtil {
 
 	private String address;// 地址
+	@SuppressWarnings("unused")
 	private String control;// 控制域
 	private String dataLength;// 报文长度
+	@SuppressWarnings("unused")
 	private String data;// 应用服务数据单元ASDU
 	private String check;// 帧校验和CS
 

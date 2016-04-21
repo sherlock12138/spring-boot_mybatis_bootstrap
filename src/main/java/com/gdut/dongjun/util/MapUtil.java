@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class MapUtil {
 
+	public static final Map<String, Object> SUCCESS = MapUtil.warp("success", true);
+	public static final Map<String, Object> ERROR = MapUtil.warp("success", false);
 	/**
 	 * 
 	 * @Title: wrap

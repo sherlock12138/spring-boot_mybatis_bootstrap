@@ -36,6 +36,16 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false" />
 
+		<table schema="root" tableName="high_voltage_operation"
+			domainObjectName="HighVoltageOperation" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
+			
+		<table schema="root" tableName="switch_operation"
+			domainObjectName="SwitchOperation" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
+			
 		<!-- <table schema="root" tableName="control_mearsure_current" domainObjectName="ControlMearsureCurrent" 
 			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
 			enableSelectByExample="false" selectByExampleQueryId="false" /> <table schema="root" 
