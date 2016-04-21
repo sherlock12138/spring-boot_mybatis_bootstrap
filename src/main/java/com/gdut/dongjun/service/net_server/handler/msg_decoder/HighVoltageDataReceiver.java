@@ -15,8 +15,13 @@
  */
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,8 @@ import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.HighVoltageHitchEventService;
 import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
+import com.gdut.dongjun.service.HistoryHighVoltageCurrentService;
+import com.gdut.dongjun.service.HistoryHighVoltageVoltageService;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.service.net_server.server.impl.HighVoltageServer;
@@ -40,10 +47,6 @@ import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.TimeUtil;
 import com.gdut.dongjun.util.UUIDUtil;
 
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-
 @Service
 @Sharable
 public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
@@ -52,6 +55,10 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	private HighVoltageCurrentService currentService;
 	@Autowired
 	private HighVoltageVoltageService voltageService;
+	@Autowired
+	private HistoryHighVoltageCurrentService historyCurrentService;
+	@Autowired
+	private HistoryHighVoltageVoltageService historyVoltageService;
 	@Autowired
 	private HighVoltageSwitchService switchService;
 	@Autowired
@@ -81,17 +88,6 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		// ctx.channel().writeAndFlush(READ_ADDRESS);// 读取地址
 		//CtxStore.printCtxStore();
 		//
-	}
-
-	private static boolean checkCrc(String data) {
-		
-		String controlCode = data.substring(8, 10);
-		String addressCoode = data.substring(10, 14);
-		String CrcCode = data.substring(data.length() - 4, data.length() - 2);
-		if(true) {
-			return true;
-		}
-		return false;
 	}
 	
 	@Override
@@ -221,15 +217,6 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			} else {
 				logger.error("there is an error in saving CV!");
 			}
-/*			*//**
-			 * 全遥测后终止总召
-			 *//*
-			String resu = new HighVoltageDeviceCommandUtil().finshTotalCall(data.substring(10, 14));
-			*//**
-			 * 等待发回全遥测数据后执行终止
-			 *//*
-			logger.info("总召激活确定并收到全遥测，开始终止总召----------" + resu);
-			ctx.writeAndFlush(resu);*/
 		} else if (infoIdenCode.equals("01")) {
 
 			String address = data.substring(10, 14);
@@ -325,7 +312,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	}
 
 	private void changeState(String address, String code, String value) {
-		// TODO Auto-generated method stub
+
 		if(code == null || code.length() == 0 || code.length() != 4) {
 			return;
 		}
@@ -376,29 +363,17 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		if(CtxStore.getIdbyAddress(address) == null) {
 			return;
 		}
-		if(code.equals("4001")) {
-			HighVoltageVoltage hv = new HighVoltageVoltage();
-			hv.setId(UUIDUtil.getUUID());
-			hv.setTime(new Date());
-			hv.setSwitchId(CtxStore.getIdbyAddress(address));
-			hv.setValue(Integer.valueOf(HighVoltageDeviceCommandUtil.changToRight(value)));
-			hv.setPhase("A");
-			voltageService.insert(hv);
-		} else {
-			HighVoltageCurrent hc = new HighVoltageCurrent();
-			hc.setId(UUIDUtil.getUUID());
-			hc.setTime(new Date());
-			hc.setSwitchId(CtxStore.getIdbyAddress(address));
-			hc.setValue(Integer.valueOf(HighVoltageDeviceCommandUtil.changToRight(value)));
-			switch(code) {
-				case "4006": hc.setPhase("A");break;
-				case "4007": hc.setPhase("B");break;
-				case "4008": hc.setPhase("C");break;
-				default:break;
-			}
-			if(hc.getPhase() != null) {
-				currentService.insert(hc);
-			}
+		
+		switch(code) {
+			case "4001": saveVoltageForValue(CtxStore.getIdbyAddress(address), "A",
+				HighVoltageDeviceCommandUtil.changToRight(value));break;
+			case "4006": saveCurrentForValue(CtxStore.getIdbyAddress(address), "A",
+					HighVoltageDeviceCommandUtil.changToRight(value));break;
+			case "4007": saveCurrentForValue(CtxStore.getIdbyAddress(address), "B",
+					HighVoltageDeviceCommandUtil.changToRight(value));break;
+			case "4008": saveCurrentForValue(CtxStore.getIdbyAddress(address), "C",
+					HighVoltageDeviceCommandUtil.changToRight(value));break;
+			default:break;
 		}
 	}
 
@@ -440,80 +415,43 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		String ACurrent = new HighVoltageDeviceCommandUtil().readAPhaseCurrent(data);
 		String BCurrent = new HighVoltageDeviceCommandUtil().readBPhaseCurrent(data);
 		String CCurrent = new HighVoltageDeviceCommandUtil().readCPhaseCurrent(data);
-		String[] dStrings_voltage = { ABVoltage, BCVoltage };
-
-		saveVoltage(switchId, dStrings_voltage);
-		String[] dStrings_current = { ACurrent, BCurrent, CCurrent };
-		saveCurrent(switchId, dStrings_current);
-
+		
+		saveCurrentForValue(switchId, "A", ACurrent);
+		saveCurrentForValue(switchId, "B", BCurrent);
+		saveCurrentForValue(switchId, "C", CCurrent);
+		saveVoltageForValue(switchId, "A", ABVoltage);
+		saveVoltageForValue(switchId, "B", BCVoltage);
 		System.out.println("-------saved cv-----------");
 	}
-
-	/**
-	 * @param switchId
-	 * 
-	 * @Title: saveCurrent @Description: TODO @param @param dStrings @return
-	 *         void @throws
-	 */
-	private void saveCurrent(String switchId, String[] dStrings) {
-
-		logger.info("saving current..");
+	
+	private void saveVoltageForValue(String switchId, String phase, String value) {
+		
 		Date date = new Date();
-		HighVoltageCurrent c1 = new HighVoltageCurrent();
-		c1.setId(UUIDUtil.getUUID());
-		c1.setPhase("A");
-		c1.setSwitchId(switchId);
-		c1.setTime(date);
-		c1.setValue(Integer.parseInt(dStrings[0]));
-
-		HighVoltageCurrent c2 = new HighVoltageCurrent();
-		c2.setId(UUIDUtil.getUUID());
-		c2.setPhase("B");
-		c2.setSwitchId(switchId);
-		c2.setTime(date);
-		c2.setValue(Integer.parseInt(dStrings[1]));
-
-		HighVoltageCurrent c3 = new HighVoltageCurrent();
-		c3.setId(UUIDUtil.getUUID());
-		c3.setPhase("C");
-		c3.setSwitchId(switchId);
-		c3.setTime(date);
-		c3.setValue(Integer.parseInt(dStrings[2]));
-
-		currentService.insert(c1);
-		currentService.insert(c2);
-		currentService.insert(c3);
-		logger.info("current has bean saved!");
+		Map<String, Object> map = MyBatisMapUtil.warp("switch_id", switchId);
+		map.put("phase", "A");
+		List<HighVoltageVoltage> list = voltageService.selectByParameters(map);
+		if(list != null && list.size() != 0) {
+			HighVoltageVoltage c1 = list.get(0);
+			c1.setTime(date);
+			c1.setValue(Integer.parseInt(value));
+			voltageService.updateByPrimaryKey(c1);
+			historyVoltageService.insert(c1.changeToHistory());
+		}
 	}
-
-	/**
-	 * @param switchId
-	 * 
-	 * @Title: saveVoltage @Description: TODO @param @param dStrings @return
-	 *         void @throws
-	 */
-	private void saveVoltage(String switchId, String[] dStrings) {
-
-		logger.info("saving voltage...");
+	
+	private void saveCurrentForValue(String switchId, String phase, String value) {
+		
 		Date date = new Date();
-		HighVoltageVoltage v1 = new HighVoltageVoltage();
-		v1.setId(UUIDUtil.getUUID());
-		v1.setPhase("A");
-		v1.setSwitchId(switchId);
-		v1.setTime(date);
-		v1.setValue(Integer.parseInt(dStrings[0]));
-
-		HighVoltageVoltage v2 = new HighVoltageVoltage();
-		v2.setId(UUIDUtil.getUUID());
-		v2.setPhase("B");
-		v2.setSwitchId(switchId);
-		v2.setTime(date);
-		v2.setValue(Integer.parseInt(dStrings[1]));
-
-		voltageService.insert(v1);
-		voltageService.insert(v2);
-		logger.info("voltage has bean saved!");
-		return;
+		Map<String, Object> map = MyBatisMapUtil.warp("switch_id", switchId);
+		map.put("phase", "A");
+		List<HighVoltageCurrent> list = currentService.selectByParameters(map);
+		if(list != null && list.size() != 0) {
+			HighVoltageCurrent c1 = list.get(0);
+			c1.setTime(date);
+			c1.setValue(Integer.parseInt(value));
+			currentService.updateByPrimaryKey(c1);
+			historyCurrentService.insert(c1.changeToHistory());
+		}
 	}
 
 	/**

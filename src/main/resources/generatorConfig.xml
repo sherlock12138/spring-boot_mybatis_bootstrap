@@ -21,13 +21,13 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false" />
 
-		<table schema="root" tableName="high_voltage_hitch_event"
-			domainObjectName="HighVoltageHitchEvent" enableCountByExample="false"
+		<table schema="root" tableName="history_high_voltage_current"
+			domainObjectName="HistoryHighVoltageCurrent" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false" />
 
-		<table schema="root" tableName="control_mearsure_switch"
-			domainObjectName="ControlMearsureSwitch" enableCountByExample="false"
+		<table schema="root" tableName="history_high_voltage_voltage"
+			domainObjectName="HistoryHighVoltageVoltage" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false" />
 			

@@ -162,4 +162,15 @@ public class HighVoltageCurrent {
     public void setSwitchId(String switchId) {
         this.switchId = switchId;
     }
+    
+    public HistoryHighVoltageCurrent changeToHistory() {
+ 
+    	HistoryHighVoltageCurrent current = new HistoryHighVoltageCurrent();
+    	current.setId(this.getId());
+    	current.setSwitchId(this.getSwitchId());
+    	current.setPhase(this.getPhase());
+    	current.setTime(this.getTime());
+    	current.setValue(this.getValue());
+    	return current;
+    }
 }
