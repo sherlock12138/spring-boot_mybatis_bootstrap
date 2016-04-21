@@ -210,13 +210,13 @@ public abstract class NetServer {
 			/**
 			 * 等所有开关建立链路后开启第一次总召
 			*/
-			/*try {
-				sleep(1000 * 30);
+			try {
+				sleep(1000 * 200);
 				logger.info("开始发起总召。。。");
 				hitchEventSpy();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
-			}*/
+			}
 
 			while (hitchEventSypSign) {
 

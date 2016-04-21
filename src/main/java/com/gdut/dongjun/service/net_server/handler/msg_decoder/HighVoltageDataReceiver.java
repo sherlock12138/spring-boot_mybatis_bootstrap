@@ -164,12 +164,38 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			 * 总召激活确定
 			 */
 			logger.info("总召激活已经确定：" + data.substring(10, 14));
+		} else if(infoIdenCode.equals("03")) {
+			/**
+			 * 遥信变位初步确定
+			 */
+			String resu = new HighVoltageDeviceCommandUtil().confirmChangeAffair(data.substring(10, 14));
+			logger.info("遥信变位确定---------" + resu);
+			ctx.writeAndFlush(resu);
+		} else if(infoIdenCode.equals("2e")) { 
+			/**
+			 * 是否开合闸成功
+			 */
+			/*String id = CtxStore.getIdbyAddress(data.substring(10, 14));
+			HighVoltageStatus hvs = null;
+			if(id != null) {
+				hvs = CtxStore.getStatusbyId(id);
+			} else {
+				return;
+			}
+			switch(data.substring(30, 32)) {
+				case "02" : hvs.setStatus("01");
+				case "01" : hvs.setStatus("00"); //分闸
+			}
+			logger.info("遥控合分闸成功：状态变为" + (hvs.getStatus().equals("00") ? "分闸" : "合闸") + data);*/
 		} else if(infoIdenCode.equals("1f")) {
 			/**
 			 * 遥信变位确定
 			 */
-			String resu = new HighVoltageDeviceCommandUtil().confirmChange(data.substring(10, 14));
-			logger.info("遥信变位---------" + resu);
+			for(int i = 26, j = Integer.valueOf(data.substring(16, 18)); j > 0; i += 6, --j) {
+				changeState(data.substring(22, 26), data.substring(i, i + 4), data.substring(i + 4, i + 6));
+			}
+			String resu = new HighVoltageDeviceCommandUtil().confirmChangeAffair(data.substring(10, 14));
+			logger.info("遥信变位事件确定---------" + resu);
 			ctx.writeAndFlush(resu);
 		} else if (infoIdenCode.equals("09")) {
 			
@@ -195,15 +221,15 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			} else {
 				logger.error("there is an error in saving CV!");
 			}
-			/**
+/*			*//**
 			 * 全遥测后终止总召
-			 */
+			 *//*
 			String resu = new HighVoltageDeviceCommandUtil().finshTotalCall(data.substring(10, 14));
-			/**
+			*//**
 			 * 等待发回全遥测数据后执行终止
-			 */
+			 *//*
 			logger.info("总召激活确定并收到全遥测，开始终止总召----------" + resu);
-			ctx.writeAndFlush(resu);
+			ctx.writeAndFlush(resu);*/
 		} else if (infoIdenCode.equals("01")) {
 
 			String address = data.substring(10, 14);
@@ -298,6 +324,44 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 	}
 
+	private void changeState(String address, String code, String value) {
+		// TODO Auto-generated method stub
+		if(code == null || code.length() == 0 || code.length() != 4) {
+			return;
+		}
+		if(code.endsWith("00")) {
+			/**
+			 * 报文反转
+			 */
+			code = LowVoltageDeviceCommandUtil.reverseStringBy2(code);
+		}
+		if(CtxStore.getIdbyAddress(address) == null || 
+				CtxStore.getStatusbyId(CtxStore.getIdbyAddress(address)) == null) {
+			return;
+		}
+		if(value.equals("02")) {
+			value = "01";
+		} else {
+			value = "00";
+		}
+		HighVoltageStatus hvs = CtxStore.getStatusbyId(CtxStore.getIdbyAddress(address));
+		switch(code) {
+			case "0000": hvs.setGuo_liu_yi_duan(value);break;
+			case "0001": hvs.setGuo_liu_er_duan(value);break;
+			case "0002": hvs.setGuo_liu_san_duan(value);break;
+			case "0004": hvs.setLing_xu_guo_liu_(value);break;
+			case "000A": hvs.setPt1_you_ya(value);break;
+			case "000B": hvs.setPt1_guo_ya(value);break;
+			case "000C": hvs.setPt2_guo_ya(value);break;
+			case "000D": hvs.setShou_dong_he_zha(value);break;
+			case "000E": hvs.setShou_dong_fen_zha(value);break;
+			case "00FB": hvs.setYao_kong_he_zha(value);break;
+			case "00FC": hvs.setYao_kong_he_zha(value);break;
+			case "00FD": hvs.setYao_kong_fu_gui(value);break;
+		}
+		System.out.println("===========================解析成功");
+	}
+
 	private void getMessageAddress(String code, String address, String value) {
 		// TODO Auto-generated method stub
 		if(code == null || code.length() == 0 || code.length() != 4) {
@@ -312,7 +376,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		if(CtxStore.getIdbyAddress(address) == null) {
 			return;
 		}
-		if(code.equals("4008")) {
+		if(code.equals("4001")) {
 			HighVoltageVoltage hv = new HighVoltageVoltage();
 			hv.setId(UUIDUtil.getUUID());
 			hv.setTime(new Date());
@@ -327,9 +391,9 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			hc.setSwitchId(CtxStore.getIdbyAddress(address));
 			hc.setValue(Integer.valueOf(HighVoltageDeviceCommandUtil.changToRight(value)));
 			switch(code) {
-				case "4001": hc.setPhase("A");break;
-				case "4002": hc.setPhase("B");break;
-				case "4003": hc.setPhase("C");break;
+				case "4006": hc.setPhase("A");break;
+				case "4007": hc.setPhase("B");break;
+				case "4008": hc.setPhase("C");break;
 				default:break;
 			}
 			if(hc.getPhase() != null) {

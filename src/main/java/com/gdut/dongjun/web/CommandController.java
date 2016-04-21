@@ -126,14 +126,14 @@ public class CommandController {
 		SwitchGPRS gprs = CtxStore.get(switchId);
 		String address = null;
 		String msg = null;
-
+		
 		if (gprs != null && gprs.getAddress() != null) {
 
 			address = gprs.getAddress();
 		} else {
 			return "error";
 		}
-
+		System.out.println(address);
 		// address = "7700";
 
 		switch (sign) {

@@ -120,10 +120,11 @@ public class HighVoltageDeviceCommandUtil {
 		}
 		return data;
 	}
+
 	/**
-	 * 遥信确定
+	 * 遥信确定事件
 	 */
-	public String confirmChange(String address) {
+	public String confirmChangeAffair(String address) {
 		
 		String msg = "00" + address;
 		setData(msg);
