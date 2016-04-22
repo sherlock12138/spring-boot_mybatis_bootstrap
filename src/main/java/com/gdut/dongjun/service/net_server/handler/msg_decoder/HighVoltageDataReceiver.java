@@ -16,11 +16,12 @@
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.commonj.TimerManagerFactoryBean;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
@@ -31,10 +32,14 @@ import com.gdut.dongjun.service.HighVoltageCurrentService;
 import com.gdut.dongjun.service.HighVoltageHitchEventService;
 import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.HighVoltageVoltageService;
+import com.gdut.dongjun.service.HistoryHighVoltageCurrentService;
+import com.gdut.dongjun.service.HistoryHighVoltageVoltageService;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
+import com.gdut.dongjun.service.net_server.server.impl.HighVoltageServer;
 import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
 import com.gdut.dongjun.util.HighVoltageDeviceCommandUtil;
+import com.gdut.dongjun.util.LowVoltageDeviceCommandUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.TimeUtil;
 import com.gdut.dongjun.util.UUIDUtil;
@@ -51,6 +56,10 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	private HighVoltageCurrentService currentService;
 	@Autowired
 	private HighVoltageVoltageService voltageService;
+	@Autowired
+	private HistoryHighVoltageCurrentService historyCurrentService;
+	@Autowired
+	private HistoryHighVoltageVoltageService historyVoltageService;
 	@Autowired
 	private HighVoltageSwitchService switchService;
 	@Autowired
@@ -78,17 +87,17 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		// 设备刚连上我们的服务器还不知道它的地址的,先查一下它的地址
 		// ***********************************************
 		// ctx.channel().writeAndFlush(READ_ADDRESS);// 读取地址
-		CtxStore.printCtxStore();
+		//CtxStore.printCtxStore();
 		//
-
 	}
-
+	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		String data = (String) msg;// 查询后回来的报文
 		data = data.replace(" ", "");
 		logger.info("接收到的报文： " + data);
 		// 截取控制码
+		//if(!data.startsWith("EB90") && !checkCrc(data))
 		String infoIdenCode = data.substring(14, 16);
 		String hitchEventDesc = "控制回路";
 		if (data.length() == 190) {
@@ -96,20 +105,29 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 			hitchEventDesc = getHitchReason(data.substring(140, 160));
 		}
 
-		// 将接收到的客户端信息分类处理
-
-		// 读通信地址并将地址反转
+		/**
+		 * 将接收到的客户端信息分类处理
+		 * 读通信地址并将地址反转
+		 */
 		if ((data.startsWith("EB90") || data.startsWith("eb90"))) {
-
+			
 			SwitchGPRS gprs = CtxStore.get(ctx);
-
+			/**
+			 * 当注册的高压开关的地址不为空，说明已经注册过了，不再进行相关操作
+			 */
+			if(gprs != null && gprs.getAddress() != null) {
+				ctx.channel().writeAndFlush(data);
+				return;
+			}
 			String address = data.substring(12, 16);
 			gprs.setAddress(address);
 
 			address = new HighVoltageDeviceCommandUtil().reverseString(address);
 
 			if (gprs != null) {
-				// 根据反转后的地址查询得到highvoltageswitch的集合
+				/**
+				 * 根据反转后的地址查询得到highvoltageswitch的集合
+				 */
 				List<HighVoltageSwitch> list = switchService
 						.selectByParameters(MyBatisMapUtil.warp("address", Integer.parseInt(address, 16)));
 				HighVoltageSwitch s = null;
@@ -118,35 +136,90 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					s = list.get(0);
 					String id = s.getId();
 					gprs.setId(id);
-					logger.info(address + " is ready!");
-
-					if (CtxStore.get(id) != null) {
-
+					
+					/**
+					 * 这个地方是开始对bug的一个测试，当开关从跳闸到合闸的时候，无法及时获取，只能
+					 * 这样替换ctx才能进行状态更新
+					 * 
+					 * 	if (CtxStore.get(id) != null) {
+					 *		CtxStore.remove(id);
+					 *		CtxStore.add(gprs);
+					 *	}
+					 * 
+					 */
+					HighVoltageServer.totalCall(id);
+					if(CtxStore.get(id) != null) {
 						CtxStore.remove(id);
 						CtxStore.add(gprs);
 					}
-					ctx.channel().writeAndFlush(data);// 需要原样返回
 				} else {
 					logger.info("this device is not registered!!");
 				}
 			}
+		} else if(infoIdenCode.equals("64")) {
+			/**
+			 * 总召激活确定
+			 */
+			logger.info("总召激活已经确定：" + data.substring(10, 14));
+		} else if(infoIdenCode.equals("03")) {
+			/**
+			 * 遥信变位初步确定
+			 */
+			String resu = new HighVoltageDeviceCommandUtil().confirmChangeAffair(data.substring(10, 14));
+			logger.info("遥信变位确定---------" + resu);
+			ctx.writeAndFlush(resu);
+		} else if(infoIdenCode.equals("2e")) { 
+			/**
+			 * 是否开合闸成功
+			 */
+			/*String id = CtxStore.getIdbyAddress(data.substring(10, 14));
+			HighVoltageStatus hvs = null;
+			if(id != null) {
+				hvs = CtxStore.getStatusbyId(id);
+			} else {
+				return;
+			}
+			switch(data.substring(30, 32)) {
+				case "02" : hvs.setStatus("01");
+				case "01" : hvs.setStatus("00"); //分闸
+			}
+			logger.info("遥控合分闸成功：状态变为" + (hvs.getStatus().equals("00") ? "分闸" : "合闸") + data);*/
+		} else if(infoIdenCode.equals("1f")) {
+			/**
+			 * 遥信变位确定
+			 */
+			for(int i = 26, j = Integer.valueOf(data.substring(16, 18)); j > 0; i += 6, --j) {
+				changeState(data.substring(22, 26), data.substring(i, i + 4), data.substring(i + 4, i + 6));
+			}
+			String resu = new HighVoltageDeviceCommandUtil().confirmChangeAffair(data.substring(10, 14));
+			logger.info("遥信变位事件确定---------" + resu);
+			ctx.writeAndFlush(resu);
 		} else if (infoIdenCode.equals("09")) {
-			System.out.println("hehehhehe" + data);
-			// 读数据(电流，电压)
+			
+			if(!data.substring(2,4).equals("47")) {
+				/**
+				 * 若data.length=40，测归一值
+				 */
+				logger.info("测归一值-------" + data);
+				//680e0e68f4680009010301680008400000001a16
+				//68131368f46600090203016600054000000006402700008116
+				//68131368f46600090203016600054000000006402700008116
+				for(int i = 22; i + 14 < data.length(); i += 10) {
+					getMessageAddress(data.substring(i + 4, i + 8), data.substring(22, 26), 
+							data.substring(i + 8, i + 14));
+				}
+				return;
+			}
 			logger.info("解析CV---------" + data);
-
 			String address = data.substring(10, 14);
 			String id = CtxStore.getIdbyAddress(address);
-
 			if (id != null) {
-
 				saveCV(id, data);
 			} else {
 				logger.error("there is an error in saving CV!");
 			}
 		} else if (infoIdenCode.equals("01")) {
 
-			// System.out.println(data);
 			String address = data.substring(10, 14);
 			String id = CtxStore.getIdbyAddress(address);
 
@@ -188,7 +261,6 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					gprs.setOpen(true);
 
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
-					logger.info("-----------跳闸");
 
 					event.setHitchTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 					event.setHitchPhase("A");
@@ -200,14 +272,13 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					// event.setSolvePeople();
 					hitchEventService.insert(event);
 
-					logger.info("-----------跳闸");
+					logger.info("-----------跳闸成功");
 				} else if ("01".equals(new_status) && "00".equals(s.getStatus())) {
 
 					gprs.setOpen(false);
 
 					HighVoltageHitchEvent event = new HighVoltageHitchEvent();
 
-					logger.info("-----------合闸");
 					event.setHitchTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
 					event.setHitchPhase("A");
 					event.setHitchReason(hitchEventDesc == null ? "未知报警" : hitchEventDesc);
@@ -216,7 +287,7 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 					event.setId(UUIDUtil.getUUID());
 					event.setSwitchId(id);
 					hitchEventService.insert(event);
-					logger.info("-----------合闸");
+					logger.info("-----------合闸成功");
 				}
 				s.setStatus(new_status);
 
@@ -241,6 +312,72 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 
 	}
 
+	private void changeState(String address, String code, String value) {
+
+		if(code == null || code.length() == 0 || code.length() != 4) {
+			return;
+		}
+		if(code.endsWith("00")) {
+			/**
+			 * 报文反转
+			 */
+			code = LowVoltageDeviceCommandUtil.reverseStringBy2(code);
+		}
+		if(CtxStore.getIdbyAddress(address) == null || 
+				CtxStore.getStatusbyId(CtxStore.getIdbyAddress(address)) == null) {
+			return;
+		}
+		if(value.equals("02")) {
+			value = "01";
+		} else {
+			value = "00";
+		}
+		HighVoltageStatus hvs = CtxStore.getStatusbyId(CtxStore.getIdbyAddress(address));
+		switch(code) {
+			case "0000": hvs.setGuo_liu_yi_duan(value);break;
+			case "0001": hvs.setGuo_liu_er_duan(value);break;
+			case "0002": hvs.setGuo_liu_san_duan(value);break;
+			case "0004": hvs.setLing_xu_guo_liu_(value);break;
+			case "000A": hvs.setPt1_you_ya(value);break;
+			case "000B": hvs.setPt1_guo_ya(value);break;
+			case "000C": hvs.setPt2_guo_ya(value);break;
+			case "000D": hvs.setShou_dong_he_zha(value);break;
+			case "000E": hvs.setShou_dong_fen_zha(value);break;
+			case "00FB": hvs.setYao_kong_he_zha(value);break;
+			case "00FC": hvs.setYao_kong_he_zha(value);break;
+			case "00FD": hvs.setYao_kong_fu_gui(value);break;
+		}
+		System.out.println("===========================解析成功");
+	}
+
+	private void getMessageAddress(String code, String address, String value) {
+		// TODO Auto-generated method stub
+		if(code == null || code.length() == 0 || code.length() != 4) {
+			return;
+		}
+		if(code.endsWith("40")) {
+			/**
+			 * 报文反转
+			 */
+			code = LowVoltageDeviceCommandUtil.reverseStringBy2(code);
+		}
+		if(CtxStore.getIdbyAddress(address) == null) {
+			return;
+		}
+		
+		switch(code) {
+			case "4001": saveVoltageForValue(CtxStore.getIdbyAddress(address), "A",
+				HighVoltageDeviceCommandUtil.changToRight(value));break;
+			case "4006": saveCurrentForValue(CtxStore.getIdbyAddress(address), "A",
+					HighVoltageDeviceCommandUtil.changToRight(value));break;
+			case "4007": saveCurrentForValue(CtxStore.getIdbyAddress(address), "B",
+					HighVoltageDeviceCommandUtil.changToRight(value));break;
+			case "4008": saveCurrentForValue(CtxStore.getIdbyAddress(address), "C",
+					HighVoltageDeviceCommandUtil.changToRight(value));break;
+			default:break;
+		}
+	}
+
 	private String getHitchReason(String string) {
 
 		for (int i = 0; i < string.length(); i = i + 2) {
@@ -251,23 +388,17 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		return "未知报警";
 	}
 
-	/*
-	 * @Test public void testone() { //String str =
-	 * "68 0c 0c 68 f4 77 00 64 01 07 01 77 00 00 00 14 63 16 68 47 47 68 d4 77 00 09 94 14 01 77 00 01 40 b8 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 e8 03 00 88 13 00 92 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 db 16"
-	 * ; String str =
-	 * "680c0c68f477002e0107017700016081fb16680c0c68d47700640107017700000014631600000000000068474768d4770009941401770001400f5600000000000000000000000000000000000000000000000000000000e80300851300940100";
-	 * str = str.replace(" ", ""); System.out.println(str.substring(14, 16)); }
-	 */
-
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 
 		SwitchGPRS gprs = CtxStore.get(ctx);
 		if (gprs != null) {
 			CtxStore.remove(ctx);// 从Store中移除这个context
-			HighVoltageSwitch hvSwitch = switchService.selectByPrimaryKey(gprs.getId());
-			hvSwitch.setOnlineTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
-			switchService.updateByPrimaryKey(hvSwitch);
+			if(gprs.getId() != null) {
+				HighVoltageSwitch hvSwitch = switchService.selectByPrimaryKey(gprs.getId());
+				hvSwitch.setOnlineTime(TimeUtil.timeFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
+				switchService.updateByPrimaryKey(hvSwitch);
+			}
 		}
 
 		CtxStore.printCtxStore();
@@ -285,80 +416,65 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 		String ACurrent = new HighVoltageDeviceCommandUtil().readAPhaseCurrent(data);
 		String BCurrent = new HighVoltageDeviceCommandUtil().readBPhaseCurrent(data);
 		String CCurrent = new HighVoltageDeviceCommandUtil().readCPhaseCurrent(data);
-		String[] dStrings_voltage = { ABVoltage, BCVoltage };
-
-		saveVoltage(switchId, dStrings_voltage);
-		String[] dStrings_current = { ACurrent, BCurrent, CCurrent };
-		saveCurrent(switchId, dStrings_current);
-
+		
+		saveCurrentForValue(switchId, "A", ACurrent);
+		saveCurrentForValue(switchId, "B", BCurrent);
+		saveCurrentForValue(switchId, "C", CCurrent);
+		saveVoltageForValue(switchId, "A", ABVoltage);
+		saveVoltageForValue(switchId, "B", BCVoltage);
 		System.out.println("-------saved cv-----------");
 	}
-
-	/**
-	 * @param switchId
-	 * 
-	 * @Title: saveCurrent @Description: TODO @param @param dStrings @return
-	 *         void @throws
-	 */
-	private void saveCurrent(String switchId, String[] dStrings) {
-
-		logger.info("saving current..");
+	
+	private void saveVoltageForValue(String switchId, String phase, String value) {
+		
 		Date date = new Date();
-		HighVoltageCurrent c1 = new HighVoltageCurrent();
-		c1.setId(UUIDUtil.getUUID());
-		c1.setPhase("A");
-		c1.setSwitchId(switchId);
-		c1.setTime(date);
-		c1.setValue(Integer.parseInt(dStrings[0]));
-
-		HighVoltageCurrent c2 = new HighVoltageCurrent();
-		c2.setId(UUIDUtil.getUUID());
-		c2.setPhase("B");
-		c2.setSwitchId(switchId);
-		c2.setTime(date);
-		c2.setValue(Integer.parseInt(dStrings[1]));
-
-		HighVoltageCurrent c3 = new HighVoltageCurrent();
-		c3.setId(UUIDUtil.getUUID());
-		c3.setPhase("C");
-		c3.setSwitchId(switchId);
-		c3.setTime(date);
-		c3.setValue(Integer.parseInt(dStrings[2]));
-
-		currentService.insert(c1);
-		currentService.insert(c2);
-		currentService.insert(c3);
-		logger.info("current has bean saved!");
+		Map<String, Object> map = new HashMap<>(3);
+		map.put("switch_id", switchId);
+		map.put("phase", phase);
+		List<HighVoltageVoltage> list = voltageService.selectByParameters(MyBatisMapUtil.warp(map));
+		if(list != null && list.size() != 0) {
+			HighVoltageVoltage c1 = list.get(0);
+			c1.setTime(date);
+			c1.setValue(Integer.parseInt(value));
+			voltageService.updateByPrimaryKey(c1);
+			c1.setId(UUIDUtil.getUUID());
+			historyVoltageService.insert(c1.changeToHistory());
+		} else {
+			HighVoltageVoltage c1 = new HighVoltageVoltage();
+			c1.setId(UUIDUtil.getUUID());
+			c1.setTime(date);
+			c1.setSwitchId(switchId);
+			c1.setValue(Integer.parseInt(value));
+			c1.setPhase(phase);
+			voltageService.insert(c1);
+			historyVoltageService.insert(c1.changeToHistory());
+		}
 	}
-
-	/**
-	 * @param switchId
-	 * 
-	 * @Title: saveVoltage @Description: TODO @param @param dStrings @return
-	 *         void @throws
-	 */
-	private void saveVoltage(String switchId, String[] dStrings) {
-
-		logger.info("saving voltage...");
+	
+	private void saveCurrentForValue(String switchId, String phase, String value) {
+		
 		Date date = new Date();
-		HighVoltageVoltage v1 = new HighVoltageVoltage();
-		v1.setId(UUIDUtil.getUUID());
-		v1.setPhase("A");
-		v1.setSwitchId(switchId);
-		v1.setTime(date);
-		v1.setValue(Integer.parseInt(dStrings[0]));
-
-		HighVoltageVoltage v2 = new HighVoltageVoltage();
-		v2.setId(UUIDUtil.getUUID());
-		v2.setPhase("B");
-		v2.setSwitchId(switchId);
-		v2.setTime(date);
-		v2.setValue(Integer.parseInt(dStrings[1]));
-
-		voltageService.insert(v1);
-		voltageService.insert(v2);
-		logger.info("voltage has bean saved!");
-		return;
+		Map<String, Object> map = new HashMap<>(3);
+		map.put("switch_id", switchId);
+		map.put("phase", phase);
+		List<HighVoltageCurrent> list = currentService.selectByParameters(MyBatisMapUtil.warp(map));
+		if(list != null && list.size() != 0) {
+			HighVoltageCurrent c1 = list.get(0);
+			c1.setTime(date);
+			c1.setValue(Integer.parseInt(value));
+			currentService.updateByPrimaryKey(c1);
+			c1.setId(UUIDUtil.getUUID());
+			historyCurrentService.insert(c1.changeToHistory());
+		} else {
+			HighVoltageCurrent c1 = new HighVoltageCurrent();
+			c1.setId(UUIDUtil.getUUID());
+			c1.setTime(date);
+			c1.setSwitchId(switchId);
+			c1.setValue(Integer.parseInt(value));
+			c1.setPhase(phase);
+			currentService.insert(c1);
+			historyCurrentService.insert(c1.changeToHistory());
+		}
 	}
 
 	/**

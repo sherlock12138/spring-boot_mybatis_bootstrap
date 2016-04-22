@@ -17,8 +17,10 @@ public enum CurrentVariable {
 			"6", "02020300", "当前C相电流"), ALL_PHASE_CURRENT("7", "0202FF00",
 			"当前A,B,C相电流");
 
+	@SuppressWarnings("unused")
 	private String sign;// 标示
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private CurrentVariable(String sign, String code, String statement) {

@@ -68,10 +68,9 @@
 	<select id="getRecentlyVoltage" resultMap="BaseResultMap">
 		select * from
 		high_voltage_voltage
-		where (time IN
-		(SELECT MAX(time)
-		FROM
-		high_voltage_voltage))
+		where switch_id=#{switchId} and 
+		phase=#{phase}
+		order by time DESC LIMIT 0, 1
 	</select>
   
   

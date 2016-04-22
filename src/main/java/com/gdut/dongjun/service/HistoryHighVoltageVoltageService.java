@@ -1,6 +1,6 @@
 package com.gdut.dongjun.service;
 
-import com.gdut.dongjun.domain.po.Company;
+import com.gdut.dongjun.domain.po.HistoryHighVoltageVoltage;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**
@@ -11,7 +11,8 @@ import com.gdut.dongjun.service.base.BaseService;
  * @date 2015年7月24日 下午2:34:11
  * @version V1.0
  */
-public interface CompanyService extends BaseService<Company>{
+public interface HistoryHighVoltageVoltageService 
+	extends BaseService<HistoryHighVoltageVoltage>{
 	
 	
 }

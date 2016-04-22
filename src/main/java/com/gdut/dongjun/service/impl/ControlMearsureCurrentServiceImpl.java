@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.dao.ControlMearsureCurrentMapper;
 import com.gdut.dongjun.domain.po.ControlMearsureCurrent;
-import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 import com.gdut.dongjun.service.ControlMearsureCurrentService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
 import com.gdut.dongjun.util.MapUtil;

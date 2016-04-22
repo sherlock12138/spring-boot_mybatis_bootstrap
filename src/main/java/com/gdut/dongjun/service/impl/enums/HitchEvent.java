@@ -22,6 +22,7 @@ public enum HitchEvent {
 
 	private String sign;// 标示
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private HitchEvent(String sign, String code, String statement) {

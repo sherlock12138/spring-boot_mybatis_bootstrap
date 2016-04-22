@@ -39,42 +39,50 @@ public class HighVoltageServer extends NetServer {
 	public void setInitializer(ServerInitializer initializer) {
 
 		super.initializer = initializer;
-		super.hitchEventBreak = 5*1000;
+		super.hitchEventBreak = 30 * 60 * 1000;
 		// super.cvReadBreak = 30 * 1000;//设置较短的读取间隔
 	}
 
 	@Override
 	protected void hitchEventSpy() {
 
-		String msg = null;
 		List<HighVoltageSwitch> switchs = lowVoltageSwitchService
 				.selectByParameters(null);
 
 		if (switchs != null) {
-			
 			for (HighVoltageSwitch s : switchs) {
-
 				if (s.getId() != null && CtxStore.isReady(s.getId())) {
-
-					SwitchGPRS gprs = CtxStore.get(s.getId());
-					// String address = new
-					// HighVoltageDeviceCommandUtil().reverseString(s.getAddress());
-					msg = new HighVoltageDeviceCommandUtil()
-							.readVoltageAndCurrent(gprs.getAddress(),
-									HighCommandControlCode.READ_VOLTAGE_CURRENT
-											.toString());
-					logger.info("读取电流电压，报警状态---" + msg);
-					gprs.getCtx().writeAndFlush(msg);// 读取电压
+					totalCall(s);
 				}
 			}
 		}
 
 	}
+	
+	/**
+	 * 这个方法可以用于当有新的高压开关在线时，进行一次总召.
+	 * @return 返回发送总召命令的报文
+	 */
+	public static String totalCall(HighVoltageSwitch s) {
+		
+		return totalCall(s.getId());
+	}
+	
+	public static String totalCall(String id) {
+		
+		SwitchGPRS gprs = CtxStore.get(id);
+		String msg = new HighVoltageDeviceCommandUtil()
+				.readVoltageAndCurrent(gprs.getAddress(),
+						HighCommandControlCode.READ_VOLTAGE_CURRENT
+								.toString());
+		logger.info("总召激活地址：" + gprs.getAddress() + "---" + msg);
+		gprs.getCtx().writeAndFlush(msg);// 读取电压
+		return msg;
+	}
 
 	@Override
 	protected void timedCVReadTask() {
-
-	}
+		
+	}	
 	
-
 }

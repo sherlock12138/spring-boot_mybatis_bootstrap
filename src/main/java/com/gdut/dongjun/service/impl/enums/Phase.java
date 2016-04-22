@@ -15,6 +15,7 @@ public enum Phase {
 
 	private String sign;// 标示
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private Phase(String sign, String code, String statement) {

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,6 @@ public class SinglePrimaryKeyBaseDAOImpl<T> implements
 
 	@Resource(name = "msg_sqlSessionTemplate")
 	protected SqlSessionTemplate template;
-	private static final Logger logger = Logger
-			.getLogger(SinglePrimaryKeyBaseMapper.class);
 
 	public int deleteByPrimaryKey(String id) {
 

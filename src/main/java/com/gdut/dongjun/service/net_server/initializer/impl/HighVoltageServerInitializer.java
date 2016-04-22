@@ -32,15 +32,6 @@ public class HighVoltageServerInitializer extends ServerInitializer{
 		p.addLast(new Decoder());
 		p.addLast(new Encoder());
 		p.addLast(dataReceiver);
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }

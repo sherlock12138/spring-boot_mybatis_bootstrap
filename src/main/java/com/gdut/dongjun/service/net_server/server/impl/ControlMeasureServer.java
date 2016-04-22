@@ -8,18 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gdut.dongjun.domain.po.ControlMearsureSwitch;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.ControlMearsureSwitchService;
-import com.gdut.dongjun.service.LowVoltageSwitchService;
-import com.gdut.dongjun.service.impl.DataZone;
 import com.gdut.dongjun.service.impl.enums.ControlMearsureFunctionCode;
-import com.gdut.dongjun.service.impl.enums.EventVariable;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.service.net_server.initializer.ServerInitializer;
 import com.gdut.dongjun.service.net_server.server.NetServer;
 import com.gdut.dongjun.util.ControlMearsureDeviceCommandUtil;
-import com.gdut.dongjun.util.LowVoltageDeviceCommandUtil;
 
 /**
  * @author Sherlock-lee

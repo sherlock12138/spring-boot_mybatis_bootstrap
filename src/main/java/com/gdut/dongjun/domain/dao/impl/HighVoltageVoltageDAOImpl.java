@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.gdut.dongjun.domain.dao.HighVoltageVoltageMapper;
 import com.gdut.dongjun.domain.dao.base.impl.SinglePrimaryKeyBaseDAOImpl;
 import com.gdut.dongjun.domain.po.HighVoltageVoltage;
-import com.gdut.dongjun.domain.po.LowVoltageVoltage;
 
 /**
  * @author zjd
@@ -37,9 +36,9 @@ SinglePrimaryKeyBaseDAOImpl<HighVoltageVoltage> implements HighVoltageVoltageMap
 	}
 
 	@Override
-	public List<HighVoltageVoltage> getRecentlyVoltage() {
+	public List<HighVoltageVoltage> getRecentlyVoltage(HighVoltageVoltage hv) {
 		// TODO Auto-generated method stub
-		return template.selectList(getNamespace("getRecentlyVoltage"));
+		return template.selectList(getNamespace("getRecentlyVoltage"), hv);
 	}
 
 }

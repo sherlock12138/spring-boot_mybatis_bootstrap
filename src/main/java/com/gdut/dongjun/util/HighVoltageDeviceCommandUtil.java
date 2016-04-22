@@ -17,8 +17,10 @@ import com.gdut.dongjun.service.impl.enums.HighCommandControlCode;
 public class HighVoltageDeviceCommandUtil {
 
 	private String address;// 地址
+	@SuppressWarnings("unused")
 	private String control;// 控制域
 	private String dataLength;// 报文长度
+	@SuppressWarnings("unused")
 	private String data;// 应用服务数据单元ASDU
 	private String check;// 帧校验和CS
 
@@ -121,6 +123,25 @@ public class HighVoltageDeviceCommandUtil {
 		return data;
 	}
 
+	/**
+	 * 遥信确定事件
+	 */
+	public String confirmChangeAffair(String address) {
+		
+		String msg = "00" + address;
+		setData(msg);
+		return "68" + msg + this.check + "16";
+	}
+	/**
+	 * 总召激活终止指令
+	 */
+	public String finshTotalCall(String address) {
+		
+		String msg = "F4" + address;
+		setData(msg);
+		return "680C0C68" + msg + "64010A01" + address + "000014" + this.check + "16";
+	}
+
 	// 读取电压电流的报文
 	public String readVoltageAndCurrent(String address, String data) {
 
@@ -150,7 +171,7 @@ public class HighVoltageDeviceCommandUtil {
 	// HighCommandControlCode.READ_VOLTAGE_CURRENT.toString()));
 	// }
 	// 将线电压装化为相电压
-	private String changToRight(String data) {
+	public static String changToRight(String data) {
 
 		//以两位为单位，翻转
 		return Integer.parseInt(LowVoltageDeviceCommandUtil.reverseStringBy2(data), 16) + "";

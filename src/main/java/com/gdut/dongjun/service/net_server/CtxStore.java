@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.gdut.dongjun.domain.po.HighVoltageSwitch;
 import com.gdut.dongjun.service.net_server.status.HighVoltageStatus;
 
 /**

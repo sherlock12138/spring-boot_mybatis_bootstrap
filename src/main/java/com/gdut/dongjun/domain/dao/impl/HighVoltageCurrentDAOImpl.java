@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.gdut.dongjun.domain.dao.HighVoltageCurrentMapper;
 import com.gdut.dongjun.domain.dao.base.impl.SinglePrimaryKeyBaseDAOImpl;
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
-import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 
 /**
  * @author zjd
@@ -37,9 +36,9 @@ SinglePrimaryKeyBaseDAOImpl<HighVoltageCurrent> implements HighVoltageCurrentMap
 	}
 
 	@Override
-	public List<HighVoltageCurrent> getRecentlyCurrent() {
+	public List<HighVoltageCurrent> getRecentlyCurrent(HighVoltageCurrent hc) {
 		// TODO Auto-generated method stub
-		return template.selectList(getNamespace("getRecentlyCurrent"));
+		return template.selectList(getNamespace("getRecentlyCurrent"), hc);
 
 	}
 }

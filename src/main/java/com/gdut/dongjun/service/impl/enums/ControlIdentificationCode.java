@@ -15,8 +15,10 @@ public enum ControlIdentificationCode {
 			"3", "06 01 02 02", "取消预约合闸"), TEST_OPEN_SWITCH("4", "06 01 03 01",
 			"测试预约跳闸"), CANCEL_TEST_OPEN_SWITCH("5", "06 01 03 02", "取消测试预约跳闸");
 
+	@SuppressWarnings("unused")
 	private String sign;// 标示
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private ControlIdentificationCode(String sign, String code, String statement) {
