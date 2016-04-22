@@ -15,11 +15,8 @@
  */
 package com.gdut.dongjun.service.net_server.handler.msg_decoder;
 
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +43,10 @@ import com.gdut.dongjun.util.LowVoltageDeviceCommandUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.TimeUtil;
 import com.gdut.dongjun.util.UUIDUtil;
+
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 @Service
 @Sharable
@@ -427,14 +428,25 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	private void saveVoltageForValue(String switchId, String phase, String value) {
 		
 		Date date = new Date();
-		Map<String, Object> map = MyBatisMapUtil.warp("switch_id", switchId);
-		map.put("phase", "A");
-		List<HighVoltageVoltage> list = voltageService.selectByParameters(map);
+		Map<String, Object> map = new HashMap<>(3);
+		map.put("switch_id", switchId);
+		map.put("phase", phase);
+		List<HighVoltageVoltage> list = voltageService.selectByParameters(MyBatisMapUtil.warp(map));
 		if(list != null && list.size() != 0) {
 			HighVoltageVoltage c1 = list.get(0);
 			c1.setTime(date);
 			c1.setValue(Integer.parseInt(value));
 			voltageService.updateByPrimaryKey(c1);
+			c1.setId(UUIDUtil.getUUID());
+			historyVoltageService.insert(c1.changeToHistory());
+		} else {
+			HighVoltageVoltage c1 = new HighVoltageVoltage();
+			c1.setId(UUIDUtil.getUUID());
+			c1.setTime(date);
+			c1.setSwitchId(switchId);
+			c1.setValue(Integer.parseInt(value));
+			c1.setPhase(phase);
+			voltageService.insert(c1);
 			historyVoltageService.insert(c1.changeToHistory());
 		}
 	}
@@ -442,14 +454,25 @@ public class HighVoltageDataReceiver extends ChannelInboundHandlerAdapter {
 	private void saveCurrentForValue(String switchId, String phase, String value) {
 		
 		Date date = new Date();
-		Map<String, Object> map = MyBatisMapUtil.warp("switch_id", switchId);
-		map.put("phase", "A");
-		List<HighVoltageCurrent> list = currentService.selectByParameters(map);
+		Map<String, Object> map = new HashMap<>(3);
+		map.put("switch_id", switchId);
+		map.put("phase", phase);
+		List<HighVoltageCurrent> list = currentService.selectByParameters(MyBatisMapUtil.warp(map));
 		if(list != null && list.size() != 0) {
 			HighVoltageCurrent c1 = list.get(0);
 			c1.setTime(date);
 			c1.setValue(Integer.parseInt(value));
 			currentService.updateByPrimaryKey(c1);
+			c1.setId(UUIDUtil.getUUID());
+			historyCurrentService.insert(c1.changeToHistory());
+		} else {
+			HighVoltageCurrent c1 = new HighVoltageCurrent();
+			c1.setId(UUIDUtil.getUUID());
+			c1.setTime(date);
+			c1.setSwitchId(switchId);
+			c1.setValue(Integer.parseInt(value));
+			c1.setPhase(phase);
+			currentService.insert(c1);
 			historyCurrentService.insert(c1.changeToHistory());
 		}
 	}
