@@ -2,3 +2,6 @@
 /target/
 sh.exe.stackdump
 *.stackdump
+/.settings/
+/.project/
+/.classpath/
