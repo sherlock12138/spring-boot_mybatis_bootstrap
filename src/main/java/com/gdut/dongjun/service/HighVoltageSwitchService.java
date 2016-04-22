@@ -1,12 +1,8 @@
 package com.gdut.dongjun.service;
 
 import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.ss.formula.functions.T;
 
 import com.gdut.dongjun.domain.po.HighVoltageSwitch;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**

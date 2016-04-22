@@ -1,10 +1,5 @@
 package com.gdut.dongjun.web;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +17,6 @@ import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.domain.po.User;
 import com.gdut.dongjun.service.HighVoltageHitchEventService;
 import com.gdut.dongjun.service.net_server.CtxStore;
-import com.gdut.dongjun.service.net_server.SwitchGPRS;
 import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
 import com.gdut.dongjun.util.TimeUtil;

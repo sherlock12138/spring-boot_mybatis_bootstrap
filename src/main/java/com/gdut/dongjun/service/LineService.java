@@ -1,9 +1,6 @@
 package com.gdut.dongjun.service;
 
-import java.util.List;
-
 import com.gdut.dongjun.domain.po.Line;
-import com.gdut.dongjun.domain.po.Substation;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**

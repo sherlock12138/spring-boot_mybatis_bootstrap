@@ -5,8 +5,10 @@ public enum HighCommandControlCode {
 	PRE_CLOSE_SWITCH("2","016082","预置合闸"),CLOSE_SWITCH("3","016002","合闸"),
 	PRE_CONTROL("4","73","预置控制域"),CONTROL("5","53","控制域"),COMMAND("6","2E010601","双点命令"),
 	READ_VOLTAGE_CURRENT("7","64010601","总站激活");
+	@SuppressWarnings("unused")
 	private String sign;// 标示
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private HighCommandControlCode(String sign, String code, String statement) {

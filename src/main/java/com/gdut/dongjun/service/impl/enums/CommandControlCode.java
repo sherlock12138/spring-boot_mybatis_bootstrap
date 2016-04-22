@@ -18,6 +18,7 @@ public enum CommandControlCode {
 			"1B", "事件清零"), CONTROL_DEVICE("1C", "控制设备");
 
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private CommandControlCode(String code, String statement) {

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.gdut.dongjun.domain.dao.HighVoltageCurrentMapper;
 import com.gdut.dongjun.domain.dao.base.impl.SinglePrimaryKeyBaseDAOImpl;
 import com.gdut.dongjun.domain.po.HighVoltageCurrent;
-import com.gdut.dongjun.domain.po.LowVoltageCurrent;
 
 /**
  * @author zjd

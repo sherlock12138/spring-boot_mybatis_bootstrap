@@ -3,8 +3,6 @@ package com.gdut.dongjun.service.base;
 import java.util.List;
 import java.util.Map;
 
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
-
 /**
  * @Title: BaseService.java
  * @Package com.gdut.dongjun.service.system

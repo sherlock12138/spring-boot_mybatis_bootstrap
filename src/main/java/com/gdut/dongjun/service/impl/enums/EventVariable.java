@@ -1,6 +1,5 @@
 package com.gdut.dongjun.service.impl.enums;
 
-import org.springframework.stereotype.Component;
 
 /**
  * @Title: EventVariable.java
@@ -16,6 +15,7 @@ public enum EventVariable {
 
 	private String sign;// 标示
 	private String code;// 16进制代码
+	@SuppressWarnings("unused")
 	private String statement;// 说明
 
 	private EventVariable(String sign, String code, String statement) {

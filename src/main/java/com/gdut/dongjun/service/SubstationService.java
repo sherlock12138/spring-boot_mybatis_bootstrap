@@ -2,12 +2,7 @@ package com.gdut.dongjun.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.gdut.dongjun.domain.dao.LowVoltageCurrentMapper;
-import com.gdut.dongjun.domain.dao.LowVoltageSwitchMapper;
 import com.gdut.dongjun.domain.po.Substation;
-import com.gdut.dongjun.domain.po.LowVoltageSwitch;
 import com.gdut.dongjun.service.base.BaseService;
 
 /**

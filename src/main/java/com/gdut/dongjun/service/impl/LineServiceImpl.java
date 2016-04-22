@@ -1,9 +1,5 @@
 package com.gdut.dongjun.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +7,6 @@ import com.gdut.dongjun.domain.dao.LineMapper;
 import com.gdut.dongjun.domain.po.Line;
 import com.gdut.dongjun.service.LineService;
 import com.gdut.dongjun.service.base.impl.BaseServiceImpl;
-import com.gdut.dongjun.util.MyBatisMapUtil;
 
 /**
  * @Title: UserServiceImpl.java

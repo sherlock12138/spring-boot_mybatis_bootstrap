@@ -16,6 +16,7 @@ public enum ControlMearsureFunctionCode {
 	BOARDCAST("ff", "广播报时");
 	
 	private String code;
+	@SuppressWarnings("unused")
 	private String statement;
 	
 	private ControlMearsureFunctionCode(String code, String statement) {

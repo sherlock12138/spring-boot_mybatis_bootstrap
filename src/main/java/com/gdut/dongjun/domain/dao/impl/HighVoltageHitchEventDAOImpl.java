@@ -3,9 +3,6 @@
  */
 package com.gdut.dongjun.domain.dao.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Repository;
 
 import com.gdut.dongjun.domain.dao.HighVoltageHitchEventMapper;
