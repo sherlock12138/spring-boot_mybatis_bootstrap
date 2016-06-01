@@ -127,17 +127,19 @@ public class SubstationController {
 	 */
 	@RequestMapping("/edit_substation")
 	@ResponseBody
-	public String editSwitch(Substation switch1, Model model,
+	public String editSwitch(Substation switch1, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes) {
-
-		if (switch1.getId() == "") {
+		
+		User user = (User)session.getAttribute("currentUser");
+		if (user != null && switch1.getId() == "") {
 			switch1.setId(UUIDUtil.getUUID());
+			switch1.setCompanyId(user.getCompanyId());
 		}
 		try {
 
 			substationService.updateByPrimaryKey(switch1);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			logger.error("修改开关失败！");
 			return null;
 		}

@@ -4,6 +4,6 @@ Implementation-Title: dongjun
 Implementation-Version: 0.0.1-SNAPSHOT
 Implementation-Vendor-Id: com.gdut
 Build-Jdk: 1.7.0_79
-Built-By: Administrator
+Built-By: USER
 Created-By: Maven Integration for Eclipse
 
