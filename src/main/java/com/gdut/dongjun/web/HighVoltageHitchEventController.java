@@ -1,4 +1,4 @@
-package com.gdut.dongjun.web;
+﻿package com.gdut.dongjun.web;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +28,11 @@ public class HighVoltageHitchEventController {
 	@Autowired
 	private HighVoltageHitchEventService hitchEventService;
 
+
+	@RequestMapping("/all_switch_event")
+	public String forwardIndex() {
+		return "all_switch_event";
+	}
 
 	/**
 	 * 
