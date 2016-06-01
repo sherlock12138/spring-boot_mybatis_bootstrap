@@ -3,7 +3,11 @@ $('#all_event').DataTable({
 	'ajax': {
 		url: 'get_all_high_event_by_time'
 	},
-	'columns' : [ {
+	'columns' : [{
+		'data': 'switchName'
+	},{
+		'data': 'switchAddress'
+	},{
 		'data' : "hitchTime"
 	}, {
 		'data' : "hitchReason"
