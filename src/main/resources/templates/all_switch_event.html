@@ -26,28 +26,7 @@
 
     <link rel="shortcut icon" href="../../ico/favicon.png" />
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
-    <script src="../../js/jquery.js"></script>
-    <script src="../../js/bootstrap-transition.js"></script>
-    <script src="../../js/bootstrap-alert.js"></script>
-    <script src="../../js/bootstrap-modal.js"></script>
-    <script src="../../js/bootstrap-dropdown.js"></script>
-    <script src="../../js/bootstrap-scrollspy.js"></script>
-    <script src="../../js/bootstrap-tab.js"></script>
-    <script src="../../js/bootstrap-tooltip.js"></script>
-    <script src="../../js/bootstrap-popover.js"></script>
-    <script src="../../js/bootstrap-button.js"></script>
-    <script src="../../js/bootstrap-collapse.js"></script>
-    <script src="../../js/bootstrap-carousel.js"></script>
-    <script src="../../js/bootstrap-typeahead.js"></script>
 
-    <!-- dataTables -->
-    <script src="../../js/dataTables/dataTables.bootstrap.js"></script>
-    <script src="../../js/dataTables/jquery.dataTables.js"></script>
-    <script src="../../js/dataTables/dataTables.tableTools.js"></script>
-    <script src="../../js/dataTables/dataTables_initial.js"></script>
-
-    <!-- custom -->
-    <script src="../../js/custom/gobal.js"></script>
 </head>
 
 <body>
@@ -60,7 +39,7 @@
             <div class="span5">
                 <h2>
                     <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
-                    <span class="label label-default">1.01</span>
+                    <span class="label label-default">1.02</span>
                 </h2>
             </div>
             <div class="span6 MENU">
@@ -88,27 +67,21 @@
         </div>
 
         <div class="span10 container">
-            
+            <table id="all_event" class="table table-bordered table-striped table-hover table-condensed success" width="100%">
+                <thead>
+                <td>报警时间</td>
+                <td>报警原因</td>
+                <td>报警相位</td>
+                <td>操作</td>
+                <td>解决人</td>
+                <td>解决时间</td>
+                <td>解决方式</td>
+                </thead>
+            </table>
         </div>
     </div>
 
 
-    <!-- Modal -->
-    <div id="del_event_modal" class="modal hide fade" tabindex="-1"
-         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"
-                    aria-hidden="true">×</button>
-            <h3 id="myModalLabel">警告</h3>
-        </div>
-        <div class="modal-body">
-            <p>您确定要删除这个故障事件吗？请慎重考虑</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-            <a id="del_confirm_btn" class="btn btn-danger">删除</a>
-        </div>
-    </div>
 
 
     <footer>
@@ -116,6 +89,30 @@
     </footer>
 
 </div>
+
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap-transition.js"></script>
+<script src="../../js/bootstrap-alert.js"></script>
+<script src="../../js/bootstrap-modal.js"></script>
+<script src="../../js/bootstrap-dropdown.js"></script>
+<script src="../../js/bootstrap-scrollspy.js"></script>
+<script src="../../js/bootstrap-tab.js"></script>
+<script src="../../js/bootstrap-tooltip.js"></script>
+<script src="../../js/bootstrap-popover.js"></script>
+<script src="../../js/bootstrap-button.js"></script>
+<script src="../../js/bootstrap-collapse.js"></script>
+<script src="../../js/bootstrap-carousel.js"></script>
+<script src="../../js/bootstrap-typeahead.js"></script>
+
+<!-- dataTables -->
+<script src="../../js/dataTables/dataTables.bootstrap.js"></script>
+<script src="../../js/dataTables/jquery.dataTables.js"></script>
+<script src="../../js/dataTables/dataTables.tableTools.js"></script>
+<script src="../../js/dataTables/dataTables_initial.js"></script>
+
+<!-- custom -->
+<script src="../../js/custom/all_event.js"></script>
+<script src="../../js/custom/gobal.js"></script>
 
 </body>
 </html>
