@@ -3,6 +3,8 @@
  */
 package com.gdut.dongjun.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,11 @@ implements HighVoltageHitchEventService {
 	public HighVoltageHitchEvent getRecentHitchEvent(String id) {
 		
 		return currentMapper.getRecentHitchEvent(id);
+	}
+
+	@Override
+	public List<HighVoltageHitchEvent> getAllHighEventByTime() {
+		return currentMapper.getAllHighEventByTime();
 	}
 
 }

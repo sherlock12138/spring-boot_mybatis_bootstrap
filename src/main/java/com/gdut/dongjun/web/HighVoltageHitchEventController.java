@@ -122,4 +122,10 @@ public class HighVoltageHitchEventController {
 		}
 		return MapUtil.warp("success", true);
 	}
+	
+	@RequestMapping("/get_all_high_event_by_time")
+	@ResponseBody
+	public Object getAllHighEventByTime() {
+		return hitchEventService.getAllHighEventByTime();
+	}
 }

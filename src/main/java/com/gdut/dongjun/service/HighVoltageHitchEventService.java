@@ -1,5 +1,7 @@
 package com.gdut.dongjun.service;
 
+import java.util.List;
+
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.service.base.BaseService;
 /**
@@ -13,5 +15,7 @@ import com.gdut.dongjun.service.base.BaseService;
 public interface HighVoltageHitchEventService extends BaseService<HighVoltageHitchEvent> {
 
 	public HighVoltageHitchEvent getRecentHitchEvent(String id);
+
+	public List<HighVoltageHitchEvent> getAllHighEventByTime();
 	
 }

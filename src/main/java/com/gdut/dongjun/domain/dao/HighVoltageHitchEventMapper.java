@@ -3,6 +3,8 @@
  */
 package com.gdut.dongjun.domain.dao;
 
+import java.util.List;
+
 import com.gdut.dongjun.domain.dao.base.SinglePrimaryKeyBaseMapper;
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 
@@ -17,5 +19,7 @@ public interface HighVoltageHitchEventMapper extends
 SinglePrimaryKeyBaseMapper<HighVoltageHitchEvent> {
 
 	HighVoltageHitchEvent getRecentHitchEvent(String id);
+
+	public List<HighVoltageHitchEvent> getAllHighEventByTime();
 
 }
