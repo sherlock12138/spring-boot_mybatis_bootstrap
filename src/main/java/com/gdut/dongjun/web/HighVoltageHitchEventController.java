@@ -3,6 +3,7 @@
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -131,6 +132,8 @@ public class HighVoltageHitchEventController {
 	@RequestMapping("/get_all_high_event_by_time")
 	@ResponseBody
 	public Object getAllHighEventByTime() {
-		return hitchEventService.getAllHighEventByTime();
+		Map<String, Object> result = new HashMap<String, Object>(1);
+		result.put("data", hitchEventService.getAllHighEventByTime());
+		return result;
 	}
 }
