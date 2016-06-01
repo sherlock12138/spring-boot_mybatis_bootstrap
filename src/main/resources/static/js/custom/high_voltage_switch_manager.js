@@ -77,7 +77,7 @@ $(document).ready(function() {
 	$(".lines").change(function(){
 		reloadDataTable(this.value);
 	});
-	
+
 });
 
 /**
@@ -167,7 +167,6 @@ function reloadDataTable(lineId){
  * @throws
  */
 function addSwitch() {
-
 	$("#inputId").val("");
 	
 	if($(".lines").val() == null){

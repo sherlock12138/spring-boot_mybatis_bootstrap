@@ -65,7 +65,7 @@ function Change_line(lineId) {
 					+ "</option>";
 			}
 			$(".lines").empty().append(options);
-
+			reloadDataTable($(".lines").val())
 			$.ajax({
 				type : "post",
 				url : 'high_voltage_switch_list_by_line_id',
