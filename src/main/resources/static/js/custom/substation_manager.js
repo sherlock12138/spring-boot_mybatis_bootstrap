@@ -26,7 +26,11 @@ $(document).ready(function() {
 				"targets": -1,
 				"data": null,
 				"defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
-			}]
+			}],
+		"fnInitComplete": function(oSettings, json) {
+			$(".edit_switch_btn").click(editSwitch);
+			$(".del_switch_btn").click(delSwitch);
+		}
 	})
 	$("#add_switch_btn").click(addSwitch);
 	$(".edit_switch_btn").click(editSwitch);
@@ -112,8 +116,7 @@ function reloadDataTable(id){
             "data": null,
             "defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
         }], 	
-        "fnInitComplete": function(oSettings, json) { 
-
+        "fnInitComplete": function(oSettings, json) {
         	$(".edit_switch_btn").click(editSwitch);
         	$(".del_switch_btn").click(delSwitch);
           }
