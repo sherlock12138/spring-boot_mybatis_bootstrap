@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdut.dongjun.domain.po.HighVoltageHitchEvent;
 import com.gdut.dongjun.domain.po.User;
+import com.gdut.dongjun.domain.vo.HighVoltageHitchEventVo;
 import com.gdut.dongjun.service.HighVoltageHitchEventService;
+import com.gdut.dongjun.service.HighVoltageSwitchService;
 import com.gdut.dongjun.service.net_server.CtxStore;
 import com.gdut.dongjun.util.MapUtil;
 import com.gdut.dongjun.util.MyBatisMapUtil;
@@ -28,6 +30,9 @@ public class HighVoltageHitchEventController {
 
 	@Autowired
 	private HighVoltageHitchEventService hitchEventService;
+	
+	@Autowired
+	private HighVoltageSwitchService switchService;
 
 
 	@RequestMapping("/all_switch_event")
@@ -133,7 +138,9 @@ public class HighVoltageHitchEventController {
 	@ResponseBody
 	public Object getAllHighEventByTime() {
 		Map<String, Object> result = new HashMap<String, Object>(1);
-		result.put("data", hitchEventService.getAllHighEventByTime());
+		result.put("data", HighVoltageHitchEventVo.createHitchEventVoList(
+				hitchEventService.getAllHighEventByTime(), 
+				switchService.selectByParameters(null)));
 		return result;
 	}
 }
