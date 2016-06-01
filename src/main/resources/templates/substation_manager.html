@@ -44,7 +44,7 @@ th, td {
           <div class="span5">
               <h2>
                   <img src="../../img/logo.png" style="height: 65px" />电网智能监控系统
-                  <span class="label label-default">1.02</span>
+                  <span class="label label-default">1.01</span>
               </h2>
           </div>
           <div class="span6 MENU">
@@ -62,7 +62,7 @@ th, td {
 
 		<div class="row-fluid">
 			<div class="span2 container-fluid well sidebar-nav">
-				<ul class="nav nav-list bs-docs-sidenav">
+				<ul class="nav nav-list bs-docs-sidenav" id="menu">
 					<li class="nav-header">资源管理</li>
 					<li><a href="" class="btn-success">变电站管理</a></li>
 					<li><a href="line_manager">线路管理</a></li>
@@ -93,19 +93,9 @@ th, td {
 						<td>名称</td>
 						<td class="hidden">Id</td>
 						<td class="hidden">线路ID</td>
-						<td>修改</td>
-						<td>删除</td>
+            <td>修改</td>
+            <td>删除</td>
 					</thead>
-					<tr th:each="switch:${switches}" th:if="*{switch!=null}">
-						<td th:text="${switch.name}"></td>
-						<td class="hide" th:text="${switch.id}"></td>
-						<td class="hide" th:text="${switch.companyId}"></td>
-						<td><a href="#edit_switch_modal" role="button"
-							class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a></td>
-						<td><a href="#del_switch_modal"
-							class="del_switch_btn btn btn-danger" data-toggle="modal"
-							data-backdrop="static">删除&raquo; </a></td>
-					</tr>
 				</table>
 			</div>
 		</div>
@@ -142,8 +132,8 @@ th, td {
 
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
-						<button id="add_switch_confirm_btn" class="btn btn-primary"
-							data-dismiss="modal" aria-hidden="true">添加</button>
+              <button id="add_switch_confirm_btn" class="btn btn-primary"
+                      data-dismiss="modal" aria-hidden="true">添加</button>
 					</div>
 				</div>
 

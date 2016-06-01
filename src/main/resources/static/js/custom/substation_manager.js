@@ -1,14 +1,44 @@
 $(document).ready(function() {
-
 	/**
 	 * 初始化列表
 	 */
-	initial_table("switch_list");
+	//initial_table("switch_list");
+	$("#switch_list").DataTable({
+		"destroy": true,
+		"ajax": {
+			url : 'substation_list_by_company_id'
+		},
+		columns: [
+			{ "data": "name" },
+			{ 	"data": "id",
+				"sClass": "dpass"},
+			{ 	"data": "companyId",
+				"sClass": "dpass"},
+			{ "data": null},
+			{ "data": null}
+		],
+		"columnDefs": [ {
+			"targets": -2,
+			"data": null,
+			"defaultContent": '<a href="#edit_switch_modal" role="button" class="edit_switch_btn btn" data-toggle="modal">修改 &raquo;</a>'
+		},
+			{
+				"targets": -1,
+				"data": null,
+				"defaultContent": '<a href="#del_switch_modal" class="del_switch_btn btn btn-danger" data-toggle="modal" data-backdrop="static">删除&raquo; </a>'
+			}]
+	})
 	$("#add_switch_btn").click(addSwitch);
 	$(".edit_switch_btn").click(editSwitch);
 	$(".del_switch_btn").click(delSwitch);
 
-	
+	/*
+	*
+	* 根据权限加载左边的菜单栏
+	*
+	*/
+
+
 	/**
 	 * 编辑提交
 	 */
@@ -32,7 +62,7 @@ $(document).ready(function() {
 			}
 		})
 	});
-	
+
 	$("#add_switch_confirm_btn").click(function() {
 
 		$.ajax({
